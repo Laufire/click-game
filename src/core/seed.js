@@ -1,11 +1,18 @@
 import config from './config';
-import { rndString } from '@laufire/utils/random';
+import TargetManager from '../services/targetManager';
 
-const refreshIDLength = 4;
+const { getTarget } = TargetManager;
 
 const seed = {
-	count: config.countStart,
-	refreshID: rndString(refreshIDLength),
+	targets: [
+		getTarget({
+			x: 50,
+			y: 50,
+		}),
+	],
+	powers: [],
+	score: 0,
+	lives: config.lives,
 };
 
 export default seed;

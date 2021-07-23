@@ -1,17 +1,14 @@
 import { React, useEffect } from 'react';
 import './App.scss';
-import context from './core/context';
-import SampleService from './services/sample';
-import SimpleButton from './components/simpleButton';
+import ticker from './services/ticker';
+import Game from './components/game';
 
 const App = () => {
-	useEffect(SampleService.sayHai, []);
+	useEffect(ticker.start, []);
 
 	return (
 		<div className="App">
-			<div>Count: { context.state.count }</div>
-			<div>{ SimpleButton() }</div>
-			<div>Refresh ID: { context.state.refreshID }</div>
+			{ Game() }
 		</div>
 	);
 };
