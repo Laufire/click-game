@@ -10,10 +10,10 @@ const addValue = 1 / config.powers.bomb.addProbability;
 const removeValue = 1 / config.powers.bomb.removeProbability;
 
 const getRandomX = ({ width }) =>
-	rndBetween(width / two, (hundred - width) / two);
+	rndBetween(width / two, hundred - (width / two));
 
 const getRandomY = ({ height }) =>
-	rndBetween(height / two, (hundred - height) / two);
+	rndBetween(height / two, hundred - (height / two));
 
 const getPower = ({ x, y, type } = {}) => {
 	const typeConfig = config.powers[type || rndValue(powerKeys)];

@@ -9,10 +9,10 @@ const { maxTargets, powers } = config;
 const targetTypeKeys = keys(config.targets);
 
 const getRandomX = ({ width }) =>
-	rndBetween(width / two, (hundred - width) / two);
+	rndBetween(width / two, hundred - (width / two));
 
 const getRandomY = ({ height }) =>
-	rndBetween(height / two, (hundred - height) / two);
+	rndBetween(height / two, hundred - (height / two));
 
 const getTarget = ({ x, y, type } = {}) => {
 	const typeConfig = config.targets[type || rndValue(targetTypeKeys)];

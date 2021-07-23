@@ -9,8 +9,8 @@ const Target = (target) => {
 
 	const style = {
 		position: 'absolute',
-		top: `${ (y - height) / two }%`,
-		left: `${ (x - width) / two }%`,
+		top: `${ y - (height / two) }%`,
+		left: `${ x - (width / two) }%`,
 		height: `${ height }vw`,
 		width: `${ width }vw`,
 		cursor: 'crossHair',

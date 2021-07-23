@@ -8,8 +8,8 @@ const two = 2;
 
 const style = {
 	position: 'absolute',
-	top: `${ (fifty - height) / two }%`,
-	left: `${ (fifty - width) / two }%`,
+	top: `${ fifty - (height / two) }%`,
+	left: `${ fifty - (width / two) }%`,
 	width: `${ width }%`,
 	height: `${ height }%`,
 	background: 'red',
