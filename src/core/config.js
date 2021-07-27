@@ -36,8 +36,10 @@ const config = {
 	maxPowers: 1,
 	powers: {
 		bomb: {
-			minimum: 1,
-			maximum: 3,
+			targetsCount: {
+				minimum: 1,
+				maximum: 3,
+			},
 			image: bombImage,
 			height: 7,
 			width: 7,
