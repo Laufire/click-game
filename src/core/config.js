@@ -47,8 +47,10 @@ const config = {
 			image: bombImage,
 			height: 7,
 			width: 7,
-			addProbability: 0.2,
-			removeProbability: 0.5,
+			probabilities: {
+				add: 0.2,
+				remove: 0.5,
+			},
 		},
 	},
 };

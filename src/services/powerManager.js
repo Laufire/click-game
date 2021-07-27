@@ -6,8 +6,8 @@ const hundred = 100;
 const two = 2;
 const eight = 8;
 const powerKeys = keys(config.powers);
-const addValue = 1 / config.powers.bomb.addProbability;
-const removeValue = 1 / config.powers.bomb.removeProbability;
+const addValue = 1 / config.powers.bomb.probabilities.add;
+const removeValue = 1 / config.powers.bomb.probabilities.remove;
 
 const getRandomX = ({ width }) =>
 	rndBetween(width / two, hundred - (width / two));
