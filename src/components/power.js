@@ -25,8 +25,8 @@ const Power = (power) => {
 			src={ image }
 			style={ getStyle(power) }
 			onClick={ () => {
-				context.actions.removeRandomTargets();
-				context.actions.removeClickedPower(power);
+				context.actions.activatePower();
+				context.actions.removeActivatedPower(power);
 			} }
 		/>
 	);

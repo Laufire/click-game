@@ -1,5 +1,9 @@
+import { rndBetween } from '@laufire/utils/random';
 import PowerManager from '../services/powerManager';
 import TargetManager from '../services/targetManager';
+import config from './config';
+
+const { targetsCount, power } = config.powers.bomb;
 
 const increaseScore = ({ state, data }) => ({
 	score: state.score + data.score,
@@ -21,12 +25,15 @@ const removeTarget = ({ state, data }) => ({
 	targets: TargetManager.removeTarget(state.targets, data),
 });
 
-const removeRandomTargets = ({ state }) => {
-	const targetsToRemove = TargetManager.getRandomTargets(state.targets);
+const activatePower = ({ state }) => {
+	const impactedTargets = TargetManager.getRandomTargets(state.targets);
 
 	return {
-		targets: TargetManager.removeTargets(state.targets, targetsToRemove),
-		score: state.score + TargetManager.getTargetsScore(targetsToRemove),
+		targets:
+		TargetManager.decreaseTargetLives(
+			state.targets, impactedTargets,
+			rndBetween(power.minimum, power.maximum)
+		),
 	};
 };
 
@@ -40,20 +47,22 @@ const removePower = ({ state }) => ({
 	powers: PowerManager.removePower(state.powers),
 });
 
-const removeClickedPower = ({ state, data }) => ({
+const removeActivatedPower = ({ state, data }) => ({
 	powers: PowerManager.removeClickedPower(state.powers, data),
 });
 
 const decreaseTargetLives = ({ state, data }) => ({
-	targets: TargetManager.decreaseTargetLives(state.targets, data),
+	targets: TargetManager.decreaseTargetLives(
+		state.targets, data, targetsCount.minimum
+	),
 });
 
 const removeDeadTargets = ({ state }) => {
-	const targetsToRemove = TargetManager.getDeadTargets(state.targets);
+	const impactedTargets = TargetManager.getDeadTargets(state.targets);
 
 	return {
-		targets: TargetManager.removeTargets(state.targets, targetsToRemove),
-		score: state.score + TargetManager.getTargetsScore(targetsToRemove),
+		targets: TargetManager.removeTargets(state.targets, impactedTargets),
+		score: state.score + TargetManager.getTargetsScore(impactedTargets),
 	};
 };
 
@@ -64,10 +73,10 @@ const actions = {
 	decreaseLives,
 	restart,
 	removeTarget,
-	removeRandomTargets,
+	activatePower,
 	addPower,
 	removePower,
-	removeClickedPower,
+	removeActivatedPower,
 	decreaseTargetLives,
 	removeDeadTargets,
 };

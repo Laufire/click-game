@@ -57,12 +57,14 @@ const removeTargets = (targets, targetsToRemove) =>
 const getTargetsScore = (targets) =>
 	targets.reduce((acc, target) => acc + target.score, 0);
 
-const decreaseTargetLives = (targets, current) =>
+const decreaseTargetLives = (
+	targets, current, damage
+) =>
 	targets.map((target) =>
 		(target.id === current.id
 			? {
 				...current,
-				lives: Math.max(current.lives - 1, 0),
+				lives: Math.max(current.lives - damage, 0),
 			}
 			: target));
 

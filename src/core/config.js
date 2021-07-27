@@ -40,6 +40,10 @@ const config = {
 				minimum: 1,
 				maximum: 3,
 			},
+			power: {
+				minimum: 1,
+				maximum: 5,
+			},
 			image: bombImage,
 			height: 7,
 			width: 7,
