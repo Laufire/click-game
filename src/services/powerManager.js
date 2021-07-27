@@ -36,14 +36,14 @@ const removePower = (powers) =>
 		? []
 		: powers);
 
-const removeClickedPower = (powers, power) =>
+const removeActivatedPower = (powers, power) =>
 	powers.filter((current) => current.id !== power.id);
 
 const PowerManager = {
 	getPower,
 	addPower,
 	removePower,
-	removeClickedPower,
+	removeActivatedPower,
 };
 
 export default PowerManager;
