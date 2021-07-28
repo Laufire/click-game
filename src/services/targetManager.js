@@ -3,7 +3,7 @@ import { rndBetween, rndString, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 
 const hundred = 100;
-const two = 100;
+const two = 2;
 const eight = 8;
 const { maxTargets, powers } = config;
 const targetTypeKeys = keys(config.targets);
