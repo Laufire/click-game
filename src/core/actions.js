@@ -48,7 +48,7 @@ const removePower = ({ state }) => ({
 });
 
 const removeActivatedPower = ({ state, data }) => ({
-	powers: PowerManager.removeClickedPower(state.powers, data),
+	powers: PowerManager.removeActivatedPower(state.powers, data),
 });
 
 const decreaseTargetLives = ({ state, data }) => ({
