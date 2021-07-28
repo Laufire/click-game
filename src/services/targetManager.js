@@ -1,6 +1,7 @@
 import config from '../core/config';
 import { rndBetween, rndString, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
+import moment from 'moment';
 
 const hundred = 100;
 const two = 2;
@@ -25,11 +26,14 @@ const getTarget = ({ x, y, type } = {}) => {
 	};
 };
 
-const moveTargets = (targets) => targets.map((target) => ({
-	...target,
-	x: getRandomX(target),
-	y: getRandomY(target),
-}));
+const moveTargets = ({ targets, frozenTill }) =>
+	(moment() > frozenTill
+		? targets.map((target) => ({
+			...target,
+			x: getRandomX(target),
+			y: getRandomY(target),
+		}))
+		: {});
 
 const addTarget = (targets) => (targets.length < maxTargets
 	? targets.concat(getTarget())

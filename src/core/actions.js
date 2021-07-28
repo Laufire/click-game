@@ -1,16 +1,15 @@
-import { rndBetween } from '@laufire/utils/random';
 import PowerManager from '../services/powerManager';
 import TargetManager from '../services/targetManager';
 import config from './config';
 
-const { targetsCount, power } = config.powers.bomb;
+const { targetsCount } = config.powers.bomb;
 
 const increaseScore = ({ state, data }) => ({
 	score: state.score + data.score,
 });
 
 const moveTargets = ({ state }) => ({
-	targets: TargetManager.moveTargets(state.targets),
+	targets: TargetManager.moveTargets(state),
 });
 
 const addTarget = ({ state }) => ({
@@ -25,17 +24,8 @@ const removeTarget = ({ state, data }) => ({
 	targets: TargetManager.removeTarget(state.targets, data),
 });
 
-const activatePower = ({ state }) => {
-	const impactedTargets = TargetManager.getRandomTargets(state.targets);
-
-	return {
-		targets:
-		TargetManager.decreaseTargetLives(
-			state.targets, impactedTargets,
-			rndBetween(power.minimum, power.maximum)
-		),
-	};
-};
+const activatePower = ({ state, data }) =>
+	PowerManager.activatePower(state, data);
 
 const restart = ({ seed }) => seed;
 

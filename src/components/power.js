@@ -25,7 +25,7 @@ const Power = (power) => {
 			src={ image }
 			style={ getStyle(power) }
 			onClick={ () => {
-				context.actions.activatePower();
+				context.actions.activatePower(power);
 				context.actions.removeActivatedPower(power);
 			} }
 		/>
