@@ -18,6 +18,9 @@ const config = {
 			height: 10,
 			width: 20,
 			lives: 1,
+			probabilities: {
+				add: 0.2,
+			},
 		},
 		ant: {
 			score: 5,
@@ -25,6 +28,9 @@ const config = {
 			height: 5,
 			width: 10,
 			lives: 1,
+			probabilities: {
+				add: 0.6,
+			},
 		},
 		spider: {
 			score: 10,
@@ -32,6 +38,9 @@ const config = {
 			height: 2.5,
 			width: 5,
 			lives: 3,
+			probabilities: {
+				add: 0.2,
+			},
 		},
 	},
 	maxPowers: 1,

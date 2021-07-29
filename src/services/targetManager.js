@@ -35,8 +35,12 @@ const moveTargets = ({ targets, frozenTill }) =>
 		}))
 		: {});
 
+const getTargets = () => targetTypeKeys.map((type) =>
+	rndBetween(1, 1 / config.targets[type].probabilities.add) === 1
+	&& getTarget({ type })).filter((val) => val);
+
 const addTarget = (targets) => (targets.length < maxTargets
-	? targets.concat(getTarget())
+	? targets.concat(getTargets())
 	: targets);
 
 const removeTarget = (targets, target) =>
@@ -79,6 +83,7 @@ const TargetManager = {
 	moveTargets,
 	addTarget,
 	getTarget,
+	getTargets,
 	removeTarget,
 	removeTargets,
 	getRandomTargets,
