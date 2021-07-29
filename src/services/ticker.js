@@ -4,7 +4,7 @@ const masterLoop = [
 	'moveTargets',
 	'addTarget',
 	'removePower',
-	// 'addPower',
+	'addPower',
 	'removeDeadTargets',
 ];
 

@@ -49,7 +49,6 @@ const config = {
 			image: bombImage,
 			height: 7,
 			width: 7,
-			type: 'bomb',
 			targetsCount: {
 				minimum: 1,
 				maximum: 3,
@@ -60,17 +59,16 @@ const config = {
 			},
 			probabilities: {
 				add: 1,
-				remove: 0.5,
+				remove: 1,
 			},
 		},
 		ice: {
 			image: iceImage,
 			height: 5,
 			width: 5,
-			type: 'ice',
 			probabilities: {
 				add: 1,
-				remove: 0.1,
+				remove: 1,
 			},
 			frozenSeconds: {
 				minimum: 2,
