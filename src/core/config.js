@@ -5,7 +5,7 @@ import spiderImage from '../image/spider.png';
 import iceImage from '../image/ice.png';
 
 const ms = 1000;
-const delay = 1.25;
+const delay = 5;
 
 const config = {
 	tickerDelay: ms * delay,
