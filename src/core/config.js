@@ -5,7 +5,7 @@ import spiderImage from '../image/spider.png';
 import iceImage from '../image/ice.png';
 
 const ms = 1000;
-const delay = 5;
+const delay = 2;
 
 const config = {
 	tickerDelay: ms * delay,
@@ -49,6 +49,7 @@ const config = {
 			image: bombImage,
 			height: 7,
 			width: 7,
+			type: 'bomb',
 			targetsCount: {
 				minimum: 1,
 				maximum: 3,
@@ -66,6 +67,7 @@ const config = {
 			image: iceImage,
 			height: 5,
 			width: 5,
+			type: 'ice',
 			probabilities: {
 				add: 1,
 				remove: 1,
