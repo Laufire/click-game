@@ -1,3 +1,5 @@
+
+/* eslint-disable max-lines-per-function */
 import { React } from 'react';
 import context from '../core/context';
 
@@ -21,7 +23,11 @@ const Target = (target) => {
 			key={ id }
 			src={ image }
 			style={ style }
-			onClick={ () => actions.decreaseTargetLives(target) }
+			onClick={ () => {
+				if(target.name === 'butterfly')
+					actions.decreaseLives();
+				actions.decreaseTargetLives(target);
+			} }
 		/>
 	);
 };

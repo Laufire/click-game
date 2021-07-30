@@ -3,9 +3,10 @@ import antImage from '../image/ant.png';
 import bombImage from '../image/bomb.png';
 import spiderImage from '../image/spider.png';
 import iceImage from '../image/ice.png';
+import butterflyImage from '../image/butterfly.png';
 
 const ms = 1000;
-const delay = 5;
+const delay = 2;
 
 const config = {
 	tickerDelay: ms * delay,
@@ -13,6 +14,7 @@ const config = {
 	maxTargets: 5,
 	targets: {
 		mosquito: {
+			name: 'mosquito',
 			score: 1,
 			image: mosquitoImage,
 			height: 10,
@@ -23,6 +25,7 @@ const config = {
 			},
 		},
 		ant: {
+			name: 'ant',
 			score: 5,
 			image: antImage,
 			height: 5,
@@ -33,13 +36,25 @@ const config = {
 			},
 		},
 		spider: {
+			name: 'spider',
 			score: 10,
 			image: spiderImage,
 			height: 2.5,
 			width: 5,
 			lives: 3,
 			probabilities: {
-				add: 0.2,
+				add: 0.1,
+			},
+		},
+		butterfly: {
+			name: 'butterfly',
+			score: 0,
+			image: butterflyImage,
+			height: 5,
+			width: 10,
+			lives: 1,
+			probabilities: {
+				add: 0.1,
 			},
 		},
 	},
