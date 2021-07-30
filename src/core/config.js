@@ -19,6 +19,7 @@ const config = {
 			image: mosquitoImage,
 			height: 10,
 			width: 20,
+			variance: 1.5,
 			lives: 1,
 			probabilities: {
 				add: 0.2,
@@ -30,6 +31,7 @@ const config = {
 			image: antImage,
 			height: 5,
 			width: 10,
+			variance: 2,
 			lives: 1,
 			probabilities: {
 				add: 0.6,
@@ -41,6 +43,7 @@ const config = {
 			image: spiderImage,
 			height: 2.5,
 			width: 5,
+			variance: 3,
 			lives: 3,
 			probabilities: {
 				add: 0.1,
@@ -52,6 +55,7 @@ const config = {
 			image: butterflyImage,
 			height: 5,
 			width: 10,
+			variance: 2,
 			lives: 1,
 			probabilities: {
 				add: 0.1,
