@@ -16,17 +16,17 @@ const getStyle = (power) => {
 	};
 };
 
-const Power = (power) => {
-	const { id, image } = power;
+const Power = (data) => {
+	const { id, image } = data;
 
 	return (
 		<img
 			key={ id }
 			src={ image }
-			style={ getStyle(power) }
+			style={ getStyle(data) }
 			onClick={ () => {
-				context.actions.activatePower(power);
-				context.actions.removeActivatedPower(power);
+				context.actions.activatePower(data);
+				context.actions.removeActivatedPower(data);
 			} }
 		/>
 	);

@@ -3,7 +3,7 @@ import context from '../core/context';
 const masterLoop = [
 	'moveTargets',
 	'addTarget',
-	'removePower',
+	'removePowers',
 	'addPower',
 	'removeDeadTargets',
 ];

@@ -33,8 +33,8 @@ const addPower = ({ state }) => ({
 	powers: PowerManager.addPower(state.powers),
 });
 
-const removePower = ({ state }) => ({
-	powers: PowerManager.removePower(state.powers),
+const removePowers = ({ state }) => ({
+	powers: PowerManager.removePowers(state.powers),
 });
 
 const removeActivatedPower = ({ state, data }) => ({
@@ -43,7 +43,7 @@ const removeActivatedPower = ({ state, data }) => ({
 
 const decreaseTargetLives = ({ state, data }) => ({
 	targets: TargetManager.decreaseTargetLives(
-		state.targets, data, targetsCount.minimum
+		state.targets, [data], targetsCount.minimum
 	),
 });
 
@@ -65,7 +65,7 @@ const actions = {
 	removeTarget,
 	activatePower,
 	addPower,
-	removePower,
+	removePowers,
 	removeActivatedPower,
 	decreaseTargetLives,
 	removeDeadTargets,

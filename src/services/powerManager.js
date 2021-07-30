@@ -34,22 +34,22 @@ const getPowers = () => powerKeys.map((type) =>
 
 const addPower = (powers) =>	powers.concat(getPowers());
 
-const removePowers = (data) =>
+const shouldRemovePower = (data) =>
 	rndBetween(1, 1 / data.probabilities.remove) === 1;
 
-const removePower = (powers) => powers.filter((data) =>
-	!removePowers(data));
+const removePowers = (powers) => powers.filter((data) =>
+	!shouldRemovePower(data));
 
 const setPower = {
 	bomb: (state) => {
 		const impactedTargets = TargetManager.getRandomTargets(state.targets);
 
-		return { targets:
-			TargetManager.decreaseTargetLives(
+		return {
+			targets: TargetManager.decreaseTargetLives(
 				state.targets, impactedTargets,
 				rndBetween(power.minimum, power.maximum)
 			),
-		score: state.score + TargetManager.getTargetsScore(impactedTargets) };
+		};
 	},
 	ice: (state) => ({
 		frozenTill:	state.frozenTill.add(rndBetween(frozenSeconds.minimum,
@@ -65,7 +65,7 @@ const removeActivatedPower = (powers, data) =>
 const PowerManager = {
 	getPower,
 	addPower,
-	removePower,
+	removePowers,
 	activatePower,
 	removeActivatedPower,
 };

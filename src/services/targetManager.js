@@ -6,8 +6,9 @@ import moment from 'moment';
 const hundred = 100;
 const two = 2;
 const eight = 8;
-const { maxTargets, powers } = config;
+const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
+const { targetsCount } = config.powers.bomb;
 
 const getRandomX = ({ width }) =>
 	rndBetween(width / two, hundred - (width / two));
@@ -33,7 +34,7 @@ const moveTargets = ({ targets, frozenTill }) =>
 			x: getRandomX(target),
 			y: getRandomY(target),
 		}))
-		: {});
+		: targets);
 
 const getTargets = () => targetTypeKeys.map((type) =>
 	rndBetween(1, 1 / config.targets[type].probabilities.add) === 1
@@ -48,7 +49,7 @@ const removeTarget = (targets, target) =>
 
 const getRandomTargets = (targets) => {
 	const result = [];
-	const count = Math.min(powers.bomb.maximum, targets.length);
+	const count = Math.min(targetsCount.maximum, targets.length);
 
 	while(result.length < count) {
 		const i = rndBetween(0, targets.length - 1);
@@ -66,15 +67,18 @@ const getTargetsScore = (targets) =>
 	targets.reduce((acc, target) => acc + target.score, 0);
 
 const decreaseTargetLives = (
-	targets, current, damage
-) =>
-	targets.map((target) =>
-		(target.id === current.id
+	targets, impactedTargets, damage
+) => {
+	const dataId = impactedTargets.map((impactedTarget) => impactedTarget.id);
+
+	return targets.map((target) =>
+		(dataId.includes(target.id)
 			? {
-				...current,
-				lives: Math.max(current.lives - damage, 0),
+				...target,
+				lives: Math.max(target.lives - damage, 0),
 			}
 			: target));
+};
 
 const getDeadTargets = (targets) =>
 	targets.filter((target) => target.lives <= 0);
