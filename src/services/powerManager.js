@@ -2,7 +2,6 @@ import { rndBetween, rndValue, rndString } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import config from '../core/config';
 import TargetManager from './targetManager';
-import { peek } from '@laufire/utils/debug';
 
 const hundred = 100;
 const two = 2;
@@ -18,7 +17,7 @@ const getRandomY = ({ height }) =>
 	rndBetween(height / two, hundred - (height / two));
 
 const getPower = ({ type } = {}) => {
-	const typeConfig = peek(config.powers[type || rndValue(powerKeys)]);
+	const typeConfig = config.powers[type || rndValue(powerKeys)];
 
 	return {
 		id: rndString(eight),
@@ -28,23 +27,18 @@ const getPower = ({ type } = {}) => {
 	};
 };
 
-const addPower = (powers) => powerKeys.map((data) => {
-	const type = config.powers[data];
+const getPowers = () => powerKeys.map((type) =>
+	rndBetween(1,
+		1 / config.powers[type].probabilities.add) === 1
+		&& getPower({ type })).filter((value) => value);
 
-	return peek(rndBetween(1,
-		1 / peek(type.probabilities.add)) === 1 && peek(powers.length) === 0)
-		? powers.concat(peek(getPower(type)))
-		: powers;
-});
+const addPower = (powers) =>	powers.concat(getPowers());
 
-const removePower = (powers) => powerKeys.map((data) => {
-	const type = config.powers[data];
+const removePowers = (data) =>
+	rndBetween(1, 1 / data.probabilities.remove) === 1;
 
-	return rndBetween(1, 1 / type.probabilities.remove) === 1
-	&& powers.length === 1
-		? []
-		: powers;
-});
+const removePower = (powers) => powers.filter((data) =>
+	!removePowers(data));
 
 const setPower = {
 	bomb: (state) => {
