@@ -7,13 +7,18 @@ const style = {
 	top: '0%',
 	left: '0%',
 	background: 'silver',
-	fontSize: '5vw',
+	fontSize: '4vw',
 	textAlign: 'center',
+};
+
+const getStyle = {
+	color: 'gold',
+	fontSize: '3vw',
 };
 
 const Score = () =>
 	<div style={ style }>
-		<Stars color="primary" fontSize="large"/>
+		<Stars style={ getStyle }/>
 		{ context.state.score } </div>;
 
 export default Score;
