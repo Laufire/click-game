@@ -39,8 +39,8 @@ const config = {
 			name: 'spider',
 			score: 10,
 			image: spiderImage,
-			height: 2.5,
-			width: 5,
+			height: 5,
+			width: 10,
 			lives: 3,
 			probabilities: {
 				add: 0.1,
@@ -50,7 +50,7 @@ const config = {
 			name: 'butterfly',
 			score: 0,
 			image: butterflyImage,
-			height: 5,
+			height: 10,
 			width: 10,
 			lives: 1,
 			probabilities: {
