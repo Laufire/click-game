@@ -84,16 +84,16 @@ const config = {
 		},
 		ice: {
 			image: iceImage,
-			height: 5,
-			width: 5,
+			height: 10,
+			width: 10,
 			type: 'ice',
 			probabilities: {
 				add: 1,
 				remove: 1,
 			},
 			frozenSeconds: {
-				minimum: 2,
-				maximum: 4,
+				minimum: 5,
+				maximum: 7,
 			},
 		},
 	},

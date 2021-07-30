@@ -34,7 +34,7 @@ const moveTargets = ({ targets, frozenTill }) =>
 			x: getRandomX(target),
 			y: getRandomY(target),
 		}))
-		: {});
+		: targets);
 
 const getTargets = () => targetTypeKeys.map((type) =>
 	rndBetween(1, 1 / config.targets[type].probabilities.add) === 1
