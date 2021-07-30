@@ -1,3 +1,4 @@
+import { Stars } from '@material-ui/icons';
 import { React } from 'react';
 import context from '../core/context';
 
@@ -11,6 +12,8 @@ const style = {
 };
 
 const Score = () =>
-	<div style={ style }> { context.state.score } </div>;
+	<div style={ style }>
+		<Stars color="primary" fontSize="large"/>
+		{ context.state.score } </div>;
 
 export default Score;

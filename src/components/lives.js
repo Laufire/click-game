@@ -1,3 +1,4 @@
+import { Favorite } from '@material-ui/icons';
 import { React } from 'react';
 import context from '../core/context';
 
@@ -11,6 +12,8 @@ const style = {
 };
 
 const Lives = () =>
-	<div style={ style }> { context.state.lives } </div>;
+	<div style={ style }>
+		<Favorite fontSize="large" color="secondary"/>
+		{ context.state.lives } </div>;
 
 export default Lives;
