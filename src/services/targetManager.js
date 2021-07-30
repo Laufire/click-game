@@ -2,19 +2,12 @@ import config from '../core/config';
 import { rndBetween, rndString, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import moment from 'moment';
+import { getRandomX, getRandomY } from './positionService';
 
-const hundred = 100;
-const two = 2;
 const eight = 8;
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
 const { targetsCount } = config.powers.bomb;
-
-const getRandomX = ({ width }) =>
-	rndBetween(width / two, hundred - (width / two));
-
-const getRandomY = ({ height }) =>
-	rndBetween(height / two, hundred - (height / two));
 
 const getTarget = ({ x, y, type } = {}) => {
 	const typeConfig = config.targets[type || rndValue(targetTypeKeys)];
@@ -37,10 +30,10 @@ const moveTargets = ({ targets, frozenTill }) =>
 		: targets);
 
 const getTargets = () => targetTypeKeys.map((type) =>
-	rndBetween(1, 1 / config.targets[type].probabilities.add) === 1
+	rndBetween(1, 1 / config.targets[type].prob.add) === 1
 	&& getTarget({ type })).filter((val) => val);
 
-const addTarget = (targets) => (targets.length < maxTargets
+const addTargets = (targets) => (targets.length < maxTargets
 	? targets.concat(getTargets())
 	: targets);
 
@@ -85,7 +78,7 @@ const getDeadTargets = (targets) =>
 
 const TargetManager = {
 	moveTargets,
-	addTarget,
+	addTargets,
 	getTarget,
 	getTargets,
 	removeTarget,

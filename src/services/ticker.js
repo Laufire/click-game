@@ -2,9 +2,9 @@ import context from '../core/context';
 
 const masterLoop = [
 	'moveTargets',
-	'addTarget',
+	'addTargets',
 	'removePowers',
-	'addPower',
+	'addPowers',
 	'removeDeadTargets',
 ];
 

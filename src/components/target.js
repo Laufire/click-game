@@ -6,8 +6,6 @@ import { rndBetween } from '@laufire/utils/random';
 
 const two = 2;
 
-// const variance = ({ variance })
-
 const Target = (target) => {
 	const { actions } = context;
 	const { id, x, y, height, width, image, variance } = target;
@@ -28,7 +26,7 @@ const Target = (target) => {
 			src={ image }
 			style={ style }
 			onClick={ () => {
-				if(target.name === 'butterfly')
+				if(target.type === 'butterfly')
 					actions.decreaseLives();
 				actions.decreaseTargetLives(target);
 			} }

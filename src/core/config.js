@@ -14,50 +14,50 @@ const config = {
 	maxTargets: 5,
 	targets: {
 		mosquito: {
-			name: 'mosquito',
+			type: 'mosquito',
 			score: 1,
 			image: mosquitoImage,
 			height: 10,
 			width: 20,
 			variance: 1.5,
 			lives: 1,
-			probabilities: {
+			prob: {
 				add: 0.2,
 			},
 		},
 		ant: {
-			name: 'ant',
+			type: 'ant',
 			score: 5,
 			image: antImage,
 			height: 5,
 			width: 10,
 			variance: 2,
 			lives: 1,
-			probabilities: {
+			prob: {
 				add: 0.6,
 			},
 		},
 		spider: {
-			name: 'spider',
+			type: 'spider',
 			score: 10,
 			image: spiderImage,
 			height: 5,
 			width: 10,
 			variance: 3,
 			lives: 3,
-			probabilities: {
+			prob: {
 				add: 0.1,
 			},
 		},
 		butterfly: {
-			name: 'butterfly',
+			type: 'butterfly',
 			score: 0,
 			image: butterflyImage,
 			height: 10,
 			width: 10,
 			variance: 2,
 			lives: 1,
-			probabilities: {
+			prob: {
 				add: 0.1,
 			},
 		},
@@ -65,35 +65,35 @@ const config = {
 	maxPowers: 1,
 	powers: {
 		bomb: {
+			type: 'bomb',
 			image: bombImage,
 			height: 7,
 			width: 7,
-			type: 'bomb',
 			targetsCount: {
-				minimum: 1,
-				maximum: 3,
+				min: 1,
+				max: 3,
 			},
 			power: {
-				minimum: 1,
-				maximum: 5,
+				min: 1,
+				max: 5,
 			},
-			probabilities: {
+			prob: {
 				add: 1,
 				remove: 1,
 			},
 		},
 		ice: {
+			type: 'ice',
 			image: iceImage,
 			height: 10,
 			width: 10,
-			type: 'ice',
-			probabilities: {
+			prob: {
 				add: 1,
 				remove: 1,
 			},
-			frozenSeconds: {
-				minimum: 5,
-				maximum: 7,
+			duration: {
+				min: 5,
+				max: 7,
 			},
 		},
 	},

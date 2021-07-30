@@ -2,19 +2,12 @@ import { rndBetween, rndValue, rndString } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import config from '../core/config';
 import TargetManager from './targetManager';
+import { getRandomX, getRandomY } from './positionService';
 
-const hundred = 100;
-const two = 2;
 const eight = 8;
 const powerKeys = keys(config.powers);
 const { power } = config.powers.bomb;
-const { frozenSeconds } = config.powers.ice;
-
-const getRandomX = ({ width }) =>
-	rndBetween(width / two, hundred - (width / two));
-
-const getRandomY = ({ height }) =>
-	rndBetween(height / two, hundred - (height / two));
+const { duration } = config.powers.ice;
 
 const getPower = ({ type } = {}) => {
 	const typeConfig = config.powers[type || rndValue(powerKeys)];
@@ -29,13 +22,13 @@ const getPower = ({ type } = {}) => {
 
 const getPowers = () => powerKeys.map((type) =>
 	rndBetween(1,
-		1 / config.powers[type].probabilities.add) === 1
+		1 / config.powers[type].prob.add) === 1
 		&& getPower({ type })).filter((value) => value);
 
-const addPower = (powers) =>	powers.concat(getPowers());
+const addPowers = (powers) =>	powers.concat(getPowers());
 
 const shouldRemovePower = (data) =>
-	rndBetween(1, 1 / data.probabilities.remove) === 1;
+	rndBetween(1, 1 / data.prob.remove) === 1;
 
 const removePowers = (powers) => powers.filter((data) =>
 	!shouldRemovePower(data));
@@ -47,13 +40,13 @@ const setPower = {
 		return {
 			targets: TargetManager.decreaseTargetLives(
 				state.targets, impactedTargets,
-				rndBetween(power.minimum, power.maximum)
+				rndBetween(power.min, power.max)
 			),
 		};
 	},
 	ice: (state) => ({
-		frozenTill:	state.frozenTill.add(rndBetween(frozenSeconds.minimum,
-			frozenSeconds.maximum), 'seconds'),
+		frozenTill:	state.frozenTill.add(rndBetween(duration.min,
+			duration.max), 'seconds'),
 	}),
 };
 
@@ -64,7 +57,7 @@ const removeActivatedPower = (powers, data) =>
 
 const PowerManager = {
 	getPower,
-	addPower,
+	addPowers,
 	removePowers,
 	activatePower,
 	removeActivatedPower,

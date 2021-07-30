@@ -12,8 +12,8 @@ const moveTargets = ({ state }) => ({
 	targets: TargetManager.moveTargets(state),
 });
 
-const addTarget = ({ state }) => ({
-	targets: TargetManager.addTarget(state.targets),
+const addTargets = ({ state }) => ({
+	targets: TargetManager.addTargets(state.targets),
 });
 
 const decreaseLives = ({ state }) => ({
@@ -29,8 +29,8 @@ const activatePower = ({ state, data }) =>
 
 const restart = ({ seed }) => seed;
 
-const addPower = ({ state }) => ({
-	powers: PowerManager.addPower(state.powers),
+const addPowers = ({ state }) => ({
+	powers: PowerManager.addPowers(state.powers),
 });
 
 const removePowers = ({ state }) => ({
@@ -43,7 +43,7 @@ const removeActivatedPower = ({ state, data }) => ({
 
 const decreaseTargetLives = ({ state, data }) => ({
 	targets: TargetManager.decreaseTargetLives(
-		state.targets, [data], targetsCount.minimum
+		state.targets, [data], targetsCount.min
 	),
 });
 
@@ -59,12 +59,12 @@ const removeDeadTargets = ({ state }) => {
 const actions = {
 	increaseScore,
 	moveTargets,
-	addTarget,
+	addTargets,
 	decreaseLives,
 	restart,
 	removeTarget,
 	activatePower,
-	addPower,
+	addPowers,
 	removePowers,
 	removeActivatedPower,
 	decreaseTargetLives,
