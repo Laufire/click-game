@@ -15,6 +15,7 @@ const config = {
 	tickerDelay: ms * delay,
 	lives: 3,
 	maxTargets: 5,
+	swatDamage: 1,
 	targets: {
 		mosquito: {
 			type: 'mosquito',

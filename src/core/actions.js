@@ -2,7 +2,7 @@ import PowerManager from '../services/powerManager';
 import TargetManager from '../services/targetManager';
 import config from './config';
 
-const { targetsCount } = config.powers.bomb;
+const { swatDamage } = config;
 
 const increaseScore = ({ state, data }) => ({
 	score: state.score + data.score,
@@ -43,7 +43,7 @@ const removeActivatedPower = ({ state, data }) => ({
 
 const decreaseTargetLives = ({ state, data }) => ({
 	targets: TargetManager.decreaseTargetLives(
-		state.targets, [data], targetsCount.min
+		state.targets, [data], swatDamage
 	),
 });
 
