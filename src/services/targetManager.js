@@ -42,7 +42,7 @@ const removeTarget = (targets, target) =>
 
 const getRandomTargets = (targets) => {
 	const result = [];
-	const count = Math.min(targetsCount.maximum, targets.length);
+	const count = Math.min(targetsCount.max, targets.length);
 
 	while(result.length < count) {
 		const i = rndBetween(0, targets.length - 1);
