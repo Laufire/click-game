@@ -5,11 +5,13 @@
 
 ## Stack
 node_modules
+coverage
 
 # Excludes
 ## General
 !.git*
 !.npmignore
+!.vscode
 
 ## Dev
 !.editorconfig
