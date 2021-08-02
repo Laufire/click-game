@@ -7,7 +7,7 @@ import butterflyImage from '../image/butterfly.png';
 import balloon from '../image/balloon.png';
 
 const ms = 1000;
-const delay = 2;
+const delay = 1.25;
 
 const config = {
 	tickerDelay: ms * delay,
@@ -20,7 +20,7 @@ const config = {
 			image: mosquitoImage,
 			height: 10,
 			width: 20,
-			variance: 1.5,
+			variance: 0.2,
 			lives: 1,
 			prob: {
 				add: 0.2,
@@ -32,7 +32,7 @@ const config = {
 			image: antImage,
 			height: 5,
 			width: 10,
-			variance: 2,
+			variance: 0.5,
 			lives: 1,
 			prob: {
 				add: 0.6,
@@ -56,7 +56,7 @@ const config = {
 			image: butterflyImage,
 			height: 10,
 			width: 10,
-			variance: 2,
+			variance: 0.3,
 			lives: 1,
 			prob: {
 				add: 0.1,
