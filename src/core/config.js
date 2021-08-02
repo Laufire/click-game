@@ -5,6 +5,7 @@ import spiderImage from '../image/spider.png';
 import iceImage from '../image/ice.png';
 import butterflyImage from '../image/butterfly.png';
 import balloon from '../image/balloon.png';
+import gift from '../image/gift.png';
 
 const ms = 1000;
 const delay = 1.25;
@@ -105,6 +106,20 @@ const config = {
 			prob: {
 				add: 1,
 				remove: 1,
+			},
+		},
+		gift: {
+			type: 'gift',
+			image: gift,
+			height: 5,
+			width: 5,
+			prob: {
+				add: 1,
+				remove: 1,
+			},
+			score: {
+				min: 5,
+				max: 10,
 			},
 		},
 	},
