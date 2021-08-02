@@ -6,10 +6,10 @@ import iceImage from '../image/ice.png';
 import butterflyImage from '../image/butterfly.png';
 import balloon from '../image/balloon.png';
 import gift from '../image/gift.png';
-import heartImage from '../image/heart.png';
+import spoiler from '../image/spoiler.png';
 
 const ms = 1000;
-const delay = 1.25;
+const delay = 2;
 
 const config = {
 	tickerDelay: ms * delay,
@@ -123,14 +123,18 @@ const config = {
 				max: 10,
 			},
 		},
-		heart: {
-			type: 'heart',
-			image: heartImage,
+		spoiler: {
+			type: 'spoiler',
+			image: spoiler,
 			height: 7,
-			width: 7,
+			width: 10,
 			prob: {
-				add: 0.5,
+				add: 1,
 				remove: 1,
+			},
+			score: {
+				min: 1,
+				max: 3,
 			},
 		},
 	},

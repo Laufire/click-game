@@ -44,22 +44,25 @@ const setPower = {
 			),
 		};
 	},
+
 	ice: (state) => ({
 		frozenTill:	state.frozenTill.add(rndBetween(duration.min,
 			duration.max), 'seconds'),
 	}),
+
 	surprise: (state) => {
 		const randomPower = rndValue(keys(setPower)
 			.filter((data) => data !== 'surprise'));
 
 		return setPower[randomPower](state);
 	},
+
 	gift: (state, data) => (rndBetween(0, 1)
 		? { score: state.score + rndBetween(data.score.min, data.score.max) }
 		: { lives: state.lives + 1 }),
-	heart: (state) => ({
-		lives: state.lives + 1,
-	}),
+
+	spoiler: (state, data) =>
+		({ score: state.score - rndBetween(data.score.min, data.score.max) }),
 };
 
 const activatePower = (state, data) => setPower[data.type](state, data);
