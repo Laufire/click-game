@@ -4,6 +4,7 @@ import bombImage from '../image/bomb.png';
 import spiderImage from '../image/spider.png';
 import iceImage from '../image/ice.png';
 import butterflyImage from '../image/butterfly.png';
+import balloon from '../image/balloon.png';
 
 const ms = 1000;
 const delay = 2;
@@ -94,6 +95,16 @@ const config = {
 			duration: {
 				min: 5,
 				max: 7,
+			},
+		},
+		surprise: {
+			type: 'surprise',
+			image: balloon,
+			height: 7,
+			width: 4,
+			prob: {
+				add: 1,
+				remove: 1,
 			},
 		},
 	},

@@ -48,6 +48,12 @@ const setPower = {
 		frozenTill:	state.frozenTill.add(rndBetween(duration.min,
 			duration.max), 'seconds'),
 	}),
+	surprise: (state) => {
+		const randomPower = rndValue(keys(setPower)
+			.filter((data) => data !== 'surprise'));
+
+		return setPower[randomPower](state);
+	},
 };
 
 const activatePower = (state, data) => setPower[data.type](state);
