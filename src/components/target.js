@@ -23,9 +23,10 @@ const Target = (target) => {
 			src={ image }
 			style={ style }
 			onClick={ () => {
-				if(target.type === 'butterfly')
-					actions.decreaseLives();
-				actions.decreaseTargetLives(target);
+				// if(target.type === 'butterfly')
+				// 	actions.decreaseLives();
+				actions.swatTarget(target);
+				// actions.decreaseTargetLives(target);
 			} }
 		/>
 	);

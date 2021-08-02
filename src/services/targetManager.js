@@ -3,12 +3,14 @@ import { rndBetween, rndString, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import moment from 'moment';
 import { getRandomX, getRandomY } from './positionService';
+// import actions from '../core/actions';
 
 const eight = 8;
 const hundred = 100;
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
 const { targetsCount } = config.powers.bomb;
+const { swatDamage } = config;
 
 const getTarget = ({ x, y, type } = {}) => {
 	const typeConfig = config.targets[type || rndValue(targetTypeKeys)];
@@ -65,11 +67,11 @@ const getTargetsScore = (targets) =>
 	targets.reduce((acc, target) => acc + target.score, 0);
 
 const decreaseTargetLives = (
-	targets, impactedTargets, damage
+	state, impactedTargets, damage
 ) => {
 	const dataId = impactedTargets.map((impactedTarget) => impactedTarget.id);
 
-	return targets.map((target) =>
+	return state.targets.map((target) =>
 		(dataId.includes(target.id)
 			? {
 				...target,
@@ -80,6 +82,21 @@ const decreaseTargetLives = (
 
 const getDeadTargets = (targets) =>
 	targets.filter((target) => target.lives <= 0);
+
+const swatActions = {
+	butterfly: (state) => ({
+		lives: state.lives - 1,
+	}),
+};
+
+const swatActionDefault = (state, data) => ({
+	targets: decreaseTargetLives(
+		state, [data], swatDamage
+	),
+});
+
+const swatTarget = (state, data) =>
+	(swatActions[data.type] || swatActionDefault)(state, data);
 
 const TargetManager = {
 	moveTargets,
@@ -92,6 +109,7 @@ const TargetManager = {
 	getTargetsScore,
 	decreaseTargetLives,
 	getDeadTargets,
+	swatTarget,
 };
 
 export default TargetManager;

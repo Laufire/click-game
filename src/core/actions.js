@@ -1,3 +1,4 @@
+// import Target from '../components/target';
 import PowerManager from '../services/powerManager';
 import TargetManager from '../services/targetManager';
 import config from './config';
@@ -56,6 +57,9 @@ const removeDeadTargets = ({ state }) => {
 	};
 };
 
+const swatTarget = ({ state, data }) =>
+	TargetManager.swatTarget(state, data);
+
 const actions = {
 	increaseScore,
 	moveTargets,
@@ -69,6 +73,7 @@ const actions = {
 	removeActivatedPower,
 	decreaseTargetLives,
 	removeDeadTargets,
+	swatTarget,
 };
 
 export default actions;
