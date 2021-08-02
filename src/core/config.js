@@ -9,7 +9,7 @@ import gift from '../image/gift.png';
 import spoiler from '../image/spoiler.png';
 
 const ms = 1000;
-const delay = 2;
+const delay = 5;
 
 const config = {
 	tickerDelay: ms * delay,
@@ -76,10 +76,6 @@ const config = {
 			targetsCount: {
 				min: 1,
 				max: 3,
-			},
-			power: {
-				min: 1,
-				max: 5,
 			},
 			prob: {
 				add: 1,

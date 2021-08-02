@@ -6,8 +6,6 @@ import { getRandomX, getRandomY } from './positionService';
 
 const eight = 8;
 const powerKeys = keys(config.powers);
-const { power } = config.powers.bomb;
-const { duration } = config.powers.ice;
 
 const getPower = ({ type } = {}) => {
 	const typeConfig = config.powers[type || rndValue(powerKeys)];
@@ -36,19 +34,24 @@ const removePowers = (powers) => powers.filter((data) =>
 const setPower = {
 	bomb: (state) => {
 		const impactedTargets = TargetManager.getRandomTargets(state.targets);
+		const { targetsCount } = config.powers.bomb;
 
 		return {
 			targets: TargetManager.decreaseTargetLives(
 				state.targets, impactedTargets,
-				rndBetween(power.min, power.max)
+				rndBetween(targetsCount.min, targetsCount.max)
 			),
 		};
 	},
 
-	ice: (state) => ({
-		frozenTill:	state.frozenTill.add(rndBetween(duration.min,
-			duration.max), 'seconds'),
-	}),
+	ice: (state) => {
+		const { duration } = config.powers.ice;
+
+		return {
+			frozenTill:	state.frozenTill.add(rndBetween(duration.min,
+				duration.max), 'seconds'),
+		};
+	},
 
 	surprise: (state) => {
 		const randomPower = rndValue(keys(setPower)
