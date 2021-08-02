@@ -57,6 +57,9 @@ const setPower = {
 	gift: (state, data) => (rndBetween(0, 1)
 		? { score: state.score + rndBetween(data.score.min, data.score.max) }
 		: { lives: state.lives + 1 }),
+	heart: (state) => ({
+		lives: state.lives + 1,
+	}),
 };
 
 const activatePower = (state, data) => setPower[data.type](state, data);

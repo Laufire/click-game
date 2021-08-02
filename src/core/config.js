@@ -6,6 +6,7 @@ import iceImage from '../image/ice.png';
 import butterflyImage from '../image/butterfly.png';
 import balloon from '../image/balloon.png';
 import gift from '../image/gift.png';
+import heartImage from '../image/heart.png';
 
 const ms = 1000;
 const delay = 1.25;
@@ -120,6 +121,16 @@ const config = {
 			score: {
 				min: 5,
 				max: 10,
+			},
+		},
+		heart: {
+			type: 'heart',
+			image: heartImage,
+			height: 7,
+			width: 7,
+			prob: {
+				add: 0.5,
+				remove: 1,
 			},
 		},
 	},
