@@ -44,7 +44,7 @@ const config = {
 			image: spiderImage,
 			height: 5,
 			width: 10,
-			variance: 3,
+			variance: 0.2,
 			lives: 3,
 			prob: {
 				add: 0.1,

@@ -5,6 +5,7 @@ import moment from 'moment';
 import { getRandomX, getRandomY } from './positionService';
 
 const eight = 8;
+const hundred = 100;
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
 const { targetsCount } = config.powers.bomb;
