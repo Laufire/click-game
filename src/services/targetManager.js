@@ -65,11 +65,11 @@ const getTargetsScore = (targets) =>
 	targets.reduce((acc, target) => acc + target.score, 0);
 
 const decreaseTargetLives = (
-	state, impactedTargets, damage
+	targets, impactedTargets, damage
 ) => {
 	const dataId = impactedTargets.map((impactedTarget) => impactedTarget.id);
 
-	return state.targets.map((target) =>
+	return 	targets.map((target) =>
 		(dataId.includes(target.id)
 			? {
 				...target,
@@ -93,7 +93,7 @@ const swatActions = {
 
 const swatActionDefault = (state, data) => ({
 	targets: decreaseTargetLives(
-		state, [data], getDamage(state)
+		state.targets, [data], getDamage(state)
 	),
 });
 
