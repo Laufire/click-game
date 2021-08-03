@@ -9,7 +9,7 @@ const Game = () => {
 	const Screen = context.state.lives === 0 ? GameOverScreen : GameScreen;
 
 	return (
-		<div>
+		<div className="demoImage">
 			{ Screen() }
 			{ Score() }
 			{ Lives() }

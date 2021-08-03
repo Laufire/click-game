@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import TargetManager from './targetManager';
 import config from '../core/config';
-import { contains } from '@laufire/utils/collection';
+import { contains, merge } from '@laufire/utils/collection';
 
 describe('TargetManager', () => {
 	describe('getTarget', () => {
@@ -18,14 +18,87 @@ describe('TargetManager', () => {
 	});
 	describe('swatTarget', () => {
 		const { swatTarget } = TargetManager;
-		const [state, data] = [{ lives: config.lives }, { type: 'butterfly' }];
+		const ant = {
+			type: 'ant',
+			id: '1234',
+			lives: 1,
+		};
+		const mosquito = {
+			type: 'mosquito',
+			id: '9876',
+			lives: 0,
+		};
+		const butterfly = {
+			type: 'butterfly',
+			lives: 1,
+		};
+		const state = {
+			targets: [
+				ant,
+				mosquito,
+				butterfly,
+			],
+			lives: 3,
+		};
+
+		test('swatTarget returns target lives', () => {
+			const swattedAnt = { ...ant, lives: ant.lives - config.swatDamage };
+
+			const result = swatTarget(state, ant);
+
+			expect(result)
+				.toMatchObject({ targets: [swattedAnt, mosquito, butterfly] });
+		});
 
 		test('swatTarget returns lives', () => {
-			const result = swatTarget(state, data);
-			const lives = config.lives - 1;
+			const swattedButterfly = { ...butterfly,
+				lives: butterfly.lives - config.swatDamage };
 
-			expect(contains(result, { lives }))
-				.toEqual(true);
+			const result = swatTarget(state, butterfly);
+
+			expect(result).toMatchObject({ lives: state.lives - 1,
+				targets: [ant, mosquito, swattedButterfly] });
+		});
+	});
+	describe('getDeadTargets', () => {
+		const { getDeadTargets } = TargetManager;
+		const ant = {
+			lives: 1,
+		};
+		const mosquito = {
+			lives: 0,
+		};
+		const state = [
+			ant,
+			mosquito,
+		];
+
+		test('addTarget returns a target', () => {
+			const result = getDeadTargets(state);
+
+			expect(result)
+				.toEqual([mosquito]);
+		});
+	});
+	describe('getTargetsScore', () => {
+		const { getTargetsScore } = TargetManager;
+		const ant = {
+			score: 10,
+		};
+		const mosquito = {
+			score: 5,
+		};
+		const state = [
+			ant,
+			mosquito,
+		];
+		const data = 15;
+
+		test('addTarget returns a total score', () => {
+			const result = getTargetsScore(state);
+
+			expect(result)
+				.toEqual(data);
 		});
 	});
 });
