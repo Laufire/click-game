@@ -60,19 +60,30 @@ const setPower = {
 		return setPower[randomPower](state);
 	},
 
-	gift: (state, data) => (rndBetween(0, 1)
-		? { score: state.score + rndBetween(data.score.min, data.score.max) }
-		: { lives: state.lives + 1 }),
+	gift: (state) => {
+		const { score } = config.powers.gift;
 
-	spoiler: (state, data) =>
-		({ score: state.score - rndBetween(data.score.min, data.score.max) }),
+		return rndBetween(0, 1)
+			? { score: state.score + rndBetween(score.min, score.max) }
+			: { lives: state.lives + 1 };
+	},
 
-	superBat: (state, data) => ({
-		superTill: state.superTill.add(data.duration, 'seconds'),
-	}),
+	spoiler: (state) => {
+		const { score } = config.powers.spoiler;
+
+		return 	{ score: state.score - rndBetween(score.min, score.max) };
+	},
+
+	superBat: (state) => {
+		const { duration } = config.powers.superBat;
+
+		return {
+			superTill: state.superTill.add(duration, 'seconds'),
+		};
+	},
 };
 
-const activatePower = (state, data) => setPower[data.type](state, data);
+const activatePower = (state, data) => setPower[data.type](state);
 
 const removeActivatedPower = (powers, data) =>
 	powers.filter((current) => current.id !== data.id);
