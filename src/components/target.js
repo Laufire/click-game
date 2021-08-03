@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { React } from 'react';
 import context from '../core/context';
 
@@ -22,12 +21,7 @@ const Target = (target) => {
 			key={ id }
 			src={ image }
 			style={ style }
-			onClick={ () => {
-				// if(target.type === 'butterfly')
-				// 	actions.decreaseLives();
-				actions.swatTarget(target);
-				// actions.decreaseTargetLives(target);
-			} }
+			onClick={ () => actions.swatTarget(target) }
 		/>
 	);
 };
