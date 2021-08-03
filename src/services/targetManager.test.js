@@ -109,4 +109,27 @@ describe('TargetManager', () => {
 					.toEqual(data);
 			});
 	});
+	describe('removeTargets', () => {
+		const { removeTargets } = TargetManager;
+		const ant = {
+			score: 10,
+		};
+		const mosquito = {
+			score: 5,
+		};
+		const state = [
+			ant,
+			mosquito,
+		];
+		const data = [
+			ant,
+		];
+
+		test('removeTargets remove targets to be removed', () => {
+			const result = removeTargets(state, data);
+
+			expect(result)
+				.toEqual([mosquito]);
+		});
+	});
 });
