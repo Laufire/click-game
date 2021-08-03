@@ -86,8 +86,11 @@ const getDamage = (state) => (state.superTill > moment()
 	: config.swatDamage);
 
 const swatActions = {
-	butterfly: (state) => ({
+	butterfly: (state, data) => ({
 		lives: state.lives - 1,
+		targets: decreaseTargetLives(
+			state.targets, [data], getDamage(state)
+		),
 	}),
 };
 
