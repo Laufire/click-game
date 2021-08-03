@@ -15,6 +15,7 @@ const seed = {
 	score: 0,
 	lives: config.lives,
 	frozenTill: moment(),
+	superTill: moment(),
 };
 
 export default seed;

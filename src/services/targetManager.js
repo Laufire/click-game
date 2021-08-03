@@ -3,14 +3,12 @@ import { rndBetween, rndString, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import moment from 'moment';
 import { getRandomX, getRandomY } from './positionService';
-// import actions from '../core/actions';
 
 const eight = 8;
 const hundred = 100;
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
 const { targetsCount } = config.powers.bomb;
-const { swatDamage } = config;
 
 const getTarget = ({ x, y, type } = {}) => {
 	const typeConfig = config.targets[type || rndValue(targetTypeKeys)];
@@ -83,6 +81,10 @@ const decreaseTargetLives = (
 const getDeadTargets = (targets) =>
 	targets.filter((target) => target.lives <= 0);
 
+const getDamage = (state) => (state.superTill > moment()
+	? config.powers.superBat.swatDamage
+	: config.swatDamage);
+
 const swatActions = {
 	butterfly: (state) => ({
 		lives: state.lives - 1,
@@ -91,7 +93,7 @@ const swatActions = {
 
 const swatActionDefault = (state, data) => ({
 	targets: decreaseTargetLives(
-		state, [data], swatDamage
+		state, [data], getDamage(state)
 	),
 });
 

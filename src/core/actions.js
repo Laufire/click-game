@@ -1,9 +1,5 @@
-// import Target from '../components/target';
 import PowerManager from '../services/powerManager';
 import TargetManager from '../services/targetManager';
-import config from './config';
-
-const { swatDamage } = config;
 
 const increaseScore = ({ state, data }) => ({
 	score: state.score + data.score,
@@ -42,12 +38,6 @@ const removeActivatedPower = ({ state, data }) => ({
 	powers: PowerManager.removeActivatedPower(state.powers, data),
 });
 
-const decreaseTargetLives = ({ state, data }) => ({
-	targets: TargetManager.decreaseTargetLives(
-		state.targets, [data], swatDamage
-	),
-});
-
 const removeDeadTargets = ({ state }) => {
 	const impactedTargets = TargetManager.getDeadTargets(state.targets);
 
@@ -71,7 +61,6 @@ const actions = {
 	addPowers,
 	removePowers,
 	removeActivatedPower,
-	decreaseTargetLives,
 	removeDeadTargets,
 	swatTarget,
 };

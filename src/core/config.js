@@ -7,9 +7,10 @@ import butterflyImage from '../image/butterfly.png';
 import balloon from '../image/balloon.png';
 import gift from '../image/gift.png';
 import spoiler from '../image/spoiler.png';
+import flyswatter from '../image/flyswatter.png';
 
 const ms = 1000;
-const delay = 5;
+const delay = 2;
 
 const config = {
 	tickerDelay: ms * delay,
@@ -132,6 +133,18 @@ const config = {
 			score: {
 				min: 1,
 				max: 3,
+			},
+		},
+		superBat: {
+			type: 'superBat',
+			image: flyswatter,
+			height: 10,
+			width: 10,
+			duration: 5,
+			swatDamage: 10,
+			prob: {
+				add: 1,
+				remove: 1,
 			},
 		},
 	},

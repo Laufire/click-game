@@ -66,6 +66,10 @@ const setPower = {
 
 	spoiler: (state, data) =>
 		({ score: state.score - rndBetween(data.score.min, data.score.max) }),
+
+	superBat: (state, data) => ({
+		superTill: state.superTill.add(data.duration, 'seconds'),
+	}),
 };
 
 const activatePower = (state, data) => setPower[data.type](state, data);
