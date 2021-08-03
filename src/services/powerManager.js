@@ -4,14 +4,13 @@ import config from '../core/config';
 import TargetManager from './targetManager';
 import { getRandomX, getRandomY } from './positionService';
 
-const eight = 8;
 const powerKeys = keys(config.powers);
 
 const getPower = ({ type } = {}) => {
 	const typeConfig = config.powers[type || rndValue(powerKeys)];
 
 	return {
-		id: rndString(eight),
+		id: rndString(config.idLength),
 		x: getRandomX(typeConfig),
 		y: getRandomY(typeConfig),
 		...typeConfig,

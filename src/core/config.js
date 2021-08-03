@@ -14,6 +14,7 @@ const delay = 2;
 
 const config = {
 	tickerDelay: ms * delay,
+	idLength: 8,
 	lives: 3,
 	maxTargets: 5,
 	swatDamage: 1,
