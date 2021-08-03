@@ -1,8 +1,9 @@
-import { rndBetween, rndValue, rndString } from '@laufire/utils/random';
+import { rndBetween, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import config from '../core/config';
 import TargetManager from './targetManager';
 import { getRandomX, getRandomY } from './positionService';
+import { getRndString } from './helperService';
 
 const powerKeys = keys(config.powers);
 
@@ -10,7 +11,7 @@ const getPower = ({ type } = {}) => {
 	const typeConfig = config.powers[type || rndValue(powerKeys)];
 
 	return {
-		id: rndString(config.idLength),
+		id: getRndString(),
 		x: getRandomX(typeConfig),
 		y: getRandomY(typeConfig),
 		...typeConfig,

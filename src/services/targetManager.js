@@ -1,10 +1,10 @@
 import config from '../core/config';
-import { rndBetween, rndString, rndValue } from '@laufire/utils/random';
+import { rndBetween, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import moment from 'moment';
 import { getRandomX, getRandomY } from './positionService';
+import { getRndString } from './helperService';
 
-const eight = 8;
 const hundred = 100;
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
@@ -16,7 +16,7 @@ const getTarget = ({ x, y, type } = {}) => {
 		hundred + (typeConfig.variance * hundred)) / hundred;
 
 	return {
-		id: rndString(eight),
+		id: getRndString(),
 		height: `${ typeConfig.height * randomVariance }vw`,
 		width: `${ typeConfig.width * randomVariance }vw`,
 		x: x !== undefined ? x : getRandomX(typeConfig),
