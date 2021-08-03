@@ -132,4 +132,24 @@ describe('TargetManager', () => {
 				.toEqual([mosquito]);
 		});
 	});
+	describe('removeTarget', () => {
+		const { removeTarget } = TargetManager;
+		const ant = {
+			id: '10',
+		};
+		const mosquito = {
+			id: '5',
+		};
+		const state = [
+			ant,
+			mosquito,
+		];
+
+		test('removeTarget remove target to be removed', () => {
+			const result = removeTarget(state, ant);
+
+			expect(result)
+				.toEqual([mosquito]);
+		});
+	});
 });
