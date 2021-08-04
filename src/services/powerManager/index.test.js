@@ -1,5 +1,5 @@
-import config from '../core/config';
-import PowerManager from './powerManager';
+import config from '../../core/config';
+import PowerManager from '../powerManager';
 
 // eslint-disable-next-line max-lines-per-function
 describe('PowerManager', () => {
