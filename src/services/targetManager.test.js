@@ -2,6 +2,8 @@
 import TargetManager from './targetManager';
 import config from '../core/config';
 import { contains, secure } from '@laufire/utils/collection';
+import { rndValue } from '@laufire/utils/random';
+import { replace } from '../../test/helpers';
 
 describe('TargetManager', () => {
 	const ant = secure({
@@ -13,7 +15,7 @@ describe('TargetManager', () => {
 	const mosquito = secure({
 		type: 'mosquito',
 		id: '9876',
-		lives: 0,
+		lives: 1,
 		score: 5,
 	});
 	const butterfly = secure({
@@ -48,12 +50,18 @@ describe('TargetManager', () => {
 		};
 
 		test('swatTarget reduces the life of the swatted target', () => {
-			const swattedAnt = { ...ant, lives: ant.lives - config.swatDamage };
+			const targetToSwat = rndValue(targets);
+			const swattedTarget = {
+				...targetToSwat,
+				lives: targetToSwat.lives - config.swatDamage,
+			};
+			const expectedTargets = replace(
+				targets, targetToSwat, swattedTarget
+			);
 
-			const result = swatTarget(state, ant);
+			const result = swatTarget(state, targetToSwat);
 
-			expect(result)
-				.toMatchObject({ targets: [swattedAnt, mosquito, butterfly] });
+			expect(result).toMatchObject({ targets: expectedTargets });
 		});
 
 		test('swatTarget reduces player life when a butterfly is swatted',
