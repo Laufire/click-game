@@ -4,6 +4,7 @@ import { keys } from '@laufire/utils/collection';
 import moment from 'moment';
 import { getRandomX, getRandomY } from './positionService';
 import { getId, getVariance } from './helperService';
+import PowerManager from './powerManager';
 
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
@@ -79,24 +80,18 @@ const decreaseTargetLives = (
 const getDeadTargets = (targets) =>
 	targets.filter((target) => target.lives <= 0);
 
-const getDamage = (state) => (state.superTill > moment()
-	? config.powers.superBat.swatDamage
-	: config.swatDamage);
+const swatActionDefault = (state, data) => ({
+	targets: decreaseTargetLives(
+		state.targets, [data], PowerManager.getDamage(state)
+	),
+});
 
 const swatActions = {
 	butterfly: (state, data) => ({
 		lives: state.lives - 1,
-		targets: decreaseTargetLives(
-			state.targets, [data], getDamage(state)
-		),
+		...swatActionDefault(state, data),
 	}),
 };
-
-const swatActionDefault = (state, data) => ({
-	targets: decreaseTargetLives(
-		state.targets, [data], getDamage(state)
-	),
-});
 
 const swatTarget = (state, data) =>
 	(swatActions[data.type] || swatActionDefault)(state, data);

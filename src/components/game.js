@@ -4,16 +4,14 @@ import Score from './score';
 import Lives from './lives';
 import GameScreen from './gameScreen';
 import GameOverScreen from './gameOverScreen';
-import moment from 'moment';
+import PowerManager from '../services/powerManager';
 
 const Game = () => {
 	const Screen = context.state.lives === 0 ? GameOverScreen : GameScreen;
-	const cursor = moment() < context.state.superTill
-		? 'super-bat'
-		: 'normal-bat';
+	const className = `${ PowerManager.getBatType(context.state) }-bat`;
 
 	return (
-		<div className={ cursor }>
+		<div className={ className }>
 			{ Screen() }
 			{ Score() }
 			{ Lives() }
