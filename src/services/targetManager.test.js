@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
 import TargetManager from './targetManager';
 import config from '../core/config';
@@ -20,6 +21,7 @@ describe('TargetManager', () => {
 	});
 	const butterfly = secure({
 		type: 'butterfly',
+		id: '2468',
 		lives: 1,
 		score: 0,
 	});
@@ -109,4 +111,31 @@ describe('TargetManager', () => {
 					.toEqual(data);
 			});
 	});
+
+	describe('decreaseTargetLives', () => {
+		const { decreaseTargetLives } = TargetManager;
+		const randomTarget = rndValue(targets);
+		const impactedTargets = [randomTarget];
+		const damage = rndValue(config.swatDamage,
+			config.powers.superBat.swatDamage);
+		const editedTarget = { ...randomTarget,
+			lives: Math.max(randomTarget.lives - damage, 0) };
+
+		const expectedTargets = replace(
+			targets, randomTarget, editedTarget
+		);
+
+		test('decreaseTargetLives returns targets with life decreased',
+			() => {
+				const result = decreaseTargetLives(
+					targets, impactedTargets, damage
+				);
+
+				expect(result).toEqual(expectedTargets);
+			});
+	});
+
+	// describe('addTargets', () => {});
+	// describe('getRandomTargets');
+	// describe('moveTargets');
 });
