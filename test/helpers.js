@@ -8,4 +8,6 @@ const replace = (
 	return clone;
 };
 
-export { replace };
+const unique = (array) => array.filter((elm, i) => i === array.indexOf(elm));
+
+export { replace, unique };
