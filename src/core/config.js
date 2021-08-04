@@ -18,6 +18,7 @@ const config = {
 	lives: 3,
 	maxTargets: 5,
 	swatDamage: 1,
+	penalDamage: 1,
 	targets: {
 		mosquito: {
 			type: 'mosquito',

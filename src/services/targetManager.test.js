@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import TargetManager from './targetManager';
 import config from '../core/config';
-import { contains, merge } from '@laufire/utils/collection';
+import { contains } from '@laufire/utils/collection';
 
 describe('TargetManager', () => {
 	describe('getTarget', () => {
@@ -56,8 +56,9 @@ describe('TargetManager', () => {
 
 			const result = swatTarget(state, butterfly);
 
-			expect(result).toMatchObject({ lives: state.lives - 1,
-				targets: [ant, mosquito, swattedButterfly] });
+			expect(result).toMatchObject({ lives: state.lives
+				- config.penalDamage,
+			targets: [ant, mosquito, swattedButterfly] });
 		});
 	});
 	describe('getDeadTargets', () => {

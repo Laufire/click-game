@@ -3,22 +3,20 @@ import { rndBetween, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import moment from 'moment';
 import { getRandomX, getRandomY } from './positionService';
-import { getId } from './helperService';
+import { getId, getVariance } from './helperService';
 
-const hundred = 100;
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
 const { targetsCount } = config.powers.bomb;
 
 const getTarget = ({ x, y, type } = {}) => {
 	const typeConfig = config.targets[type || rndValue(targetTypeKeys)];
-	const randomVariance = rndBetween(hundred - (typeConfig.variance * hundred),
-		hundred + (typeConfig.variance * hundred)) / hundred;
+	const variance = getVariance(typeConfig.variance);
 
 	return {
 		id: getId(),
-		height: `${ typeConfig.height * randomVariance }vw`,
-		width: `${ typeConfig.width * randomVariance }vw`,
+		height: `${ typeConfig.height * variance }vw`,
+		width: `${ typeConfig.width * variance }vw`,
 		x: x !== undefined ? x : getRandomX(typeConfig),
 		y: y !== undefined ? y : getRandomY(typeConfig),
 		...typeConfig,
