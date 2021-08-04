@@ -7,11 +7,13 @@ import { rndString } from '@laufire/utils/random';
 
 describe('HelperService', () => {
 	test('getId gives a rndString of the configured idLength', () => {
-		rndString.mockImplementation(() => false);
+		const mockValue = Symbol('mock');
+
+		rndString.mockImplementation(() => mockValue);
 
 		const result = getId();
 
 		expect(rndString).toHaveBeenCalledWith(config.idLength);
-		expect(result).toEqual(false);
+		expect(result).toEqual(mockValue);
 	});
 });
