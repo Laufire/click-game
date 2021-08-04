@@ -1,32 +1,31 @@
 /* eslint-disable max-lines-per-function */
 import TargetManager from './targetManager';
 import config from '../core/config';
-import { contains } from '@laufire/utils/collection';
+import { contains, secure } from '@laufire/utils/collection';
 
 describe('TargetManager', () => {
-	const ant = {
+	const ant = secure({
 		type: 'ant',
 		id: '1234',
 		lives: 1,
 		score: 10,
-	};
-	const mosquito = {
+	});
+	const mosquito = secure({
 		type: 'mosquito',
 		id: '9876',
 		lives: 0,
 		score: 5,
-	};
-	const butterfly = {
+	});
+	const butterfly = secure({
 		type: 'butterfly',
 		lives: 1,
 		score: 0,
-	};
-
-	const targets = [
+	});
+	const targets = secure([
 		ant,
 		mosquito,
 		butterfly,
-	];
+	]);
 
 	describe('getTarget', () => {
 		const { getTarget } = TargetManager;
