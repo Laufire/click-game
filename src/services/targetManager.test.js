@@ -1,3 +1,5 @@
+/* eslint-disable max-statements */
+/* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines-per-function */
 import TargetManager from './targetManager';
 import config from '../core/config';
@@ -20,6 +22,7 @@ describe('TargetManager', () => {
 	});
 	const butterfly = secure({
 		type: 'butterfly',
+		id: '2468',
 		lives: 1,
 		score: 0,
 	});
@@ -109,47 +112,55 @@ describe('TargetManager', () => {
 					.toEqual(data);
 			});
 	});
+
+	describe('decreaseTargetLives', () => {
+		const { decreaseTargetLives } = TargetManager;
+		const randomTarget = rndValue(targets);
+		const impactedTargets = [randomTarget];
+		const damage = rndValue(config.swatDamage,
+			config.powers.superBat.swatDamage);
+		const editedTarget = { ...randomTarget,
+			lives: Math.max(randomTarget.lives - damage, 0) };
+
+		const expectedTargets = replace(
+			targets, randomTarget, editedTarget
+		);
+
+		test('decreaseTargetLives returns targets with life decreased',
+			() => {
+				const result = decreaseTargetLives(
+					targets, impactedTargets, damage
+				);
+
+				expect(result).toEqual(expectedTargets);
+			});
+	});
 	describe('removeTargets', () => {
 		const { removeTargets } = TargetManager;
-		const ant = {
-			score: 10,
-		};
-		const mosquito = {
-			score: 5,
-		};
-		const state = [
-			ant,
-			mosquito,
-		];
-		const data = [
-			ant,
-		];
+		const targetToRetain = rndValue(targets);
+		const targetsToRemove = removeTargets(targets, [targetToRetain]);
 
 		test('removeTargets remove targets to be removed', () => {
-			const result = removeTargets(state, data);
+			const result = removeTargets(targets, targetsToRemove);
+			// eslint-disable-next-line max-nested-callbacks
+			const expectedResult = targets.filter((item) =>
+				!targetsToRemove.includes(item));
 
 			expect(result)
-				.toEqual([mosquito]);
+				.toEqual(expectedResult);
 		});
 	});
 	describe('removeTarget', () => {
 		const { removeTarget } = TargetManager;
-		const ant = {
-			id: '10',
-		};
-		const mosquito = {
-			id: '5',
-		};
-		const state = [
-			ant,
-			mosquito,
-		];
 
 		test('removeTarget remove target to be removed', () => {
-			const result = removeTarget(state, ant);
+			const clickedTarget = rndValue(targets);
+			const result = removeTarget(targets, clickedTarget);
+			const expectedResult = targets.filter((item) =>
+				item !== clickedTarget);
 
 			expect(result)
-				.toEqual([mosquito]);
+				.toEqual(expectedResult);
 		});
 	});
 });

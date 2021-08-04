@@ -100,7 +100,6 @@ const TargetManager = {
 	moveTargets,
 	addTargets,
 	getTarget,
-	getTargets,
 	removeTarget,
 	removeTargets,
 	getRandomTargets,
