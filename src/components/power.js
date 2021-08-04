@@ -12,7 +12,6 @@ const getStyle = (power) => {
 		left: `${ x - (width / two) }%`,
 		height: `${ height }vw`,
 		width: `${ width }vw`,
-		cursor: 'crossHair',
 	};
 };
 

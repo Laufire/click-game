@@ -5,8 +5,11 @@ body {
 .App {
 	text-align: center;
 
-	button {
-		font-weight: bold;
+	.normal-bat {
+		cursor: url("./image/normalBat.png"), crosshair;
+	}
+	.super-bat {
+		cursor: url("./image/superBat.png"), crosshair;
 	}
 }
 
