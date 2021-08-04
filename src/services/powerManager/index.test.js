@@ -1,7 +1,15 @@
+/* eslint-disable no-import-assign */
+/* eslint-disable max-lines-per-function */
+/* eslint-disable max-nested-callbacks */
+
+import * as random from '@laufire/utils/random';
 import config from '../../core/config';
 import PowerManager from '../powerManager';
 
-// eslint-disable-next-line max-lines-per-function
+beforeEach(() => {
+	jest.clearAllMocks();
+});
+
 describe('PowerManager', () => {
 	describe('getPower', () => {
 		const { getPower } = PowerManager;
@@ -21,9 +29,8 @@ describe('PowerManager', () => {
 			expect(power.id.length).toEqual(length);
 		});
 	});
-	// eslint-disable-next-line max-lines-per-function
-	describe.skip('removePowers', () => {
-		const { removePowers } = PowerManager;
+
+	describe('test the removePowers', () => {
 		const bomb = {
 			id: 'abcd',
 			type: 'bomb',
@@ -34,18 +41,15 @@ describe('PowerManager', () => {
 			type: 'ice',
 			prob: 0,
 		};
-		const state = {
-			powers: [
-				bomb,
-				ice,
-			],
-		};
+		const powers = [bomb, ice];
 
-		test('removePowers bomb ice', () => {
-			const result = removePowers(state);
+		test('test the removePower with rndBetween', () => {
+			random.rndBetween = jest.fn();
+			random.rndBetween.mockImplementation(() => 0);
 
-			expect(result).toMatchObject({ powers: [ice] });
-			expect(result).toMatchObject({ powers: [bomb] });
+			const result = PowerManager.removePowers(powers);
+
+			expect(result).toEqual(powers);
 		});
 	});
 });
