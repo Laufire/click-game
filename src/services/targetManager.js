@@ -8,7 +8,6 @@ import PowerManager from './powerManager';
 
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
-const { targetsCount } = config.powers.bomb;
 
 const getTarget = ({ x, y, type } = {}) => {
 	const typeConfig = config.targets[type || rndValue(targetTypeKeys)];
@@ -47,19 +46,6 @@ const addTargets = (targets) => (targets.length < maxTargets
 
 const removeTarget = (targets, target) =>
 	targets.filter((current) => current.id !== target.id);
-
-const getRandomTargets = (targets) => {
-	const result = [];
-	const count = Math.min(targetsCount.max, targets.length);
-
-	while(result.length < count) {
-		const i = rndBetween(0, targets.length - 1);
-
-		if(!result.includes(targets[i]))
-			result.push(targets[i]);
-	}
-	return result;
-};
 
 const removeTargets = (targets, targetsToRemove) =>
 	targets.filter((target) => !targetsToRemove.includes(target));
@@ -106,7 +92,6 @@ const TargetManager = {
 	getTarget,
 	removeTarget,
 	removeTargets,
-	getRandomTargets,
 	getTargetsScore,
 	decreaseTargetLives,
 	getDeadTargets,

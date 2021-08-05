@@ -1,4 +1,4 @@
-import { rndBetween, rndValue } from '@laufire/utils/random';
+import { rndBetween, rndValue, rndValues } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import config from '../../core/config';
 import TargetManager from '../targetManager';
@@ -6,7 +6,7 @@ import { adjustTime } from '../helperService';
 
 const Powers = {
 	bomb: (state) => {
-		const impactedTargets = TargetManager.getRandomTargets(state.targets);
+		const impactedTargets = rndValues(state.targets);
 		const { targetsCount } = config.powers.bomb;
 
 		return {
