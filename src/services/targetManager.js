@@ -1,9 +1,8 @@
 import config from '../core/config';
 import { rndBetween, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
-import moment from 'moment';
 import { getRandomX, getRandomY } from './positionService';
-import { getId, getVariance } from './helperService';
+import { getId, getVariance, isFuture } from './helperService';
 import PowerManager from './powerManager';
 
 const { maxTargets } = config;
@@ -27,8 +26,7 @@ const getTarget = ({ x, y, type } = {}) => {
 };
 
 const moveTargets = ({ targets, frozenTill }) =>
-	// TODO: Move this comparison to a service.
-	(moment() > moment(frozenTill)
+	(isFuture(frozenTill)
 		? targets.map((target) => ({
 			...target,
 			x: getRandomX(target),

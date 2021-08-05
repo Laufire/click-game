@@ -2,9 +2,8 @@ import { rndBetween, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import config from '../../core/config';
 import { getRandomX, getRandomY } from '../positionService';
-import { getId } from '../helperService';
+import { getId, isFuture } from '../helperService';
 import Powers from './powers';
-import moment from 'moment';
 import { damage } from './data';
 
 const powerKeys = keys(config.powers);
@@ -39,7 +38,7 @@ const removePower = (powers, data) =>
 	powers.filter((current) => current.id !== data.id);
 
 const getBatType = ({ superTill }) => (
-	moment(superTill) > moment() ? 'super' : 'normal');
+	isFuture(superTill) ? 'normal' : 'super');
 
 const getDamage = (state) => damage[getBatType(state)];
 

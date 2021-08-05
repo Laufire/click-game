@@ -15,4 +15,6 @@ const adjustTime = (
 ) =>
 	new Date(moment(date).add(adjustment, unit));
 
-export { getId, getVariance, adjustTime };
+const isFuture = (date) => date < new Date();
+
+export { getId, getVariance, adjustTime, isFuture };
