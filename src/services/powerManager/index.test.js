@@ -34,12 +34,16 @@ describe('PowerManager', () => {
 		const bomb = {
 			id: 'abcd',
 			type: 'bomb',
-			prob: 1,
+			prob: {
+				remove: 0,
+			},
 		};
 		const ice = {
 			id: 'efgh',
 			type: 'ice',
-			prob: 0,
+			prob: {
+				remove: 0,
+			},
 		};
 		const powers = [bomb, ice];
 
@@ -50,6 +54,19 @@ describe('PowerManager', () => {
 			const result = PowerManager.removePowers(powers);
 
 			expect(result).toEqual(powers);
+		});
+
+		test('test the removePower without mock', () => {
+			const result = PowerManager.removePowers(powers);
+
+			expect(result).toEqual(powers);
+		});
+
+		test('test the removeActivatedPower without mock', () => {
+			const data = ice;
+			const result = PowerManager.removeActivatedPower(powers, data);
+
+			expect(result).toEqual([bomb]);
 		});
 	});
 });
