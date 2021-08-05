@@ -12,7 +12,7 @@ import * as position from './positionService';
 import * as helper from './helperService';
 
 beforeEach(() => {
-	jest.clearAllMocks();
+	jest.restoreAllMocks();
 });
 
 describe('TargetManager', () => {
@@ -74,9 +74,8 @@ describe('TargetManager', () => {
 
 		test('getTarget params are optional', () => {
 			helper.getId = jest.fn().mockImplementation(() => id);
-			const { rndValue } = random;
-
-			random.rndValue = jest.fn().mockImplementation(() => 'ant');
+			jest.spyOn(random,
+				'rndValue').mockImplementation(jest.fn(() => 'ant'));
 			helper.getVariance = jest.fn().mockImplementation(() => variance);
 			position.getRandomX = jest.fn().mockImplementation(() => x);
 			position.getRandomY = jest.fn().mockImplementation(() => y);
@@ -97,7 +96,6 @@ describe('TargetManager', () => {
 			expect(position.getRandomY)
 				.toHaveBeenCalledWith(size);
 			expect(result).toMatchObject(expectedResult);
-			random.rndValue = rndValue;
 		});
 	});
 
