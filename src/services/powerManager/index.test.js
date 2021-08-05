@@ -118,5 +118,36 @@ describe('PowerManager', () => {
 				expect(result).toEqual(expectedDamage);
 			});
 		});
+		describe('getBatType', () => {
+			test('getBatType returns super when the super is active', () => {
+				const date = new Date();
+				const adjustment = 5;
+				const unit = 'seconds';
+
+				const superTill = adjustTime(
+					date, adjustment, unit
+				);
+				const expectedBatType = 'super';
+
+				const result = PowerManager.getBatType({ superTill });
+
+				expect(result).toEqual(expectedBatType);
+			});
+
+			test('getBatType returns normal the when super is inactive', () => {
+				const date = new Date();
+				const adjustment = -5;
+				const unit = 'seconds';
+
+				const superTill = adjustTime(
+					date, adjustment, unit
+				);
+				const expectedBatType = 'normal';
+
+				const result = PowerManager.getBatType({ superTill });
+
+				expect(result).toEqual(expectedBatType);
+			});
+		});
 	});
 });
