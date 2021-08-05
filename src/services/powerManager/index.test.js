@@ -5,6 +5,7 @@
 import * as random from '@laufire/utils/random';
 import config from '../../core/config';
 import PowerManager from '../powerManager';
+import Powers from './powers';
 
 beforeEach(() => {
 	jest.clearAllMocks();
@@ -67,6 +68,23 @@ describe('PowerManager', () => {
 			const result = PowerManager.removePower(powers, data);
 
 			expect(result).toEqual([bomb]);
+		});
+
+		test('activatePower activates the given power', () => {
+			const returnValue = Symbol('returnValue');
+			const state = Symbol('state');
+			const type = 'bomb';
+			const data = { type };
+
+			Powers[type] = jest.fn()
+				.mockImplementation(() => returnValue);
+
+			const powerHandler = Powers[type];
+
+			const result = PowerManager.activatePower(state, data);
+
+			expect(powerHandler).toHaveBeenCalledWith(state);
+			expect(result).toEqual(returnValue);
 		});
 	});
 });

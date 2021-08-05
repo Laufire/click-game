@@ -3,7 +3,7 @@ import { keys } from '@laufire/utils/collection';
 import config from '../../core/config';
 import TargetManager from '../targetManager';
 
-const setPower = {
+const Powers = {
 	bomb: (state) => {
 		const impactedTargets = TargetManager.getRandomTargets(state.targets);
 		const { targetsCount } = config.powers.bomb;
@@ -26,10 +26,10 @@ const setPower = {
 	},
 
 	surprise: (state) => {
-		const randomPower = rndValue(keys(setPower)
+		const randomPower = rndValue(keys(Powers)
 			.filter((data) => data !== 'surprise'));
 
-		return setPower[randomPower](state);
+		return Powers[randomPower](state);
 	},
 
 	gift: (state) => {
@@ -55,4 +55,4 @@ const setPower = {
 	},
 };
 
-export default setPower;
+export default Powers;

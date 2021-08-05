@@ -3,7 +3,7 @@ import { keys } from '@laufire/utils/collection';
 import config from '../../core/config';
 import { getRandomX, getRandomY } from '../positionService';
 import { getId } from '../helperService';
-import setPower from './powers';
+import Powers from './powers';
 import moment from 'moment';
 
 const powerKeys = keys(config.powers);
@@ -32,7 +32,7 @@ const hasPowerExpired = (data) =>
 const removeExpiredPowers = (powers) => powers.filter((data) =>
 	!hasPowerExpired(data));
 
-const activatePower = (state, data) => setPower[data.type](state);
+const activatePower = (state, data) => Powers[data.type](state);
 
 const removePower = (powers, data) =>
 	powers.filter((current) => current.id !== data.id);
