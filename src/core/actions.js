@@ -30,12 +30,12 @@ const addPowers = ({ state }) => ({
 	powers: PowerManager.addPowers(state.powers),
 });
 
-const removePowers = ({ state }) => ({
-	powers: PowerManager.removePowers(state.powers),
+const removeExpiredPowers = ({ state }) => ({
+	powers: PowerManager.removeExpiredPowers(state.powers),
 });
 
 const removeActivatedPower = ({ state, data }) => ({
-	powers: PowerManager.removeActivatedPower(state.powers, data),
+	powers: PowerManager.removePower(state.powers, data),
 });
 
 const removeDeadTargets = ({ state }) => {
@@ -59,7 +59,7 @@ const actions = {
 	removeTarget,
 	activatePower,
 	addPowers,
-	removePowers,
+	removeExpiredPowers,
 	removeActivatedPower,
 	removeDeadTargets,
 	swatTarget,
