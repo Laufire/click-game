@@ -6,8 +6,9 @@ import { adjustTime } from '../helperService';
 
 const Powers = {
 	bomb: (state) => {
-		const impactedTargets = rndValues(state.targets);
 		const { targetsCount } = config.powers.bomb;
+		const count = Math.min(targetsCount.max, state.targets.length);
+		const impactedTargets = rndValues(state.targets, count);
 
 		return {
 			targets: TargetManager.decreaseTargetLives(
