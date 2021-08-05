@@ -13,9 +13,12 @@ const Ticker = () => {
 		const { config } = context;
 		const { tickerDelay } = config;
 
-		setInterval(() => {
+		const runMasterLoop = () =>
 			masterLoop.forEach((data) => context.actions[data]());
-		}, tickerDelay);
+
+		runMasterLoop();
+
+		setInterval(runMasterLoop, tickerDelay);
 	};
 
 	return {
