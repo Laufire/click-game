@@ -1,11 +1,19 @@
+/* eslint-disable no-magic-numbers */
+/* eslint-disable no-import-assign */
 /* eslint-disable max-statements */
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines-per-function */
+import * as random from '@laufire/utils/random';
 import TargetManager from './targetManager';
 import config from '../core/config';
-import { contains, secure } from '@laufire/utils/collection';
-import { rndValue } from '@laufire/utils/random';
+import { secure } from '@laufire/utils/collection';
 import { replace } from '../../test/helpers';
+import * as position from './positionService';
+import * as helper from './helperService';
+
+beforeEach(() => {
+	jest.clearAllMocks();
+});
 
 describe('TargetManager', () => {
 	const ant = secure({
@@ -34,14 +42,58 @@ describe('TargetManager', () => {
 
 	describe('getTarget', () => {
 		const { getTarget } = TargetManager;
-		const [x, y, type] = [0, 0, 'ant'];
+		const variance = 0.5;
+		const [x, y, type, id] = [Symbol('x'),
+			Symbol('y'),
+			'ant',
+			Symbol('id')];
+		const [height, width] = [20, 10];
+		const typeConfig = config.targets[type];
 
-		test('getTarget returns a new target', () => {
-			const target = getTarget({ x, y, type });
-			const typeConfig = config.targets[type];
+		test('getTarget returns a expected target', () => {
+			helper.getId = jest.fn().mockImplementation(() => id);
+			helper.getVariance = jest.fn().mockImplementation(() => variance);
+			const result = getTarget({ x, y, type });
+			const expectedResult = {
+				id: id,
+				x: x,
+				y: y,
+				type: type,
+				height: height * variance,
+				width: width * variance,
+				...typeConfig,
+			};
 
-			expect(contains(target, { x, y, type, ...typeConfig }))
-				.toEqual(true);
+			expect(helper.getId).toHaveBeenCalled();
+			expect(helper.getVariance).toHaveBeenCalledWith(variance);
+			expect(result).toMatchObject(expectedResult);
+		});
+
+		test('getTarget returns random target', () => {
+			helper.getId = jest.fn().mockImplementation(() => id);
+			const { rndValue } = random;
+
+			random.rndValue = jest.fn().mockImplementation(() => 'ant');
+			helper.getVariance = jest.fn().mockImplementation(() => variance);
+			position.getRandomX = jest.fn().mockImplementation(() => x);
+			position.getRandomY = jest.fn().mockImplementation(() => y);
+			const result = getTarget();
+			const expectedResult = {
+				id: id,
+				x: x,
+				y: y,
+				type: type,
+				height: height * variance,
+				width: width * variance,
+				...typeConfig,
+			};
+
+			expect(helper.getId).toHaveBeenCalled();
+			expect(helper.getVariance).toHaveBeenCalledWith(variance);
+			expect(position.getRandomX).toHaveBeenCalledWith(typeConfig);
+			expect(position.getRandomY).toHaveBeenCalledWith(typeConfig);
+			expect(result).toMatchObject(expectedResult);
+			random.rndValue = rndValue;
 		});
 	});
 
@@ -53,7 +105,7 @@ describe('TargetManager', () => {
 		};
 
 		test('swatTarget reduces the life of the swatted target', () => {
-			const targetToSwat = rndValue(targets);
+			const targetToSwat = random.rndValue(targets);
 			const swattedTarget = {
 				...targetToSwat,
 				lives: targetToSwat.lives - config.swatDamage,
@@ -115,9 +167,9 @@ describe('TargetManager', () => {
 
 	describe('decreaseTargetLives', () => {
 		const { decreaseTargetLives } = TargetManager;
-		const randomTarget = rndValue(targets);
+		const randomTarget = random.rndValue(targets);
 		const impactedTargets = [randomTarget];
-		const damage = rndValue(config.swatDamage,
+		const damage = random.rndValue(config.swatDamage,
 			config.powers.superBat.swatDamage);
 		const editedTarget = { ...randomTarget,
 			lives: Math.max(randomTarget.lives - damage, 0) };
@@ -137,7 +189,7 @@ describe('TargetManager', () => {
 	});
 	describe('removeTargets', () => {
 		const { removeTargets } = TargetManager;
-		const targetToRetain = rndValue(targets);
+		const targetToRetain = random.rndValue(targets);
 		const targetsToRemove = removeTargets(targets, [targetToRetain]);
 
 		test('removeTargets remove targets to be removed', () => {
@@ -153,8 +205,8 @@ describe('TargetManager', () => {
 	describe('removeTarget', () => {
 		const { removeTarget } = TargetManager;
 
-		test('removeTarget remove target to be removed', () => {
-			const clickedTarget = rndValue(targets);
+		test('removeTarget removes target to be removed', () => {
+			const clickedTarget = random.rndValue(targets);
 			const result = removeTarget(targets, clickedTarget);
 			const expectedResult = targets.filter((item) =>
 				item !== clickedTarget);
