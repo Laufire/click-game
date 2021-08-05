@@ -6,7 +6,7 @@
 import * as random from '@laufire/utils/random';
 import TargetManager from './targetManager';
 import config from '../core/config';
-import { secure } from '@laufire/utils/collection';
+import { secure, keys, range } from '@laufire/utils/collection';
 import { replace } from '../../test/helpers';
 import * as position from './positionService';
 import * as helper from './helperService';
@@ -39,6 +39,26 @@ describe('TargetManager', () => {
 		mosquito,
 		butterfly,
 	]);
+
+	describe('addTargets', () => {
+		const { addTargets } = TargetManager;
+
+		test('addTargets add target', () => {
+			random.rndBetween = jest.fn().mockImplementation(() => 1);
+
+			const result = addTargets([]);
+			const resultKeys = result.map((item) => item.type);
+
+			expect(resultKeys).toEqual(keys(config.targets));
+		});
+
+		test('addTargets return target', () => {
+			const maxTargets = range(0, config.maxTargets).map(() => ant);
+			const result = addTargets(maxTargets);
+
+			expect(result).toEqual(maxTargets);
+		});
+	});
 
 	describe('getTarget', () => {
 		const { getTarget } = TargetManager;
