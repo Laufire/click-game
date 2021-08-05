@@ -47,21 +47,24 @@ describe('TargetManager', () => {
 			Symbol('y'),
 			'ant',
 			Symbol('id')];
-		const [height, width] = [20, 10];
 		const typeConfig = config.targets[type];
+		const { height, width } = typeConfig;
+		const size = {
+			height: height * variance,
+			width: width * variance,
+		};
 
-		test('getTarget returns a expected target', () => {
+		test('getTarget returns a target', () => {
 			helper.getId = jest.fn().mockImplementation(() => id);
 			helper.getVariance = jest.fn().mockImplementation(() => variance);
 			const result = getTarget({ x, y, type });
 			const expectedResult = {
-				id: id,
-				x: x,
-				y: y,
-				type: type,
-				height: height * variance,
-				width: width * variance,
+				id,
+				x,
+				y,
+				type,
 				...typeConfig,
+				...size,
 			};
 
 			expect(helper.getId).toHaveBeenCalled();
@@ -69,7 +72,7 @@ describe('TargetManager', () => {
 			expect(result).toMatchObject(expectedResult);
 		});
 
-		test('getTarget returns random target', () => {
+		test('getTarget params are optional', () => {
 			helper.getId = jest.fn().mockImplementation(() => id);
 			const { rndValue } = random;
 
@@ -79,19 +82,20 @@ describe('TargetManager', () => {
 			position.getRandomY = jest.fn().mockImplementation(() => y);
 			const result = getTarget();
 			const expectedResult = {
-				id: id,
-				x: x,
-				y: y,
-				type: type,
-				height: height * variance,
-				width: width * variance,
+				id,
+				x,
+				y,
+				type,
 				...typeConfig,
+				...size,
 			};
 
 			expect(helper.getId).toHaveBeenCalled();
 			expect(helper.getVariance).toHaveBeenCalledWith(variance);
-			expect(position.getRandomX).toHaveBeenCalledWith(typeConfig);
-			expect(position.getRandomY).toHaveBeenCalledWith(typeConfig);
+			expect(position.getRandomX)
+				.toHaveBeenCalledWith(size);
+			expect(position.getRandomY)
+				.toHaveBeenCalledWith(size);
 			expect(result).toMatchObject(expectedResult);
 			random.rndValue = rndValue;
 		});

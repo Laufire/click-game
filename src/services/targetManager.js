@@ -13,14 +13,17 @@ const { targetsCount } = config.powers.bomb;
 const getTarget = ({ x, y, type } = {}) => {
 	const typeConfig = config.targets[type || rndValue(targetTypeKeys)];
 	const variance = getVariance(typeConfig.variance);
+	const size = {
+		height: typeConfig.height * variance,
+		width: typeConfig.width * variance,
+	};
 
 	return {
 		id: getId(),
-		height: typeConfig.height * variance,
-		width: typeConfig.width * variance,
-		x: x !== undefined ? x : getRandomX(typeConfig),
-		y: y !== undefined ? y : getRandomY(typeConfig),
+		x: x !== undefined ? x : getRandomX(size),
+		y: y !== undefined ? y : getRandomY(size),
 		...typeConfig,
+		...size,
 	};
 };
 
