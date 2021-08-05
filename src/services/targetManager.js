@@ -16,8 +16,8 @@ const getTarget = ({ x, y, type } = {}) => {
 
 	return {
 		id: getId(),
-		height: `${ typeConfig.height * variance }vw`,
-		width: `${ typeConfig.width * variance }vw`,
+		height: typeConfig.height * variance,
+		width: typeConfig.width * variance,
 		x: x !== undefined ? x : getRandomX(typeConfig),
 		y: y !== undefined ? y : getRandomY(typeConfig),
 		...typeConfig,
