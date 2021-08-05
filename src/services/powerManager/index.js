@@ -26,15 +26,15 @@ const getPowers = () => powerKeys.map((type) =>
 
 const addPowers = (powers) =>	powers.concat(getPowers());
 
-const shouldRemovePower = (data) =>
+const hasPowerExpired = (data) =>
 	rndBetween(1, 1 / data.prob.remove) === 1;
 
-const removePowers = (powers) => powers.filter((data) =>
-	!shouldRemovePower(data));
+const removeExpiredPowers = (powers) => powers.filter((data) =>
+	!hasPowerExpired(data));
 
 const activatePower = (state, data) => setPower[data.type](state);
 
-const removeActivatedPower = (powers, data) =>
+const removePower = (powers, data) =>
 	powers.filter((current) => current.id !== data.id);
 
 const getBatType = ({ superTill }) => (
@@ -50,9 +50,9 @@ const getDamage = (state) => damage[getBatType(state)];
 const PowerManager = {
 	getPower,
 	addPowers,
-	removePowers,
+	removeExpiredPowers,
 	activatePower,
-	removeActivatedPower,
+	removePower,
 	getBatType,
 	damage,
 	getDamage,

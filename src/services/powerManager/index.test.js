@@ -47,24 +47,24 @@ describe('PowerManager', () => {
 		};
 		const powers = [bomb, ice];
 
-		test('test the removePower with rndBetween', () => {
+		test('test the removeExpiredPower with rndBetween', () => {
 			random.rndBetween = jest.fn();
 			random.rndBetween.mockImplementation(() => 0);
 
-			const result = PowerManager.removePowers(powers);
+			const result = PowerManager.removeExpiredPowers(powers);
 
 			expect(result).toEqual(powers);
 		});
 
-		test('test the removePower without mock', () => {
-			const result = PowerManager.removePowers(powers);
+		test('removeExpiredPowers remove the powers', () => {
+			const result = PowerManager.removeExpiredPowers(powers);
 
 			expect(result).toEqual(powers);
 		});
 
-		test('test the removeActivatedPower without mock', () => {
+		test('removePower remove the given power', () => {
 			const data = ice;
-			const result = PowerManager.removeActivatedPower(powers, data);
+			const result = PowerManager.removePower(powers, data);
 
 			expect(result).toEqual([bomb]);
 		});
