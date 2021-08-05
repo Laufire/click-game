@@ -5,6 +5,7 @@ import { getRandomX, getRandomY } from '../positionService';
 import { getId } from '../helperService';
 import Powers from './powers';
 import moment from 'moment';
+import { damage } from './data';
 
 const powerKeys = keys(config.powers);
 
@@ -40,11 +41,6 @@ const removePower = (powers, data) =>
 const getBatType = ({ superTill }) => (
 	moment(superTill) > moment() ? 'super' : 'normal');
 
-const damage = {
-	super: config.powers.superBat.swatDamage,
-	normal: config.swatDamage,
-};
-
 const getDamage = (state) => damage[getBatType(state)];
 
 const PowerManager = {
@@ -54,7 +50,6 @@ const PowerManager = {
 	activatePower,
 	removePower,
 	getBatType,
-	damage,
 	getDamage,
 };
 
