@@ -1,8 +1,8 @@
 import config from './config';
 import TargetManager from '../services/targetManager';
-import moment from 'moment';
 
 const { getTarget } = TargetManager;
+const timeZero = new Date();
 
 const seed = {
 	targets: [
@@ -14,8 +14,8 @@ const seed = {
 	powers: [],
 	score: 0,
 	lives: config.lives,
-	frozenTill: moment(),
-	superTill: moment(),
+	frozenTill: timeZero,
+	superTill: timeZero,
 };
 
 export default seed;

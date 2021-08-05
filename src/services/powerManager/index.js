@@ -38,7 +38,7 @@ const removePower = (powers, data) =>
 	powers.filter((current) => current.id !== data.id);
 
 const getBatType = ({ superTill }) => (
-	superTill > moment() ? 'super' : 'normal');
+	moment(superTill) > moment() ? 'super' : 'normal');
 
 const damage = {
 	super: config.powers.superBat.swatDamage,

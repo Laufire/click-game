@@ -28,7 +28,8 @@ const getTarget = ({ x, y, type } = {}) => {
 };
 
 const moveTargets = ({ targets, frozenTill }) =>
-	(moment() > frozenTill
+	// TODO: Move this comparison to a service.
+	(moment() > moment(frozenTill)
 		? targets.map((target) => ({
 			...target,
 			x: getRandomX(target),

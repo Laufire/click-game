@@ -2,6 +2,7 @@ import { rndBetween, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import config from '../../core/config';
 import TargetManager from '../targetManager';
+import { adjustTime } from '../helperService';
 
 const Powers = {
 	bomb: (state) => {
@@ -20,8 +21,11 @@ const Powers = {
 		const { duration } = config.powers.ice;
 
 		return {
-			frozenTill:	state.frozenTill.add(rndBetween(duration.min,
-				duration.max), 'seconds'),
+			frozenTill: adjustTime(
+				state.frozenTill,
+				rndBetween(duration.min, duration.max),
+				'seconds'
+			),
 		};
 	},
 
@@ -50,7 +54,11 @@ const Powers = {
 		const { duration } = config.powers.superBat;
 
 		return {
-			superTill: state.superTill.add(duration, 'seconds'),
+			superTill: adjustTime(
+				state.superTill,
+				duration,
+				'seconds',
+			),
 		};
 	},
 };
