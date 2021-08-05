@@ -4,7 +4,9 @@
 
 import * as random from '@laufire/utils/random';
 import config from '../../core/config';
+import { adjustTime } from '../helperService';
 import PowerManager from '../powerManager';
+import { damage } from './data';
 import Powers from './powers';
 
 beforeEach(() => {
@@ -85,6 +87,36 @@ describe('PowerManager', () => {
 
 			expect(powerHandler).toHaveBeenCalledWith(state);
 			expect(result).toEqual(returnValue);
+		});
+
+		describe('getDamage', () => {
+			test('geDamage returns superbat when power is active', () => {
+				const date = new Date();
+				const adjustment = 5;
+				const unit = 'seconds';
+
+				const superTill = adjustTime(
+					date, adjustment, unit
+				);
+				const expectedDamage = damage.super;
+				const result = PowerManager
+					.getDamage({ superTill });
+
+				expect(result).toEqual(expectedDamage);
+			});
+			test('geDamage returns normalbat when power is not active', () => {
+				const date = new Date();
+				const adjustment = -5;
+				const unit = 'seconds';
+
+				const superTill = adjustTime(
+					date, adjustment, unit
+				);
+				const expectedDamage = damage.normal;
+				const result = PowerManager.getDamage({ superTill });
+
+				expect(result).toEqual(expectedDamage);
+			});
 		});
 	});
 });
