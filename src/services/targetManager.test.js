@@ -6,39 +6,18 @@
 import * as random from '@laufire/utils/random';
 import TargetManager from './targetManager';
 import config from '../core/config';
-import { secure, keys, range } from '@laufire/utils/collection';
+import { keys, range } from '@laufire/utils/collection';
 import { replace } from '../../test/helpers';
 import * as position from './positionService';
 import * as helper from './helperService';
+import Mocks from '../../test/mock';
 
 beforeEach(() => {
 	jest.restoreAllMocks();
 });
 
 describe('TargetManager', () => {
-	const ant = secure({
-		type: 'ant',
-		id: '1234',
-		lives: 1,
-		score: 10,
-	});
-	const mosquito = secure({
-		type: 'mosquito',
-		id: '9876',
-		lives: 1,
-		score: 5,
-	});
-	const butterfly = secure({
-		type: 'butterfly',
-		id: '2468',
-		lives: 1,
-		score: 0,
-	});
-	const targets = secure([
-		ant,
-		mosquito,
-		butterfly,
-	]);
+	const { targets, ant, mosquito, butterfly } = Mocks;
 
 	describe('addTargets', () => {
 		const { addTargets } = TargetManager;
