@@ -51,8 +51,8 @@ describe('PowerManager', () => {
 		const powers = [bomb, ice];
 
 		test('test the removeExpiredPower with rndBetween', () => {
-			random.rndBetween = jest.fn();
-			random.rndBetween.mockImplementation(() => 0);
+			jest.spyOn(random, 'rndBetween')
+				.mockImplementation(jest.fn(() => 0));
 
 			const result = PowerManager.removeExpiredPowers(powers);
 
@@ -78,8 +78,8 @@ describe('PowerManager', () => {
 			const type = 'bomb';
 			const data = { type };
 
-			Powers[type] = jest.fn()
-				.mockImplementation(() => returnValue);
+			jest.spyOn(Powers, type)
+				.mockImplementation(jest.fn(() => returnValue));
 
 			const powerHandler = Powers[type];
 
