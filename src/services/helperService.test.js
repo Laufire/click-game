@@ -5,11 +5,12 @@ jest.mock('@laufire/utils/random');
 
 import config from '../core/config';
 import * as helper from './helperService';
-import { rndString } from '@laufire/utils/random';
+import * as random from '@laufire/utils/random';
 
 describe('HelperService', () => {
 	describe('getId', () => {
 		const { getId } = helper;
+		const { rndString } = random;
 
 		test('getId gives a rndString of the configured idLength', () => {
 			const mockValue = Symbol('mock');
@@ -43,5 +44,34 @@ describe('HelperService', () => {
 
 				expect(result).toEqual(false);
 			});
+	});
+
+	describe('getVariance', () => {
+		const { getVariance } = helper;
+		const input = 100;
+
+		test('returns a random number between variance range', () => {
+			jest.spyOn(random, 'rndBetween')
+				.mockImplementation(jest.fn(() => input));
+			const { rndBetween } = random;
+			const result = getVariance(0.2);
+
+			expect(result).toEqual(input / 100);
+			expect(rndBetween).toHaveBeenCalledWith(80, 120);
+		});
+	});
+
+	describe.skip('adjustTime', () => {
+		const { adjustTime } = helper;
+
+		test('returns adjustedTime', () => {
+			const result = adjustTime(
+				new Date(), 4, 'hours'
+			);
+
+			expect(result).toEqual(adjustTime(
+				new Date(), 4, 'hours'
+			));
+		});
 	});
 });
