@@ -241,6 +241,7 @@ describe('TargetManager', () => {
 
 			const result = moveTargets(state);
 
+			expect(PowerManager.isFrozen).toHaveBeenCalledWith(state);
 			expect(result).toEqual(expectedResult);
 		});
 
@@ -253,6 +254,7 @@ describe('TargetManager', () => {
 
 				const result = moveTargets(state);
 
+				expect(PowerManager.isFrozen).toHaveBeenCalledWith(state);
 				expect(result).toEqual(expectedResult);
 			});
 	});

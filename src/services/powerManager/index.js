@@ -42,7 +42,7 @@ const getBatType = ({ superTill }) => (
 
 const getDamage = (state) => damage[getBatType(state)];
 
-const isFrozen = (frozenTill) => isFuture(frozenTill);
+const isFrozen = ({ frozenTill }) => isFuture(frozenTill);
 
 const PowerManager = {
 	getPower,

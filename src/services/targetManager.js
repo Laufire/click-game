@@ -25,14 +25,14 @@ const getTarget = ({ x, y, type } = {}) => {
 	};
 };
 
-const moveTargets = ({ targets, frozenTill }) =>
-	(PowerManager.isFrozen(frozenTill)
-		? targets.map((target) => ({
+const moveTargets = (state) =>
+	(PowerManager.isFrozen(state)
+		? state.targets.map((target) => ({
 			...target,
 			x: getRandomX(target),
 			y: getRandomY(target),
 		}))
-		: targets);
+		: state.targets);
 
 const getTargets = () => targetTypeKeys.map((type) =>
 	rndBetween(1, 1 / config.targets[type].prob.add) === 1
