@@ -1,4 +1,4 @@
-import { rndBetween, rndValue } from '@laufire/utils/random';
+import { rndBetween } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import config from '../../core/config';
 import { getRandomX, getRandomY } from '../positionService';
@@ -8,8 +8,8 @@ import { damage } from './data';
 
 const powerKeys = keys(config.powers);
 
-const getPower = ({ type } = {}) => {
-	const typeConfig = config.powers[type || rndValue(powerKeys)];
+const getPower = ({ type }) => {
+	const typeConfig = config.powers[type];
 
 	return {
 		id: getId(),
@@ -24,7 +24,7 @@ const getPowers = () => powerKeys.map((type) =>
 		1 / config.powers[type].prob.add) === 1
 		&& getPower({ type })).filter((value) => value);
 
-const addPowers = (powers) =>	powers.concat(getPowers());
+const addPowers = (powers) => powers.concat(getPowers());
 
 const hasPowerExpired = (data) =>
 	rndBetween(1, 1 / data.prob.remove) === 1;
