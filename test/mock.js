@@ -1,4 +1,5 @@
 import { secure } from '@laufire/utils/collection';
+import { rndValues } from '@laufire/utils/random';
 
 const ant = secure({
 	type: 'ant',
@@ -23,7 +24,8 @@ const targets = secure([
 	mosquito,
 	butterfly,
 ]);
+const getRandomTargets = (count = 1) => rndValues(targets, count);
 
-const Mocks = { ant, mosquito, butterfly, targets };
+const Mocks = { ant, mosquito, butterfly, targets, getRandomTargets };
 
 export default Mocks;

@@ -13,6 +13,7 @@ const Powers = {
 		return {
 			targets: TargetManager.decreaseTargetLives(
 				state.targets, impactedTargets,
+				// TODO: Need to add separate configuration for damage
 				rndBetween(targetsCount.min, targetsCount.max)
 			),
 		};
