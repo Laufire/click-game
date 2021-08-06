@@ -11,6 +11,7 @@ import { replace } from '../../test/helpers';
 import * as position from './positionService';
 import * as helper from './helperService';
 import Mocks from '../../test/mock';
+import PowerManager from './powerManager';
 
 beforeEach(() => {
 	jest.restoreAllMocks();
@@ -76,8 +77,10 @@ describe('TargetManager', () => {
 			jest.spyOn(random,
 				'rndValue').mockImplementation(jest.fn(() => 'ant'));
 			helper.getVariance = jest.fn().mockImplementation(() => variance);
-			position.getRandomX = jest.fn().mockImplementation(() => x);
-			position.getRandomY = jest.fn().mockImplementation(() => y);
+			jest.spyOn(position,
+				'getRandomX').mockImplementation(jest.fn(() => x));
+			jest.spyOn(position,
+				'getRandomY').mockImplementation(jest.fn(() => y));
 			const result = getTarget();
 			const expectedResult = {
 				id,
@@ -215,5 +218,42 @@ describe('TargetManager', () => {
 			expect(result)
 				.toEqual(expectedResult);
 		});
+	});
+
+	describe('moveTargets', () => {
+		const { moveTargets } = TargetManager;
+		const state = {
+			targets: targets,
+			frozenTill: new Date(),
+		};
+
+		test('moveTargets moves the targets', () => {
+			const expectedResult = [{ ...ant, x: 10, y: 20 },
+				{ ...mosquito, x: 10, y: 20 },
+				{ ...butterfly, x: 10, y: 20 }];
+
+			jest.spyOn(position,
+				'getRandomX').mockImplementation(jest.fn(() => 10));
+			jest.spyOn(position,
+				'getRandomY').mockImplementation(jest.fn(() => 20));
+			jest.spyOn(PowerManager,
+				'isFrozen').mockImplementation(jest.fn(() => true));
+
+			const result = moveTargets(state);
+
+			expect(result).toEqual(expectedResult);
+		});
+
+		test('moveTargets will not move targets when frozenTill is active',
+			() => {
+				const expectedResult = targets;
+
+				jest.spyOn(PowerManager,
+					'isFrozen').mockImplementation(jest.fn(() => false));
+
+				const result = moveTargets(state);
+
+				expect(result).toEqual(expectedResult);
+			});
 	});
 });
