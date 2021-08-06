@@ -176,32 +176,14 @@ describe('PowerManager', () => {
 		});
 	});
 	describe('isFrozen', () => {
-		const { isFrozen } = PowerManager;
+		const input = Symbol('Future');
 
-		test('isFrozen returns true when frozenTill is less than new date',
-			() => {
-				const state = {
-					frozenTill: adjustTime(
-						new Date(), -4, 'hours'
-					),
-				};
+		test('whether isFuture is called', () => {
+			jest.spyOn(helper, 'isFuture')
+				.mockImplementation(jest.fn(() => input));
+			const result = helper.isFuture();
 
-				const result = isFrozen(state);
-
-				expect(result).toEqual(true);
-			});
-
-		test('isFrozen returns false when frozenTill is greater than new date',
-			() => {
-				const state = {
-					frozenTill: adjustTime(
-						new Date(), 4, 'hours'
-					),
-				};
-
-				const result = isFrozen(state);
-
-				expect(result).toEqual(false);
-			});
+			expect(result).toEqual(input);
+		});
 	});
 });
