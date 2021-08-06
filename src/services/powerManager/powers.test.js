@@ -52,28 +52,33 @@ describe('Powers', () => {
 	});
 
 	describe('ice', () => {
-		const date = Symbol('date');
+		const newTime = Symbol('newTime');
 		const frozenTill = Symbol('frozenTill');
 		const state = {
 			frozenTill,
 		};
 		const frozenDuration = Symbol('frozenDuration');
 		const { duration } = config.powers.ice;
+		const second = 'seconds';
 
 		test('ice return the frozenTill', () => {
 			jest.spyOn(helper, 'adjustTime')
-				.mockImplementation(jest.fn(() => date));
+				.mockImplementation(jest.fn(() => newTime));
 
 			jest.spyOn(random, 'rndBetween')
 				.mockImplementation(jest.fn(() => frozenDuration));
 
 			const result = Powers.ice(state);
 
-			expect(result).toMatchObject({
-				frozenTill: date,
-			});
 			expect(random.rndBetween)
 				.toHaveBeenCalledWith(duration.min, duration.max);
+			expect(helper.adjustTime)
+				.toHaveBeenCalledWith(
+					frozenTill, frozenDuration, second
+				);
+			expect(result).toMatchObject({
+				frozenTill: newTime,
+			});
 		});
 	});
 });
