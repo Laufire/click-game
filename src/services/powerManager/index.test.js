@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 /* eslint-disable no-import-assign */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-nested-callbacks */
@@ -173,5 +174,34 @@ describe('PowerManager', () => {
 				});
 			});
 		});
+	});
+	describe('isFrozen', () => {
+		const { isFrozen } = PowerManager;
+
+		test('isFrozen returns true when frozenTill is less than new date',
+			() => {
+				const state = {
+					frozenTill: adjustTime(
+						new Date(), -4, 'hours'
+					),
+				};
+
+				const result = isFrozen(state);
+
+				expect(result).toEqual(true);
+			});
+
+		test('isFrozen returns false when frozenTill is greater than new date',
+			() => {
+				const state = {
+					frozenTill: adjustTime(
+						new Date(), 4, 'hours'
+					),
+				};
+
+				const result = isFrozen(state);
+
+				expect(result).toEqual(false);
+			});
 	});
 });
