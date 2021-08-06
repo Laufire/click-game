@@ -4,16 +4,19 @@
 
 import * as random from '@laufire/utils/random';
 import config from '../../core/config';
-import { adjustTime } from '../helperService';
 import PowerManager from '../powerManager';
 import { damage } from './data';
 import Powers from './powers';
+import * as helper from '../helperService';
+import { keys } from '@laufire/utils/collection';
 
 beforeEach(() => {
 	jest.clearAllMocks();
 });
 
 describe('PowerManager', () => {
+	const { adjustTime } = helper;
+
 	describe('getPower', () => {
 		const { getPower } = PowerManager;
 		const [type] = ['bomb'];
@@ -147,6 +150,27 @@ describe('PowerManager', () => {
 				const result = PowerManager.getBatType({ superTill });
 
 				expect(result).toEqual(expectedBatType);
+			});
+
+			describe('addPowers adds powers based on prob', () => {
+				test('No powers added with 0 prob', () => {
+					jest.spyOn(random, 'rndBetween')
+						.mockImplementation(jest.fn(() => 0));
+
+					const result = PowerManager.addPowers(powers);
+
+					expect(result).toEqual(powers);
+				});
+
+				test('Added powers with prob 1', () => {
+					jest.spyOn(random, 'rndBetween')
+						.mockImplementation(jest.fn(() => 1));
+
+					const result = PowerManager.addPowers([]);
+					const resultKeys = result.map((item) => item.type);
+
+					expect(resultKeys).toEqual(keys(config.powers));
+				});
 			});
 		});
 	});
