@@ -42,6 +42,8 @@ const getBatType = ({ superTill }) => (
 
 const getDamage = (state) => damage[getBatType(state)];
 
+const isFrozen = (frozenTill) => isFuture(frozenTill);
+
 const PowerManager = {
 	getPower,
 	addPowers,
@@ -50,6 +52,7 @@ const PowerManager = {
 	removePower,
 	getBatType,
 	getDamage,
+	isFrozen,
 };
 
 export default PowerManager;

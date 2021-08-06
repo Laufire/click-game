@@ -2,7 +2,7 @@ import config from '../core/config';
 import { rndBetween, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import { getRandomX, getRandomY } from './positionService';
-import { getId, getVariance, isFuture } from './helperService';
+import { getId, getVariance } from './helperService';
 import PowerManager from './powerManager';
 
 const { maxTargets } = config;
@@ -26,7 +26,7 @@ const getTarget = ({ x, y, type } = {}) => {
 };
 
 const moveTargets = ({ targets, frozenTill }) =>
-	(isFuture(frozenTill)
+	(PowerManager.isFrozen(frozenTill)
 		? targets.map((target) => ({
 			...target,
 			x: getRandomX(target),
