@@ -5,6 +5,7 @@ import Powers from './powers';
 import config from '../../core/config';
 import Mock from '../../../test/mock';
 import * as random from '@laufire/utils/random';
+import * as helper from '../helperService';
 import TargetManager from '../targetManager';
 
 beforeEach(() => {
@@ -47,6 +48,32 @@ describe('Powers', () => {
 			);
 
 			expect(result).toMatchObject({ targets });
+		});
+	});
+
+	describe('ice', () => {
+		const date = Symbol('date');
+		const frozenTill = Symbol('frozenTill');
+		const state = {
+			frozenTill,
+		};
+		const frozenDuration = Symbol('frozenDuration');
+		const { duration } = config.powers.ice;
+
+		test('ice return the frozenTill', () => {
+			jest.spyOn(helper, 'adjustTime')
+				.mockImplementation(jest.fn(() => date));
+
+			jest.spyOn(random, 'rndBetween')
+				.mockImplementation(jest.fn(() => frozenDuration));
+
+			const result = Powers.ice(state);
+
+			expect(result).toMatchObject({
+				frozenTill: date,
+			});
+			expect(random.rndBetween)
+				.toHaveBeenCalledWith(duration.min, duration.max);
 		});
 	});
 });
