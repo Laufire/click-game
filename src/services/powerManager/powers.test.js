@@ -13,7 +13,7 @@ beforeEach(() => {
 });
 
 describe('Powers', () => {
-	const { bomb, ice, superBat } = Powers;
+	const { bomb, ice, superBat, spoiler } = Powers;
 
 	describe('bomb', () => {
 		const randomTargets = Mock.getRandomTargets();
@@ -37,7 +37,7 @@ describe('Powers', () => {
 			const result = bomb({ targets });
 
 			expect(Math.min)
-				.toHaveBeenCalledWith(targetsCount.max,	targets.length);
+				.toHaveBeenCalledWith(targetsCount.max, targets.length);
 
 			expect(random.rndValues).toHaveBeenCalledWith(targets, count);
 
@@ -105,6 +105,27 @@ describe('Powers', () => {
 			expect(result).toMatchObject({
 				superTill: newTime,
 			});
+		});
+	});
+
+	describe('spoiler', () => {
+		const score = 10;
+		const state = {
+			score,
+		};
+		const reduceScore = 3;
+		const { min, max } = config.powers.spoiler.score;
+
+		test('spoiler reduce the score', () => {
+			jest.spyOn(random, 'rndBetween')
+				.mockImplementation(jest.fn(() => reduceScore));
+			const result = spoiler(state);
+
+			expect(result).toMatchObject({
+				score: score - reduceScore,
+			});
+			expect(random.rndBetween)
+				.toHaveBeenCalledWith(min, max);
 		});
 	});
 });

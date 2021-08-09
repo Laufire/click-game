@@ -49,7 +49,7 @@ const Powers = {
 	spoiler: (state) => {
 		const { score } = config.powers.spoiler;
 
-		return 	{ score: state.score - rndBetween(score.min, score.max) };
+		return { score: state.score - rndBetween(score.min, score.max) };
 	},
 
 	superBat: (state) => {
