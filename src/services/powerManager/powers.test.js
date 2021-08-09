@@ -13,8 +13,9 @@ beforeEach(() => {
 });
 
 describe('Powers', () => {
+	const { bomb, ice, superBat } = Powers;
+
 	describe('bomb', () => {
-		const { bomb } = Powers;
 		const randomTargets = Mock.getRandomTargets();
 		const { targetsCount } = config.powers.bomb;
 		const targets = [Symbol('target')];
@@ -68,7 +69,7 @@ describe('Powers', () => {
 			jest.spyOn(random, 'rndBetween')
 				.mockImplementation(jest.fn(() => frozenDuration));
 
-			const result = Powers.ice(state);
+			const result = ice(state);
 
 			expect(random.rndBetween)
 				.toHaveBeenCalledWith(duration.min, duration.max);
@@ -78,6 +79,31 @@ describe('Powers', () => {
 				);
 			expect(result).toMatchObject({
 				frozenTill: newTime,
+			});
+		});
+	});
+
+	describe('superBat', () => {
+		const newTime = Symbol('newTime');
+		const superTill = Symbol('superTill');
+		const state = {
+			superTill,
+		};
+		const { duration } = config.powers.superBat;
+		const second = 'seconds';
+
+		test('superBat return the superTill', () => {
+			jest.spyOn(helper, 'adjustTime')
+				.mockImplementation(jest.fn(() => newTime));
+
+			const result = superBat(state);
+
+			expect(helper.adjustTime)
+				.toHaveBeenCalledWith(
+					superTill, duration, second
+				);
+			expect(result).toMatchObject({
+				superTill: newTime,
 			});
 		});
 	});
