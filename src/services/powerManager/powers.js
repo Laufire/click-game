@@ -39,11 +39,11 @@ const Powers = {
 	},
 
 	gift: (state) => {
-		const { score } = config.powers.gift;
+		const { score, lives } = config.powers.gift;
 
 		return rndBetween(0, 1)
 			? { score: state.score + rndBetween(score.min, score.max) }
-			: { lives: state.lives + 1 };
+			: { lives: state.lives + lives };
 	},
 
 	spoiler: (state) => {

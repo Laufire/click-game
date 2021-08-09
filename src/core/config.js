@@ -122,6 +122,7 @@ const config = {
 				min: 5,
 				max: 10,
 			},
+			lives: 1,
 		},
 		spoiler: {
 			type: 'spoiler',

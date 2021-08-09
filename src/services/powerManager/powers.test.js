@@ -13,7 +13,7 @@ beforeEach(() => {
 });
 
 describe('Powers', () => {
-	const { bomb, ice, superBat, spoiler } = Powers;
+	const { bomb, ice, superBat, spoiler, gift } = Powers;
 
 	describe('bomb', () => {
 		const randomTargets = Mock.getRandomTargets();
@@ -126,6 +126,43 @@ describe('Powers', () => {
 			});
 			expect(random.rndBetween)
 				.toHaveBeenCalledWith(min, max);
+		});
+	});
+
+	describe('gift randomly increases the score or lives', () => {
+		const score = 5;
+		const lives = 3;
+		const addScore = 5;
+		const state = {
+			score,
+			lives,
+		};
+
+		test('gift sometimes increase the score', () => {
+			const { min, max } = config.powers.gift.score;
+
+			jest.spyOn(random, 'rndBetween')
+				.mockImplementationOnce(jest.fn(() => 1))
+				.mockImplementationOnce(jest.fn(() => addScore));
+
+			const result = gift(state);
+
+			expect(random.rndBetween)
+				.toHaveBeenCalledWith(min, max);
+			expect(result).toMatchObject({
+				score: score + addScore,
+			});
+		});
+
+		test('gift sometimes increase the lives', () => {
+			jest.spyOn(random, 'rndBetween')
+				.mockImplementation(jest.fn(() => 0));
+
+			const result = gift(state);
+
+			expect(result).toMatchObject({
+				lives: lives + config.powers.gift.lives,
+			});
 		});
 	});
 });
