@@ -27,22 +27,22 @@ describe('HelperService', () => {
 	describe('isFuture', () => {
 		const { isFuture, adjustTime } = helper;
 
-		test('isFuture returns true when input is less than new date',
+		test('isFuture returns false when input date is less than new date',
 			() => {
 				const result = isFuture(adjustTime(
 					new Date(), -4, 'hours'
 				));
 
-				expect(result).toEqual(true);
+				expect(result).toEqual(false);
 			});
 
-		test('isFuture returns false when input is greater than new date',
+		test('isFuture returns true when input date is greater than new date',
 			() => {
 				const result = isFuture(adjustTime(
 					new Date(), 4, 'hours'
 				));
 
-				expect(result).toEqual(false);
+				expect(result).toEqual(true);
 			});
 	});
 

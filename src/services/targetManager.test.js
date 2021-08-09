@@ -23,6 +23,7 @@ describe('TargetManager', () => {
 	describe('addTargets', () => {
 		const { addTargets } = TargetManager;
 
+		// TODO
 		test('addTargets add target', () => {
 			random.rndBetween = jest.fn().mockImplementation(() => 1);
 
@@ -103,6 +104,7 @@ describe('TargetManager', () => {
 
 	describe('swatTarget', () => {
 		const { swatTarget } = TargetManager;
+		// Todo, secure
 		const state = {
 			targets: targets,
 			lives: 3,
@@ -158,6 +160,7 @@ describe('TargetManager', () => {
 			ant,
 			mosquito,
 		];
+		// TODO
 		const data = 15;
 
 		test('getTargetsScore returns the total score of all given targets',
@@ -191,6 +194,7 @@ describe('TargetManager', () => {
 				expect(result).toEqual(expectedTargets);
 			});
 	});
+
 	describe('removeTargets', () => {
 		const { removeTargets } = TargetManager;
 		const targetToRetain = random.rndValue(targets);
@@ -206,6 +210,7 @@ describe('TargetManager', () => {
 				.toEqual(expectedResult);
 		});
 	});
+
 	describe('removeTarget', () => {
 		const { removeTarget } = TargetManager;
 
@@ -237,7 +242,7 @@ describe('TargetManager', () => {
 			jest.spyOn(position,
 				'getRandomY').mockImplementation(jest.fn(() => 20));
 			jest.spyOn(PowerManager,
-				'isFrozen').mockImplementation(jest.fn(() => true));
+				'isFrozen').mockImplementation(jest.fn(() => false));
 
 			const result = moveTargets(state);
 
@@ -250,7 +255,7 @@ describe('TargetManager', () => {
 				const expectedResult = targets;
 
 				jest.spyOn(PowerManager,
-					'isFrozen').mockImplementation(jest.fn(() => false));
+					'isFrozen').mockImplementation(jest.fn(() => true));
 
 				const result = moveTargets(state);
 

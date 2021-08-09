@@ -38,7 +38,7 @@ const removePower = (powers, data) =>
 	powers.filter((current) => current.id !== data.id);
 
 const getBatType = ({ superTill }) => (
-	isFuture(superTill) ? 'normal' : 'super');
+	isFuture(superTill) ? 'super' : 'normal');
 
 const getDamage = (state) => damage[getBatType(state)];
 
