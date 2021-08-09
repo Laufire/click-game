@@ -17,6 +17,8 @@ beforeEach(() => {
 	jest.restoreAllMocks();
 });
 
+// TODO: remove describe, if it has only one test.
+
 describe('TargetManager', () => {
 	const { targets, ant, mosquito, butterfly } = Mocks;
 
@@ -44,6 +46,7 @@ describe('TargetManager', () => {
 	describe('getTarget', () => {
 		const { getTarget } = TargetManager;
 		const variance = 0.5;
+		// TODO: split to individual vars.
 		const [x, y, type, id] = [Symbol('x'),
 			Symbol('y'),
 			'ant',
@@ -81,6 +84,7 @@ describe('TargetManager', () => {
 				'getId').mockImplementation(jest.fn(() => id));
 			jest.spyOn(random,
 				'rndValue').mockImplementation(jest.fn(() => 'ant'));
+			// TODO: change to spyOn format.
 			helper.getVariance = jest.fn().mockImplementation(() => variance);
 			jest.spyOn(position,
 				'getRandomX').mockImplementation(jest.fn(() => x));
@@ -108,7 +112,7 @@ describe('TargetManager', () => {
 
 	describe('swatTarget', () => {
 		const { swatTarget } = TargetManager;
-
+		// TODO: Split lives
 		const state = secure({
 			targets: targets,
 			lives: 3,
@@ -116,6 +120,7 @@ describe('TargetManager', () => {
 
 		test('swatTarget reduces the life of the swatted target', () => {
 			const targetToSwat = random.rndValue(targets);
+			// TODO: Secure swatted target
 			const swattedTarget = {
 				...targetToSwat,
 				lives: targetToSwat.lives - config.swatDamage,
@@ -174,7 +179,7 @@ describe('TargetManager', () => {
 					.toEqual(score);
 			});
 	});
-
+	// TODO: lives two different test.
 	describe('decreaseTargetLives', () => {
 		const { decreaseTargetLives } = TargetManager;
 		const randomTarget = random.rndValue(targets);
@@ -197,7 +202,7 @@ describe('TargetManager', () => {
 				expect(result).toEqual(expectedTargets);
 			});
 	});
-
+	// TODO: removeTarget remove.
 	describe('removeTargets', () => {
 		const { removeTargets } = TargetManager;
 		const targetToRetain = random.rndValue(targets);
@@ -239,6 +244,7 @@ describe('TargetManager', () => {
 			const expectedResult = [{ ...ant, x: 10, y: 20 },
 				{ ...mosquito, x: 10, y: 20 },
 				{ ...butterfly, x: 10, y: 20 }];
+			// TODO: replace number with symbol.
 
 			jest.spyOn(position,
 				'getRandomX').mockImplementation(jest.fn(() => 10));

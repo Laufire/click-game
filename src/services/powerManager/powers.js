@@ -48,6 +48,7 @@ const Powers = {
 
 	spoiler: (state) => {
 		const { score } = config.powers.spoiler;
+		// TODO: Introduce player manager.
 
 		return { score: Math.max(state.score
 			-	rndBetween(score.min, score.max), 0) };
