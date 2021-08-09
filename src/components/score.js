@@ -1,6 +1,7 @@
 import { Stars } from '@material-ui/icons';
 import { React } from 'react';
 import context from '../core/context';
+import ActivePowers from './activePowers';
 
 const style = {
 	position: 'absolute',
@@ -19,6 +20,8 @@ const getStyle = {
 const Score = () =>
 	<div style={ style }>
 		<Stars style={ getStyle }/>
-		{ context.state.score } </div>;
+		{ context.state.score }
+		{ ActivePowers() }
+	</div>;
 
 export default Score;
