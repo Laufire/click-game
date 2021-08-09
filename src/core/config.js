@@ -76,7 +76,8 @@ const config = {
 			image: bombImage,
 			height: 7,
 			width: 7,
-			targetsCount: {
+			targetsCount: 3,
+			damage: {
 				min: 1,
 				max: 3,
 			},

@@ -17,6 +17,7 @@ describe('Powers', () => {
 
 	describe('bomb', () => {
 		const randomTargets = Mock.getRandomTargets();
+		const { min, max } = config.powers.bomb.damage;
 		const { targetsCount } = config.powers.bomb;
 		const targets = [Symbol('target')];
 		const count = Symbol('count');
@@ -37,12 +38,12 @@ describe('Powers', () => {
 			const result = bomb({ targets });
 
 			expect(Math.min)
-				.toHaveBeenCalledWith(targetsCount.max, targets.length);
+				.toHaveBeenCalledWith(targetsCount, targets.length);
 
 			expect(random.rndValues).toHaveBeenCalledWith(targets, count);
 
 			expect(random.rndBetween)
-				.toHaveBeenCalledWith(targetsCount.min, targetsCount.max);
+				.toHaveBeenCalledWith(min, max);
 
 			expect(TargetManager.decreaseTargetLives).toHaveBeenCalledWith(
 				targets, randomTargets, damage

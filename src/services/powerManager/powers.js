@@ -6,15 +6,15 @@ import { adjustTime } from '../helperService';
 
 const Powers = {
 	bomb: (state) => {
-		const { targetsCount } = config.powers.bomb;
-		const count = Math.min(targetsCount.max, state.targets.length);
+		const { damage, targetsCount } = config.powers.bomb;
+		const count = Math.min(targetsCount, state.targets.length);
 		const impactedTargets = rndValues(state.targets, count);
 
 		return {
 			targets: TargetManager.decreaseTargetLives(
 				state.targets, impactedTargets,
 				// TODO: Need to add separate configuration for damage
-				rndBetween(targetsCount.min, targetsCount.max)
+				rndBetween(damage.min, damage.max)
 			),
 		};
 	},
