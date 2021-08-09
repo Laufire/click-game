@@ -6,7 +6,7 @@
 import * as random from '@laufire/utils/random';
 import TargetManager from './targetManager';
 import config from '../core/config';
-import { keys, range } from '@laufire/utils/collection';
+import { keys, range, secure } from '@laufire/utils/collection';
 import { replace } from '../../test/helpers';
 import * as position from './positionService';
 import * as helper from './helperService';
@@ -23,9 +23,9 @@ describe('TargetManager', () => {
 	describe('addTargets', () => {
 		const { addTargets } = TargetManager;
 
-		// TODO
 		test('addTargets add target', () => {
-			random.rndBetween = jest.fn().mockImplementation(() => 1);
+			jest.spyOn(random,
+				'rndBetween').mockImplementation(jest.fn(() => 1));
 
 			const result = addTargets([]);
 			const resultKeys = result.map((item) => item.type);
@@ -56,8 +56,11 @@ describe('TargetManager', () => {
 		};
 
 		test('getTarget returns a target', () => {
-			helper.getId = jest.fn().mockImplementation(() => id);
-			helper.getVariance = jest.fn().mockImplementation(() => variance);
+			jest.spyOn(helper,
+				'getId').mockImplementation(jest.fn(() => id));
+			jest.spyOn(helper,
+				'getVariance').mockImplementation(jest.fn(() => variance));
+
 			const result = getTarget({ x, y, type });
 			const expectedResult = {
 				id,
@@ -74,7 +77,8 @@ describe('TargetManager', () => {
 		});
 
 		test('getTarget params are optional', () => {
-			helper.getId = jest.fn().mockImplementation(() => id);
+			jest.spyOn(helper,
+				'getId').mockImplementation(jest.fn(() => id));
 			jest.spyOn(random,
 				'rndValue').mockImplementation(jest.fn(() => 'ant'));
 			helper.getVariance = jest.fn().mockImplementation(() => variance);
@@ -104,11 +108,11 @@ describe('TargetManager', () => {
 
 	describe('swatTarget', () => {
 		const { swatTarget } = TargetManager;
-		// Todo, secure
-		const state = {
+
+		const state = secure({
 			targets: targets,
 			lives: 3,
-		};
+		});
 
 		test('swatTarget reduces the life of the swatted target', () => {
 			const targetToSwat = random.rndValue(targets);
@@ -137,14 +141,14 @@ describe('TargetManager', () => {
 
 	describe('getDeadTargets', () => {
 		const { getDeadTargets } = TargetManager;
-		const deadTarget = {
+		const deadTarget = secure({
 			...mosquito,
 			lives: 0,
-		};
-		const state = [
+		});
+		const state = secure([
 			ant,
 			deadTarget,
-		];
+		]);
 
 		test('getDeadTargets returns all dead targets from the given targets',
 			() => {
@@ -156,19 +160,18 @@ describe('TargetManager', () => {
 
 	describe('getTargetsScore', () => {
 		const { getTargetsScore } = TargetManager;
-		const state = [
+		const state = secure([
 			ant,
 			mosquito,
-		];
-		// TODO
-		const data = 15;
+		]);
+		const score = ant.score + mosquito.score;
 
 		test('getTargetsScore returns the total score of all given targets',
 			() => {
 				const result = getTargetsScore(state);
 
 				expect(result)
-					.toEqual(data);
+					.toEqual(score);
 			});
 	});
 
