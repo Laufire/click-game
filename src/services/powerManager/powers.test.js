@@ -8,10 +8,6 @@ import * as random from '@laufire/utils/random';
 import * as helper from '../helperService';
 import TargetManager from '../targetManager';
 
-beforeEach(() => {
-	jest.restoreAllMocks();
-});
-
 describe('Powers', () => {
 	const { bomb, ice, superBat, spoiler, gift } = Powers;
 

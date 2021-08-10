@@ -13,10 +13,6 @@ import * as HelperService from './helperService';
 import Mocks from '../../test/mock';
 import PowerManager from './powerManager';
 
-beforeEach(() => {
-	jest.restoreAllMocks();
-});
-
 describe('TargetManager', () => {
 	const { targets, ant, mosquito, butterfly, getRandomTargets } = Mocks;
 	const x = Symbol('x');

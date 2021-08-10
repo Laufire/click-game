@@ -2,10 +2,6 @@ import { secure } from '@laufire/utils/collection';
 import config from '../core/config';
 import PlayerManager from './playerManager';
 
-beforeEach(() => {
-	jest.restoreAllMocks();
-});
-
 describe('PlayerManager', () => {
 	const state = secure({
 		lives: 3,

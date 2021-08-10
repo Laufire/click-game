@@ -12,10 +12,6 @@ import Powers from './powers';
 import * as helper from '../helperService';
 import { keys, map, secure, shuffle, values } from '@laufire/utils/collection';
 
-beforeEach(() => {
-	jest.restoreAllMocks();
-});
-
 describe('PowerManager', () => {
 	const { adjustTime } = helper;
 
