@@ -1,8 +1,9 @@
+import PlayerManager from '../services/playerManager';
 import PowerManager from '../services/powerManager';
 import TargetManager from '../services/targetManager';
 
 const increaseScore = ({ state, data }) => ({
-	score: state.score + data.score,
+	score: PlayerManager.adjustScore(state, data.score),
 });
 
 const moveTargets = ({ state }) => ({
@@ -14,7 +15,7 @@ const addTargets = ({ state }) => ({
 });
 
 const decreaseLives = ({ state }) => ({
-	lives: state.lives - 1,
+	lives: PlayerManager.decreaseLives(state),
 });
 
 const removeTarget = ({ state, data }) => ({

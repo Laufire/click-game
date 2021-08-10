@@ -3,6 +3,7 @@ import { keys } from '@laufire/utils/collection';
 import config from '../../core/config';
 import TargetManager from '../targetManager';
 import { adjustTime } from '../helperService';
+import PlayerManager from '../playerManager';
 
 const Powers = {
 	bomb: (state) => {
@@ -48,10 +49,10 @@ const Powers = {
 
 	spoiler: (state) => {
 		const { score } = config.powers.spoiler;
-		// TODO: Introduce player manager.
 
-		return { score: Math.max(state.score
-			-	rndBetween(score.min, score.max), 0) };
+		return { score:
+			PlayerManager.adjustScore(state,
+				-rndBetween(score.min, score.max)) };
 	},
 
 	superBat: (state) => {
