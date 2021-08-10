@@ -1,5 +1,3 @@
-/* eslint-disable no-magic-numbers */
-/* eslint-disable no-import-assign */
 /* eslint-disable max-statements */
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines-per-function */
@@ -8,7 +6,7 @@ import TargetManager from './targetManager';
 import config from '../core/config';
 import { keys, range, secure } from '@laufire/utils/collection';
 import { replace } from '../../test/helpers';
-import * as position from './positionService';
+import * as positionService from './positionService';
 import * as helper from './helperService';
 import Mocks from '../../test/mock';
 import PowerManager from './powerManager';
@@ -17,17 +15,18 @@ beforeEach(() => {
 	jest.restoreAllMocks();
 });
 
-// TODO: remove describe, if it has only one test.
-
 describe('TargetManager', () => {
-	const { targets, ant, mosquito, butterfly } = Mocks;
+	const { targets, ant, mosquito, butterfly, getRandomTargets } = Mocks;
+	const x = Symbol('x');
+	const y = Symbol('y');
+	const id = Symbol('id');
 
 	describe('addTargets', () => {
 		const { addTargets } = TargetManager;
 
 		test('addTargets add target', () => {
-			jest.spyOn(random,
-				'rndBetween').mockImplementation(jest.fn(() => 1));
+			jest.spyOn(random, 'rndBetween')
+				.mockImplementation(jest.fn(() => 1));
 
 			const result = addTargets([]);
 			const resultKeys = result.map((item) => item.type);
@@ -46,11 +45,8 @@ describe('TargetManager', () => {
 	describe('getTarget', () => {
 		const { getTarget } = TargetManager;
 		const variance = 0.5;
-		// TODO: split to individual vars.
-		const [x, y, type, id] = [Symbol('x'),
-			Symbol('y'),
-			'ant',
-			Symbol('id')];
+		const type = 'ant';
+
 		const typeConfig = config.targets[type];
 		const { height, width } = typeConfig;
 		const size = {
@@ -59,10 +55,10 @@ describe('TargetManager', () => {
 		};
 
 		test('getTarget returns a target', () => {
-			jest.spyOn(helper,
-				'getId').mockImplementation(jest.fn(() => id));
-			jest.spyOn(helper,
-				'getVariance').mockImplementation(jest.fn(() => variance));
+			jest.spyOn(helper, 'getId')
+				.mockImplementation(jest.fn(() => id));
+			jest.spyOn(helper, 'getVariance')
+				.mockImplementation(jest.fn(() => variance));
 
 			const result = getTarget({ x, y, type });
 			const expectedResult = {
@@ -80,16 +76,16 @@ describe('TargetManager', () => {
 		});
 
 		test('getTarget params are optional', () => {
-			jest.spyOn(helper,
-				'getId').mockImplementation(jest.fn(() => id));
-			jest.spyOn(random,
-				'rndValue').mockImplementation(jest.fn(() => 'ant'));
-			// TODO: change to spyOn format.
-			helper.getVariance = jest.fn().mockImplementation(() => variance);
-			jest.spyOn(position,
-				'getRandomX').mockImplementation(jest.fn(() => x));
-			jest.spyOn(position,
-				'getRandomY').mockImplementation(jest.fn(() => y));
+			jest.spyOn(helper, 'getId')
+				.mockImplementation(jest.fn(() => id));
+			jest.spyOn(random, 'rndValue')
+				.mockImplementation(jest.fn(() => 'ant'));
+			jest.spyOn(helper, 'getVariance')
+				.mockImplementation(jest.fn(() => variance));
+			jest.spyOn(positionService, 'getRandomX')
+				.mockImplementation(jest.fn(() => x));
+			jest.spyOn(positionService, 'getRandomY')
+				.mockImplementation(jest.fn(() => y));
 			const result = getTarget();
 			const expectedResult = {
 				id,
@@ -102,9 +98,9 @@ describe('TargetManager', () => {
 
 			expect(helper.getId).toHaveBeenCalled();
 			expect(helper.getVariance).toHaveBeenCalledWith(variance);
-			expect(position.getRandomX)
+			expect(positionService.getRandomX)
 				.toHaveBeenCalledWith(size);
-			expect(position.getRandomY)
+			expect(positionService.getRandomY)
 				.toHaveBeenCalledWith(size);
 			expect(result).toMatchObject(expectedResult);
 		});
@@ -112,19 +108,18 @@ describe('TargetManager', () => {
 
 	describe('swatTarget', () => {
 		const { swatTarget } = TargetManager;
-		// TODO: Split lives
+		const lives = 3;
 		const state = secure({
-			targets: targets,
-			lives: 3,
+			targets,
+			lives,
 		});
 
 		test('swatTarget reduces the life of the swatted target', () => {
 			const targetToSwat = random.rndValue(targets);
-			// TODO: Secure swatted target
-			const swattedTarget = {
+			const swattedTarget = secure({
 				...targetToSwat,
 				lives: targetToSwat.lives - config.swatDamage,
-			};
+			});
 			const expectedTargets = replace(
 				targets, targetToSwat, swattedTarget
 			);
@@ -144,114 +139,111 @@ describe('TargetManager', () => {
 			});
 	});
 
-	describe('getDeadTargets', () => {
-		const { getDeadTargets } = TargetManager;
-		const deadTarget = secure({
-			...mosquito,
-			lives: 0,
+	test('getDeadTargets returns all dead targets from the given targets',
+		() => {
+			const { getDeadTargets } = TargetManager;
+			const deadTarget = secure({
+				...mosquito,
+				lives: 0,
+			});
+			const state = secure([
+				ant,
+				deadTarget,
+			]);
+			const result = getDeadTargets(state);
+
+			expect(result).toEqual([deadTarget]);
 		});
-		const state = secure([
-			ant,
-			deadTarget,
-		]);
 
-		test('getDeadTargets returns all dead targets from the given targets',
-			() => {
-				const result = getDeadTargets(state);
+	test('getTargetsScore returns the total score of all given targets',
+		() => {
+			const { getTargetsScore } = TargetManager;
+			const state = secure([
+				ant,
+				mosquito,
+			]);
+			const score = ant.score + mosquito.score;
+			const result = getTargetsScore(state);
 
-				expect(result).toEqual([deadTarget]);
-			});
-	});
+			expect(result)
+				.toEqual(score);
+		});
 
-	describe('getTargetsScore', () => {
-		const { getTargetsScore } = TargetManager;
-		const state = secure([
-			ant,
-			mosquito,
-		]);
-		const score = ant.score + mosquito.score;
-
-		test('getTargetsScore returns the total score of all given targets',
-			() => {
-				const result = getTargetsScore(state);
-
-				expect(result)
-					.toEqual(score);
-			});
-	});
 	// TODO: lives two different test.
-	describe('decreaseTargetLives', () => {
+	describe.only('decreaseTargetLives', () => {
 		const { decreaseTargetLives } = TargetManager;
-		const randomTarget = random.rndValue(targets);
-		const impactedTargets = [randomTarget];
-		const damage = random.rndValue(config.swatDamage,
-			config.powers.superBat.swatDamage);
-		const editedTarget = { ...randomTarget,
-			lives: Math.max(randomTarget.lives - damage, 0) };
-
-		const expectedTargets = replace(
-			targets, randomTarget, editedTarget
-		);
+		const impactedTargets = getRandomTargets();
+		const [randomTarget] = impactedTargets;
 
 		test('decreaseTargetLives returns targets with life decreased',
 			() => {
+				const damage = 1;
+				const editedTarget = {
+					...randomTarget,
+					lives: randomTarget.lives - damage,
+				};
+				const expectedTargets = replace(
+					targets, randomTarget, editedTarget
+				);
+
 				const result = decreaseTargetLives(
 					targets, impactedTargets, damage
 				);
 
 				expect(result).toEqual(expectedTargets);
 			});
+
+		test('decreaseTargetLives returns non negative lives', () => {
+			const damage = randomTarget.lives + 1;
+			const editedTarget = {
+				...randomTarget,
+				lives: 0,
+			};
+			const expectedTargets = replace(
+				targets, randomTarget, editedTarget
+			);
+			const result = decreaseTargetLives(
+				targets, impactedTargets, damage
+			);
+
+			expect(result).toEqual(expectedTargets);
+		});
 	});
-	// TODO: removeTarget remove.
-	describe('removeTargets', () => {
+
+	test('removeTargets remove targets to be removed', () => {
 		const { removeTargets } = TargetManager;
 		const targetToRetain = random.rndValue(targets);
 		const targetsToRemove = removeTargets(targets, [targetToRetain]);
+		const result = removeTargets(targets, targetsToRemove);
+		const expectedResult = targets.filter((item) =>
+			!targetsToRemove.includes(item));
 
-		test('removeTargets remove targets to be removed', () => {
-			const result = removeTargets(targets, targetsToRemove);
-			// eslint-disable-next-line max-nested-callbacks
-			const expectedResult = targets.filter((item) =>
-				!targetsToRemove.includes(item));
-
-			expect(result)
-				.toEqual(expectedResult);
-		});
-	});
-
-	describe('removeTarget', () => {
-		const { removeTarget } = TargetManager;
-
-		test('removeTarget removes target to be removed', () => {
-			const clickedTarget = random.rndValue(targets);
-			const result = removeTarget(targets, clickedTarget);
-			const expectedResult = targets.filter((item) =>
-				item !== clickedTarget);
-
-			expect(result)
-				.toEqual(expectedResult);
-		});
+		expect(result)
+			.toEqual(expectedResult);
 	});
 
 	describe('moveTargets', () => {
 		const { moveTargets } = TargetManager;
-		const state = {
+		const state = secure({
 			targets: targets,
 			frozenTill: new Date(),
-		};
+		});
+
+		const position = secure({ x, y });
 
 		test('moveTargets moves the targets', () => {
-			const expectedResult = [{ ...ant, x: 10, y: 20 },
-				{ ...mosquito, x: 10, y: 20 },
-				{ ...butterfly, x: 10, y: 20 }];
-			// TODO: replace number with symbol.
+			const expectedResult = secure([
+				{ ...ant, ...position },
+				{ ...mosquito, ...position },
+				{ ...butterfly, ...position },
+			]);
 
-			jest.spyOn(position,
-				'getRandomX').mockImplementation(jest.fn(() => 10));
-			jest.spyOn(position,
-				'getRandomY').mockImplementation(jest.fn(() => 20));
-			jest.spyOn(PowerManager,
-				'isFrozen').mockImplementation(jest.fn(() => false));
+			jest.spyOn(positionService, 'getRandomX')
+				.mockImplementation(jest.fn(() => x));
+			jest.spyOn(positionService, 'getRandomY')
+				.mockImplementation(jest.fn(() => y));
+			jest.spyOn(PowerManager, 'isFrozen')
+				.mockImplementation(jest.fn(() => false));
 
 			const result = moveTargets(state);
 
@@ -263,8 +255,8 @@ describe('TargetManager', () => {
 			() => {
 				const expectedResult = targets;
 
-				jest.spyOn(PowerManager,
-					'isFrozen').mockImplementation(jest.fn(() => true));
+				jest.spyOn(PowerManager, 'isFrozen')
+					.mockImplementation(jest.fn(() => true));
 
 				const result = moveTargets(state);
 
