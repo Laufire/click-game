@@ -38,11 +38,11 @@ const getTargets = () => targetTypeKeys.map((type) =>
 	rndBetween(1, 1 / config.targets[type].prob.add) === 1
 	&& getTarget({ type })).filter((val) => val);
 
-const addTargets = (targets) => (targets.length < maxTargets
+const addTargets = ({ targets }) => (targets.length < maxTargets
 	? targets.concat(getTargets())
 	: targets);
 
-const removeTarget = (targets, target) =>
+const removeTarget = ({ state: { targets }, data: target }) =>
 	targets.filter((current) => current.id !== target.id);
 
 const removeTargets = (targets, targetsToRemove) =>
@@ -65,7 +65,7 @@ const decreaseTargetLives = (
 			: target));
 };
 
-const getDeadTargets = (targets) =>
+const getDeadTargets = ({ targets }) =>
 	targets.filter((target) => target.lives <= 0);
 
 const swatActionDefault = (state, data) => ({
@@ -81,7 +81,7 @@ const swatActions = {
 	}),
 };
 
-const swatTarget = (state, data) =>
+const swatTarget = ({ state, data }) =>
 	(swatActions[data.type] || swatActionDefault)(state, data);
 
 const TargetManager = {

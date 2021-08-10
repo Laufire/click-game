@@ -29,7 +29,7 @@ describe('TargetManager', () => {
 			jest.spyOn(random,
 				'rndBetween').mockImplementation(jest.fn(() => 1));
 
-			const result = addTargets([]);
+			const result = addTargets({ targets: [] });
 			const resultKeys = result.map((item) => item.type);
 
 			expect(resultKeys).toEqual(keys(config.targets));
@@ -37,7 +37,7 @@ describe('TargetManager', () => {
 
 		test('addTargets return target', () => {
 			const maxTargets = range(0, config.maxTargets).map(() => ant);
-			const result = addTargets(maxTargets);
+			const result = addTargets({ targets: maxTargets });
 
 			expect(result).toEqual(maxTargets);
 		});
@@ -129,14 +129,14 @@ describe('TargetManager', () => {
 				targets, targetToSwat, swattedTarget
 			);
 
-			const result = swatTarget(state, targetToSwat);
+			const result = swatTarget({ state: state, data: targetToSwat });
 
 			expect(result).toMatchObject({ targets: expectedTargets });
 		});
 
 		test('swatTarget reduces player life when a butterfly is swatted',
 			() => {
-				const result = swatTarget(state, butterfly);
+				const result = swatTarget({ state: state, data: butterfly });
 
 				expect(result).toMatchObject({
 					lives: state.lives - config.penalDamage,
@@ -157,7 +157,7 @@ describe('TargetManager', () => {
 
 		test('getDeadTargets returns all dead targets from the given targets',
 			() => {
-				const result = getDeadTargets(state);
+				const result = getDeadTargets({ targets: state });
 
 				expect(result).toEqual([deadTarget]);
 			});
@@ -223,10 +223,10 @@ describe('TargetManager', () => {
 		const { removeTarget } = TargetManager;
 
 		test('removeTarget removes target to be removed', () => {
-			const clickedTarget = random.rndValue(targets);
-			const result = removeTarget(targets, clickedTarget);
+			const data = random.rndValue(targets);
+			const result = removeTarget({ state: { targets }, data: data });
 			const expectedResult = targets.filter((item) =>
-				item !== clickedTarget);
+				item !== data);
 
 			expect(result)
 				.toEqual(expectedResult);

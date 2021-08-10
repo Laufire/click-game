@@ -1,8 +1,8 @@
 import PowerManager from '../services/powerManager';
 import TargetManager from '../services/targetManager';
 
-const increaseScore = ({ state, data }) => ({
-	score: state.score + data.score,
+const increaseScore = (context) => ({
+	score: context.state.score + context.data.score,
 });
 
 const moveTargets = ({ state }) => ({
@@ -10,36 +10,36 @@ const moveTargets = ({ state }) => ({
 });
 
 const addTargets = ({ state }) => ({
-	targets: TargetManager.addTargets(state.targets),
+	targets: TargetManager.addTargets(state),
 });
 
 const decreaseLives = ({ state }) => ({
 	lives: state.lives - 1,
 });
 
-const removeTarget = ({ state, data }) => ({
-	targets: TargetManager.removeTarget(state.targets, data),
+const removeTarget = (context) => ({
+	targets: TargetManager.removeTarget(context),
 });
 
-const activatePower = ({ state, data }) =>
-	PowerManager.activatePower(state, data);
+const activatePower = (context) =>
+	PowerManager.activatePower(context);
 
 const restart = ({ seed }) => seed;
 
 const addPowers = ({ state }) => ({
-	powers: PowerManager.addPowers(state.powers),
+	powers: PowerManager.addPowers(state),
 });
 
 const removeExpiredPowers = ({ state }) => ({
-	powers: PowerManager.removeExpiredPowers(state.powers),
+	powers: PowerManager.removeExpiredPowers(state),
 });
 
-const removeActivatedPower = ({ state, data }) => ({
-	powers: PowerManager.removePower(state.powers, data),
+const removeActivatedPower = (context) => ({
+	powers: PowerManager.removePower(context),
 });
 
 const removeDeadTargets = ({ state }) => {
-	const impactedTargets = TargetManager.getDeadTargets(state.targets);
+	const impactedTargets = TargetManager.getDeadTargets(state);
 
 	return {
 		targets: TargetManager.removeTargets(state.targets, impactedTargets),
@@ -47,8 +47,8 @@ const removeDeadTargets = ({ state }) => {
 	};
 };
 
-const swatTarget = ({ state, data }) =>
-	TargetManager.swatTarget(state, data);
+const swatTarget = (context) =>
+	TargetManager.swatTarget(context);
 
 const actions = {
 	increaseScore,
