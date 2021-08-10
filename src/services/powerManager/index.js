@@ -50,8 +50,8 @@ const activePowersStateKeys = {
 };
 
 const getActivePowers = ({ state }) => keys(activePowersStateKeys)
-	.filter((power) => isFuture(state[power]))
-	.map((activePower) => activePowersStateKeys[activePower]);
+	.filter((stateKey) => isFuture(state[stateKey]))
+	.map((stateKey) => activePowersStateKeys[stateKey]);
 
 const PowerManager = {
 	getPower,
