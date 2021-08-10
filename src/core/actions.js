@@ -5,12 +5,12 @@ const increaseScore = (context) => ({
 	score: context.state.score + context.data.score,
 });
 
-const moveTargets = ({ state }) => ({
-	targets: TargetManager.moveTargets(state),
+const moveTargets = (context) => ({
+	targets: TargetManager.moveTargets(context),
 });
 
-const addTargets = ({ state }) => ({
-	targets: TargetManager.addTargets(state),
+const addTargets = (context) => ({
+	targets: TargetManager.addTargets(context),
 });
 
 const decreaseLives = ({ state }) => ({
@@ -26,24 +26,27 @@ const activatePower = (context) =>
 
 const restart = ({ seed }) => seed;
 
-const addPowers = ({ state }) => ({
-	powers: PowerManager.addPowers(state),
+const addPowers = (context) => ({
+	powers: PowerManager.addPowers(context),
 });
 
-const removeExpiredPowers = ({ state }) => ({
-	powers: PowerManager.removeExpiredPowers(state),
+const removeExpiredPowers = (context) => ({
+	powers: PowerManager.removeExpiredPowers(context),
 });
 
 const removeActivatedPower = (context) => ({
 	powers: PowerManager.removePower(context),
 });
 
-const removeDeadTargets = ({ state }) => {
-	const impactedTargets = TargetManager.getDeadTargets(state);
+const removeDeadTargets = (context) => {
+	const impactedTargets = TargetManager.getDeadTargets(context);
 
 	return {
-		targets: TargetManager.removeTargets(state.targets, impactedTargets),
-		score: state.score + TargetManager.getTargetsScore(impactedTargets),
+		targets: TargetManager
+			.removeTargets(context.state.targets, impactedTargets),
+		score:
+			context.state.score + TargetManager
+				.getTargetsScore(impactedTargets),
 	};
 };
 

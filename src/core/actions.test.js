@@ -17,7 +17,7 @@ describe('Actions', () => {
 				'moveTargets').mockImplementation(jest.fn(() => targets));
 			const result = moveTargets({ state });
 
-			expect(TargetManager.moveTargets).toHaveBeenCalledWith(state);
+			expect(TargetManager.moveTargets).toHaveBeenCalledWith({ state });
 			expect(result).toMatchObject({ targets });
 		});
 	});

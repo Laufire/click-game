@@ -29,7 +29,7 @@ describe('TargetManager', () => {
 			jest.spyOn(random,
 				'rndBetween').mockImplementation(jest.fn(() => 1));
 
-			const result = addTargets({ targets: [] });
+			const result = addTargets({ state: { targets: [] }});
 			const resultKeys = result.map((item) => item.type);
 
 			expect(resultKeys).toEqual(keys(config.targets));
@@ -37,7 +37,7 @@ describe('TargetManager', () => {
 
 		test('addTargets return target', () => {
 			const maxTargets = range(0, config.maxTargets).map(() => ant);
-			const result = addTargets({ targets: maxTargets });
+			const result = addTargets({ state: { targets: maxTargets }});
 
 			expect(result).toEqual(maxTargets);
 		});
@@ -157,7 +157,7 @@ describe('TargetManager', () => {
 
 		test('getDeadTargets returns all dead targets from the given targets',
 			() => {
-				const result = getDeadTargets({ targets: state });
+				const result = getDeadTargets({ state: { targets: state }});
 
 				expect(result).toEqual([deadTarget]);
 			});
@@ -253,7 +253,7 @@ describe('TargetManager', () => {
 			jest.spyOn(PowerManager,
 				'isFrozen').mockImplementation(jest.fn(() => false));
 
-			const result = moveTargets(state);
+			const result = moveTargets({ state });
 
 			expect(PowerManager.isFrozen).toHaveBeenCalledWith(state);
 			expect(result).toEqual(expectedResult);
@@ -266,7 +266,7 @@ describe('TargetManager', () => {
 				jest.spyOn(PowerManager,
 					'isFrozen').mockImplementation(jest.fn(() => true));
 
-				const result = moveTargets(state);
+				const result = moveTargets({ state });
 
 				expect(PowerManager.isFrozen).toHaveBeenCalledWith(state);
 				expect(result).toEqual(expectedResult);

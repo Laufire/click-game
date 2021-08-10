@@ -58,13 +58,15 @@ describe('PowerManager', () => {
 			jest.spyOn(random, 'rndBetween')
 				.mockImplementation(jest.fn(() => 0));
 
-			const result = PowerManager.removeExpiredPowers({ powers });
+			const result = PowerManager
+				.removeExpiredPowers({ state: { powers }});
 
 			expect(result).toEqual(powers);
 		});
 
 		test('removeExpiredPowers remove the powers', () => {
-			const result = PowerManager.removeExpiredPowers({ powers });
+			const result = PowerManager
+				.removeExpiredPowers({ state: { powers }});
 
 			expect(result).toEqual(powers);
 		});
@@ -159,7 +161,7 @@ describe('PowerManager', () => {
 					jest.spyOn(random, 'rndBetween')
 						.mockImplementation(jest.fn(() => 0));
 
-					const result = PowerManager.addPowers({ powers });
+					const result = PowerManager.addPowers({ state: { powers }});
 
 					expect(result).toEqual(powers);
 				});
@@ -168,7 +170,8 @@ describe('PowerManager', () => {
 					jest.spyOn(random, 'rndBetween')
 						.mockImplementation(jest.fn(() => 1));
 
-					const result = PowerManager.addPowers({ powers: [] });
+					const result = PowerManager
+						.addPowers({ state: { powers: [] }});
 					const resultKeys = result.map((item) => item.type);
 
 					expect(resultKeys).toEqual(keys(config.powers));

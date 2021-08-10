@@ -25,7 +25,7 @@ const getTarget = ({ x, y, type } = {}) => {
 	};
 };
 
-const moveTargets = (state) =>
+const moveTargets = ({ state }) =>
 	(PowerManager.isFrozen(state)
 		? state.targets
 		: state.targets.map((target) => ({
@@ -38,7 +38,7 @@ const getTargets = () => targetTypeKeys.map((type) =>
 	rndBetween(1, 1 / config.targets[type].prob.add) === 1
 	&& getTarget({ type })).filter((val) => val);
 
-const addTargets = ({ targets }) => (targets.length < maxTargets
+const addTargets = ({ state: { targets }}) => (targets.length < maxTargets
 	? targets.concat(getTargets())
 	: targets);
 
@@ -65,7 +65,7 @@ const decreaseTargetLives = (
 			: target));
 };
 
-const getDeadTargets = ({ targets }) =>
+const getDeadTargets = ({ state: { targets }}) =>
 	targets.filter((target) => target.lives <= 0);
 
 const swatActionDefault = (state, data) => ({
