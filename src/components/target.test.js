@@ -8,12 +8,17 @@ describe('Target', () => {
 	const { actions } = context;
 	const target = TargetManager.getTarget();
 
-	test('renders the component', () => {
+	test('renders the component with appropriate styling', () => {
 		const { getByRole } = render(Target(target));
 
 		const component = getByRole('target');
 
 		expect(component).toBeInTheDocument();
+		expect(component).toHaveStyle({
+			position: 'absolute',
+			height: `${ target.height }vw`,
+			// TODO: Include missing style attributes in the tests.
+		});
 	});
 
 	test('when clicked triggers the action, swatTarget', () => {
