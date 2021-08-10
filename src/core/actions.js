@@ -43,10 +43,10 @@ const removeDeadTargets = (context) => {
 
 	return {
 		targets: TargetManager
-			.removeTargets(context.state.targets, impactedTargets),
+			.removeTargets({ ...context, data: impactedTargets }),
 		score:
 			context.state.score + TargetManager
-				.getTargetsScore(impactedTargets),
+				.getTargetsScore({ ...context, data: impactedTargets }),
 	};
 };
 

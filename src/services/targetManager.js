@@ -45,10 +45,10 @@ const addTargets = ({ state: { targets }}) => (targets.length < maxTargets
 const removeTarget = ({ state: { targets }, data: target }) =>
 	targets.filter((current) => current.id !== target.id);
 
-const removeTargets = (targets, targetsToRemove) =>
+const removeTargets = ({ state: { targets }, data: targetsToRemove }) =>
 	targets.filter((target) => !targetsToRemove.includes(target));
 
-const getTargetsScore = (targets) =>
+const getTargetsScore = ({ data: targets }) =>
 	targets.reduce((acc, target) => acc + target.score, 0);
 
 const decreaseTargetLives = (

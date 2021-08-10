@@ -150,14 +150,15 @@ describe('TargetManager', () => {
 			...mosquito,
 			lives: 0,
 		});
-		const state = secure([
+		const allTargets = secure([
 			ant,
 			deadTarget,
 		]);
 
 		test('getDeadTargets returns all dead targets from the given targets',
 			() => {
-				const result = getDeadTargets({ state: { targets: state }});
+				const result = getDeadTargets({ state:
+					{ targets: allTargets }});
 
 				expect(result).toEqual([deadTarget]);
 			});
@@ -165,7 +166,7 @@ describe('TargetManager', () => {
 
 	describe('getTargetsScore', () => {
 		const { getTargetsScore } = TargetManager;
-		const state = secure([
+		const allTargets = secure([
 			ant,
 			mosquito,
 		]);
@@ -173,7 +174,7 @@ describe('TargetManager', () => {
 
 		test('getTargetsScore returns the total score of all given targets',
 			() => {
-				const result = getTargetsScore(state);
+				const result = getTargetsScore({ data: allTargets });
 
 				expect(result)
 					.toEqual(score);
@@ -206,10 +207,12 @@ describe('TargetManager', () => {
 	describe('removeTargets', () => {
 		const { removeTargets } = TargetManager;
 		const targetToRetain = random.rndValue(targets);
-		const targetsToRemove = removeTargets(targets, [targetToRetain]);
+		const targetsToRemove = removeTargets({ state: { targets },
+			data: [targetToRetain] });
 
 		test('removeTargets remove targets to be removed', () => {
-			const result = removeTargets(targets, targetsToRemove);
+			const result = removeTargets({ state: { targets },
+				data: targetsToRemove });
 			// eslint-disable-next-line max-nested-callbacks
 			const expectedResult = targets.filter((item) =>
 				!targetsToRemove.includes(item));
