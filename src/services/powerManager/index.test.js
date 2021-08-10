@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 /* eslint-disable no-magic-numbers */
 /* eslint-disable no-import-assign */
 /* eslint-disable max-lines-per-function */
@@ -6,10 +7,10 @@
 import * as random from '@laufire/utils/random';
 import config from '../../core/config';
 import PowerManager from '../powerManager';
-import { damage } from './data';
+import { damage, stateKeysToPowers } from './data';
 import Powers from './powers';
 import * as helper from '../helperService';
-import { keys } from '@laufire/utils/collection';
+import { keys, map, secure, shuffle, values } from '@laufire/utils/collection';
 
 beforeEach(() => {
 	jest.restoreAllMocks();
@@ -189,24 +190,19 @@ describe('PowerManager', () => {
 
 	describe('getActivePowers', () => {
 		const date = new Date();
-		const frozenTillAdjustment = 5;
-		const superTillAdjustment = -5;
-		const unit = 'seconds';
-		const frozenTill = adjustTime(
-			date, frozenTillAdjustment, unit
-		);
-		const superTill = adjustTime(
-			date, superTillAdjustment, unit
-		);
-		const state = {
-			frozenTill,
-			superTill,
+		const [activePower, inactivePower] = shuffle(values(stateKeysToPowers));
+		const adjustments = {
+			[activePower]: 5,
+			[inactivePower]: -5,
 		};
+		const state = secure(map(stateKeysToPowers, (stateKey) => adjustTime(
+			date, adjustments[stateKey], 'hours'
+		)));
 
-		test('getActivePowers returns the all active powers',
+		test('getActivePowers returns a list of all active powers',
 			() => {
 				const result = PowerManager.getActivePowers({ state });
-				const expected = ['ice'];
+				const expected = [activePower];
 
 				expect(result).toEqual(expected);
 			});

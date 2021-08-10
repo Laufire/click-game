@@ -5,4 +5,12 @@ const damage = {
 	normal: config.swatDamage,
 };
 
-export { damage };
+const stateKeysToPowers = {
+	frozenTill: 'ice',
+	superTill: 'superBat',
+};
+
+export {
+	damage,
+	stateKeysToPowers,
+};
