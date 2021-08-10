@@ -191,8 +191,8 @@ describe('PowerManager', () => {
 			[activePower]: 5,
 			[inactivePower]: -5,
 		};
-		const state = secure(map(stateKeysToPowers, (stateKey) => adjustTime(
-			date, adjustments[stateKey], 'hours'
+		const state = secure(map(stateKeysToPowers, (power) => adjustTime(
+			date, adjustments[power], 'hours'
 		)));
 
 		test('getActivePowers returns a list of all active powers',
