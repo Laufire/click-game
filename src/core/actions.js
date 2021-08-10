@@ -18,7 +18,7 @@ const decreaseLives = ({ state }) => ({
 });
 
 const removeTarget = ({ state, data }) => ({
-	targets: TargetManager.removeTarget(state.targets, data),
+	targets: TargetManager.removeTargets(state.targets, [data]),
 });
 
 const activatePower = ({ state, data }) =>

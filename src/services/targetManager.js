@@ -42,9 +42,6 @@ const addTargets = (targets) => (targets.length < maxTargets
 	? targets.concat(getTargets())
 	: targets);
 
-const removeTarget = (targets, target) =>
-	targets.filter((current) => current.id !== target.id);
-
 const removeTargets = (targets, targetsToRemove) =>
 	targets.filter((target) => !targetsToRemove.includes(target));
 
@@ -88,7 +85,6 @@ const TargetManager = {
 	moveTargets,
 	addTargets,
 	getTarget,
-	removeTarget,
 	removeTargets,
 	getTargetsScore,
 	decreaseTargetLives,
