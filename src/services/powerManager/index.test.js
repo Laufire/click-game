@@ -12,7 +12,7 @@ import * as helper from '../helperService';
 import { keys } from '@laufire/utils/collection';
 
 beforeEach(() => {
-	jest.clearAllMocks();
+	jest.restoreAllMocks();
 });
 
 describe('PowerManager', () => {
@@ -185,5 +185,30 @@ describe('PowerManager', () => {
 
 			expect(result).toEqual(input);
 		});
+	});
+
+	describe('getActivePowers', () => {
+		const date = new Date();
+		const frozenTillAdjustment = 5;
+		const superTillAdjustment = -5;
+		const unit = 'seconds';
+		const frozenTill = adjustTime(
+			date, frozenTillAdjustment, unit
+		);
+		const superTill = adjustTime(
+			date, superTillAdjustment, unit
+		);
+		const state = {
+			frozenTill,
+			superTill,
+		};
+
+		test('getActivePowers returns the all active powers',
+			() => {
+				const result = PowerManager.getActivePowers({ state });
+				const expected = ['ice'];
+
+				expect(result).toEqual(expected);
+			});
 	});
 });
