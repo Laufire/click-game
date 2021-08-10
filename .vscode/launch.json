@@ -18,7 +18,9 @@
       "args": [
         "test",
         "--runInBand",
-				"--watchAll=false"
+				"--watchAll=false",
+				"--testPathPattern",
+				"${relativeFile}",
       ],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
