@@ -1,13 +1,15 @@
+/* eslint-disable no-magic-numbers */
 /* eslint-disable max-statements */
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines-per-function */
+
 import * as random from '@laufire/utils/random';
 import TargetManager from './targetManager';
 import config from '../core/config';
 import { keys, range, secure } from '@laufire/utils/collection';
 import { replace } from '../../test/helpers';
-import * as positionService from './positionService';
-import * as helper from './helperService';
+import * as PositionService from './positionService';
+import * as HelperService from './helperService';
 import Mocks from '../../test/mock';
 import PowerManager from './powerManager';
 
@@ -21,10 +23,10 @@ describe('TargetManager', () => {
 	const y = Symbol('y');
 	const id = Symbol('id');
 
-	describe('addTargets', () => {
+	describe('addTargets adds target', () => {
 		const { addTargets } = TargetManager;
 
-		test('addTargets add target', () => {
+		test('returns targets with new targets added', () => {
 			jest.spyOn(random, 'rndBetween')
 				.mockImplementation(jest.fn(() => 1));
 
@@ -34,7 +36,7 @@ describe('TargetManager', () => {
 			expect(resultKeys).toEqual(keys(config.targets));
 		});
 
-		test('addTargets return target', () => {
+		test('returns the targets without any new targets', () => {
 			const maxTargets = range(0, config.maxTargets).map(() => ant);
 			const result = addTargets(maxTargets);
 
@@ -42,22 +44,21 @@ describe('TargetManager', () => {
 		});
 	});
 
-	describe('getTarget', () => {
+	describe('getTarget returns target', () => {
 		const { getTarget } = TargetManager;
-		const variance = 0.5;
 		const type = 'ant';
-
 		const typeConfig = config.targets[type];
+		const { variance } = typeConfig;
 		const { height, width } = typeConfig;
 		const size = {
 			height: height * variance,
 			width: width * variance,
 		};
 
-		test('getTarget returns a target', () => {
-			jest.spyOn(helper, 'getId')
+		test('returns a target while params are passed', () => {
+			jest.spyOn(HelperService, 'getId')
 				.mockImplementation(jest.fn(() => id));
-			jest.spyOn(helper, 'getVariance')
+			jest.spyOn(HelperService, 'getVariance')
 				.mockImplementation(jest.fn(() => variance));
 
 			const result = getTarget({ x, y, type });
@@ -70,43 +71,45 @@ describe('TargetManager', () => {
 				...size,
 			};
 
-			expect(helper.getId).toHaveBeenCalled();
-			expect(helper.getVariance).toHaveBeenCalledWith(variance);
+			expect(HelperService.getId).toHaveBeenCalled();
+			expect(HelperService.getVariance).toHaveBeenCalledWith(variance);
 			expect(result).toMatchObject(expectedResult);
 		});
 
-		test('getTarget params are optional', () => {
-			jest.spyOn(helper, 'getId')
-				.mockImplementation(jest.fn(() => id));
-			jest.spyOn(random, 'rndValue')
-				.mockImplementation(jest.fn(() => 'ant'));
-			jest.spyOn(helper, 'getVariance')
-				.mockImplementation(jest.fn(() => variance));
-			jest.spyOn(positionService, 'getRandomX')
-				.mockImplementation(jest.fn(() => x));
-			jest.spyOn(positionService, 'getRandomY')
-				.mockImplementation(jest.fn(() => y));
-			const result = getTarget();
-			const expectedResult = {
-				id,
-				x,
-				y,
-				type,
-				...typeConfig,
-				...size,
-			};
+		test('returns a target with random position while params are optional',
+			() => {
+				jest.spyOn(HelperService, 'getId')
+					.mockImplementation(jest.fn(() => id));
+				jest.spyOn(random, 'rndValue')
+					.mockImplementation(jest.fn(() => 'ant'));
+				jest.spyOn(HelperService, 'getVariance')
+					.mockImplementation(jest.fn(() => variance));
+				jest.spyOn(PositionService, 'getRandomX')
+					.mockImplementation(jest.fn(() => x));
+				jest.spyOn(PositionService, 'getRandomY')
+					.mockImplementation(jest.fn(() => y));
+				const result = getTarget();
+				const expectedResult = {
+					id,
+					x,
+					y,
+					type,
+					...typeConfig,
+					...size,
+				};
 
-			expect(helper.getId).toHaveBeenCalled();
-			expect(helper.getVariance).toHaveBeenCalledWith(variance);
-			expect(positionService.getRandomX)
-				.toHaveBeenCalledWith(size);
-			expect(positionService.getRandomY)
-				.toHaveBeenCalledWith(size);
-			expect(result).toMatchObject(expectedResult);
-		});
+				expect(HelperService.getId).toHaveBeenCalled();
+				expect(HelperService.getVariance)
+					.toHaveBeenCalledWith(variance);
+				expect(PositionService.getRandomX)
+					.toHaveBeenCalledWith(size);
+				expect(PositionService.getRandomY)
+					.toHaveBeenCalledWith(size);
+				expect(result).toMatchObject(expectedResult);
+			});
 	});
 
-	describe('swatTarget', () => {
+	describe('swatTarget reduces life', () => {
 		const { swatTarget } = TargetManager;
 		const lives = 3;
 		const state = secure({
@@ -114,7 +117,7 @@ describe('TargetManager', () => {
 			lives,
 		});
 
-		test('swatTarget reduces the life of the swatted target', () => {
+		test('returns reduced life of the swatted target', () => {
 			const targetToSwat = random.rndValue(targets);
 			const swattedTarget = secure({
 				...targetToSwat,
@@ -129,7 +132,7 @@ describe('TargetManager', () => {
 			expect(result).toMatchObject({ targets: expectedTargets });
 		});
 
-		test('swatTarget reduces player life when a butterfly is swatted',
+		test('returns reduced player life when a butterfly is swatted',
 			() => {
 				const result = swatTarget(state, butterfly);
 
@@ -147,7 +150,7 @@ describe('TargetManager', () => {
 				lives: 0,
 			});
 			const state = secure([
-				ant,
+				...targets,
 				deadTarget,
 			]);
 			const result = getDeadTargets(state);
@@ -169,13 +172,12 @@ describe('TargetManager', () => {
 				.toEqual(score);
 		});
 
-	// TODO: lives two different test.
-	describe.only('decreaseTargetLives', () => {
+	describe('decreaseTargetLives returns targets', () => {
 		const { decreaseTargetLives } = TargetManager;
 		const impactedTargets = getRandomTargets();
 		const [randomTarget] = impactedTargets;
 
-		test('decreaseTargetLives returns targets with life decreased',
+		test('returns targets with life decreased',
 			() => {
 				const damage = 1;
 				const editedTarget = {
@@ -193,7 +195,7 @@ describe('TargetManager', () => {
 				expect(result).toEqual(expectedTargets);
 			});
 
-		test('decreaseTargetLives returns non negative lives', () => {
+		test('returns non negative lives', () => {
 			const damage = randomTarget.lives + 1;
 			const editedTarget = {
 				...randomTarget,
@@ -210,19 +212,21 @@ describe('TargetManager', () => {
 		});
 	});
 
-	test('removeTargets remove targets to be removed', () => {
+	test('removeTargets removes targets to be removed', () => {
 		const { removeTargets } = TargetManager;
 		const targetToRetain = random.rndValue(targets);
 		const targetsToRemove = removeTargets(targets, [targetToRetain]);
-		const result = removeTargets(targets, targetsToRemove);
+
 		const expectedResult = targets.filter((item) =>
 			!targetsToRemove.includes(item));
+
+		const result = removeTargets(targets, targetsToRemove);
 
 		expect(result)
 			.toEqual(expectedResult);
 	});
 
-	describe('moveTargets', () => {
+	describe('moveTargets returns moved targets', () => {
 		const { moveTargets } = TargetManager;
 		const state = secure({
 			targets: targets,
@@ -231,16 +235,16 @@ describe('TargetManager', () => {
 
 		const position = secure({ x, y });
 
-		test('moveTargets moves the targets', () => {
+		test('returns the moved targets', () => {
 			const expectedResult = secure([
 				{ ...ant, ...position },
 				{ ...mosquito, ...position },
 				{ ...butterfly, ...position },
 			]);
 
-			jest.spyOn(positionService, 'getRandomX')
+			jest.spyOn(PositionService, 'getRandomX')
 				.mockImplementation(jest.fn(() => x));
-			jest.spyOn(positionService, 'getRandomY')
+			jest.spyOn(PositionService, 'getRandomY')
 				.mockImplementation(jest.fn(() => y));
 			jest.spyOn(PowerManager, 'isFrozen')
 				.mockImplementation(jest.fn(() => false));
@@ -251,7 +255,7 @@ describe('TargetManager', () => {
 			expect(result).toEqual(expectedResult);
 		});
 
-		test('moveTargets will not move targets when frozenTill is active',
+		test('returns targets without changing position while isFrozen is true',
 			() => {
 				const expectedResult = targets;
 
