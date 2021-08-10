@@ -3,7 +3,6 @@ import { keys } from '@laufire/utils/collection';
 import config from '../../core/config';
 import TargetManager from '../targetManager';
 import { adjustTime } from '../helperService';
-import PlayerManager from '../playerManager';
 
 const Powers = {
 	bomb: (state) => {
@@ -47,16 +46,9 @@ const Powers = {
 			: { lives: state.lives + lives };
 	},
 
-	spoiler: (state) => {
-		const { score } = config.powers.spoiler;
-
-		return { score:
-			PlayerManager.adjustScore(state,
-				-rndBetween(score.min, score.max)) };
-	},
-
 	superBat: (state) => {
 		const { duration } = config.powers.superBat;
+		// TODO: Introduce player manager.
 
 		return {
 			superTill: adjustTime(

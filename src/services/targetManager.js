@@ -76,6 +76,11 @@ const swatActions = {
 		lives: state.lives - 1,
 		...swatActionDefault(state, data),
 	}),
+	spoiler: (state, data) => ({
+		score: Math.max(state.score
+			-	rndBetween(data.effect.score.min, data.effect.score.max), 0),
+		...swatActionDefault(state, data),
+	}),
 };
 
 const swatTarget = (state, data) =>

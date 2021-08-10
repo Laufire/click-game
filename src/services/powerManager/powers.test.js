@@ -109,13 +109,13 @@ describe('Powers', () => {
 		});
 	});
 
-	describe('spoiler', () => {
+	describe.skip('spoiler', () => {
 		const score = 10;
 		const state = {
 			score,
 		};
 		const reduceScore = 3;
-		const { min, max } = config.powers.spoiler.score;
+		const { min, max } = config.targets.spoiler.effect.score;
 
 		test('spoiler reduce the score', () => {
 			jest.spyOn(random, 'rndBetween')
