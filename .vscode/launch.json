@@ -12,7 +12,7 @@
       "webRoot": "${workspaceRoot}/src",
     },
     {
-      "name": "jest-tests",
+      "name": "jest",
       "type": "node",
       "request": "launch",
       "args": [
