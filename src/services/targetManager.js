@@ -4,6 +4,7 @@ import { keys } from '@laufire/utils/collection';
 import { getRandomX, getRandomY } from './positionService';
 import { getId, getVariance } from './helperService';
 import PowerManager from './powerManager';
+import PlayerManager from './playerManager';
 
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
@@ -77,8 +78,8 @@ const swatActions = {
 		...swatActionDefault(state, data),
 	}),
 	spoiler: (state, data) => ({
-		score: Math.max(state.score
-			-	rndBetween(data.effect.score.min, data.effect.score.max), 0),
+		score: PlayerManager.adjustScore(state,
+			-rndBetween(data.effect.score.min, data.effect.score.max)),
 		...swatActionDefault(state, data),
 	}),
 };
