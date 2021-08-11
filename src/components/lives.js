@@ -17,7 +17,7 @@ const getStyle = {
 };
 
 const Lives = () =>
-	<div style={ style }>
+	<div style={ style } role="lives">
 		<Favorite style={ getStyle }/>
 		{ context.state.lives } </div>;
 
