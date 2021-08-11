@@ -18,6 +18,7 @@ const Target = (target) => {
 	return (
 		<img
 			key={ id }
+			role="target"
 			src={ image }
 			style={ style }
 			onClick={ () => actions.swatTarget(target) }

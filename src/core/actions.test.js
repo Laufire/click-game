@@ -1,9 +1,6 @@
 /* eslint-disable max-nested-callbacks */
 import Actions from '../core/actions';
 import TargetManager from '../services/targetManager';
-beforeEach(() => {
-	jest.restoreAllMocks();
-});
 
 describe('Actions', () => {
 	describe('moveTargets', () => {

@@ -46,16 +46,9 @@ const Powers = {
 			: { lives: state.lives + lives };
 	},
 
-	spoiler: (state) => {
-		const { score } = config.powers.spoiler;
-		// TODO: Introduce player manager.
-
-		return { score: Math.max(state.score
-			-	rndBetween(score.min, score.max), 0) };
-	},
-
 	superBat: (state) => {
 		const { duration } = config.powers.superBat;
+		// TODO: Introduce player manager.
 
 		return {
 			superTill: adjustTime(

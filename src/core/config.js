@@ -68,6 +68,24 @@ const config = {
 				add: 0.1,
 			},
 		},
+		spoiler: {
+			type: 'spoiler',
+			image: spoiler,
+			height: 7,
+			width: 10,
+			variance: 0.3,
+			lives: 1,
+			score: 0,
+			prob: {
+				add: 0.5,
+			},
+			effect: {
+				score: {
+					min: 1,
+					max: 3,
+				},
+			},
+		},
 	},
 	maxPowers: 1,
 	powers: {
@@ -124,20 +142,6 @@ const config = {
 				max: 10,
 			},
 			lives: 1,
-		},
-		spoiler: {
-			type: 'spoiler',
-			image: spoiler,
-			height: 7,
-			width: 10,
-			prob: {
-				add: 1,
-				remove: 1,
-			},
-			score: {
-				min: 1,
-				max: 3,
-			},
 		},
 		superBat: {
 			type: 'superBat',

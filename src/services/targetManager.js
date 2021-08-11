@@ -4,6 +4,7 @@ import { keys } from '@laufire/utils/collection';
 import { getRandomX, getRandomY } from './positionService';
 import { getId, getVariance } from './helperService';
 import PowerManager from './powerManager';
+import PlayerManager from './playerManager';
 
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
@@ -42,9 +43,6 @@ const addTargets = ({ state: { targets }}) => (targets.length < maxTargets
 	? targets.concat(getTargets())
 	: targets);
 
-const removeTarget = ({ state: { targets }, data: target }) =>
-	targets.filter((current) => current.id !== target.id);
-
 const removeTargets = ({ state: { targets }, data: targetsToRemove }) =>
 	targets.filter((target) => !targetsToRemove.includes(target));
 
@@ -79,6 +77,11 @@ const swatActions = {
 		lives: state.lives - 1,
 		...swatActionDefault(state, data),
 	}),
+	spoiler: (state, data) => ({
+		score: PlayerManager.adjustScore(state,
+			-rndBetween(data.effect.score.min, data.effect.score.max)),
+		...swatActionDefault(state, data),
+	}),
 };
 
 const swatTarget = ({ state, data }) =>
@@ -88,7 +91,6 @@ const TargetManager = {
 	moveTargets,
 	addTargets,
 	getTarget,
-	removeTarget,
 	removeTargets,
 	getTargetsScore,
 	decreaseTargetLives,

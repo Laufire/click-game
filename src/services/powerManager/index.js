@@ -4,7 +4,7 @@ import config from '../../core/config';
 import { getRandomX, getRandomY } from '../positionService';
 import { getId, isFuture } from '../helperService';
 import Powers from './powers';
-import { damage } from './data';
+import { damage, stateKeysToPowers } from './data';
 
 const powerKeys = keys(config.powers);
 
@@ -44,6 +44,10 @@ const getDamage = (state) => damage[getBatType(state)];
 
 const isFrozen = ({ frozenTill }) => isFuture(frozenTill);
 
+const getActivePowers = ({ state }) => keys(stateKeysToPowers)
+	.filter((stateKey) => isFuture(state[stateKey]))
+	.map((stateKey) => stateKeysToPowers[stateKey]);
+
 const PowerManager = {
 	getPower,
 	addPowers,
@@ -53,6 +57,7 @@ const PowerManager = {
 	getBatType,
 	getDamage,
 	isFrozen,
+	getActivePowers,
 };
 
 export default PowerManager;

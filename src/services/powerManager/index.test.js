@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 /* eslint-disable no-magic-numbers */
 /* eslint-disable no-import-assign */
 /* eslint-disable max-lines-per-function */
@@ -6,14 +7,10 @@
 import * as random from '@laufire/utils/random';
 import config from '../../core/config';
 import PowerManager from '../powerManager';
-import { damage } from './data';
+import { damage, stateKeysToPowers } from './data';
 import Powers from './powers';
 import * as helper from '../helperService';
-import { keys } from '@laufire/utils/collection';
-
-beforeEach(() => {
-	jest.clearAllMocks();
-});
+import { keys, map, secure, shuffle, values } from '@laufire/utils/collection';
 
 describe('PowerManager', () => {
 	const { adjustTime } = helper;
@@ -190,5 +187,25 @@ describe('PowerManager', () => {
 
 			expect(result).toEqual(input);
 		});
+	});
+
+	describe('getActivePowers', () => {
+		const date = new Date();
+		const [activePower, inactivePower] = shuffle(values(stateKeysToPowers));
+		const adjustments = {
+			[activePower]: 5,
+			[inactivePower]: -5,
+		};
+		const state = secure(map(stateKeysToPowers, (power) => adjustTime(
+			date, adjustments[power], 'hours'
+		)));
+
+		test('getActivePowers returns a list of all active powers',
+			() => {
+				const result = PowerManager.getActivePowers({ state });
+				const expected = [activePower];
+
+				expect(result).toEqual(expected);
+			});
 	});
 });
