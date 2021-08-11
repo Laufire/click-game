@@ -21,6 +21,7 @@ const Power = (data) => {
 	return (
 		<img
 			key={ id }
+			role="power"
 			src={ image }
 			style={ getStyle(data) }
 			onClick={ () => {
