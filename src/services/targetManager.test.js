@@ -12,6 +12,7 @@ import * as PositionService from './positionService';
 import * as HelperService from './helperService';
 import Mocks from '../../test/mock';
 import PowerManager from './powerManager';
+import PlayerManager from './playerManager';
 
 describe('TargetManager', () => {
 	const { targets, ant, mosquito, butterfly, getRandomTargets } = Mocks;
@@ -108,9 +109,12 @@ describe('TargetManager', () => {
 	describe('swatTarget reduces life', () => {
 		const { swatTarget } = TargetManager;
 		const lives = 3;
+		const score = 10;
+		const spoiler = TargetManager.getTarget({ type: 'spoiler' });
 		const state = secure({
 			targets,
 			lives,
+			score,
 		});
 
 		test('returns reduced life of the swatted target', () => {
@@ -134,6 +138,28 @@ describe('TargetManager', () => {
 
 				expect(result).toMatchObject({
 					lives: state.lives - config.penalDamage,
+				});
+			});
+
+		test('returns reduced player score when a spoiler is swatted',
+			() => {
+				const { min, max } = config.targets.spoiler.effect.score;
+				const adjustment = 5;
+				const adjustedScore = Symbol('adjustment');
+
+				jest.spyOn(random, 'rndBetween')
+					.mockImplementation(jest.fn(() => adjustment));
+				jest.spyOn(PlayerManager, 'adjustScore')
+					.mockImplementation(jest.fn(() => adjustedScore));
+
+				const result = swatTarget(state, spoiler);
+
+				expect(random.rndBetween)
+					.toHaveBeenCalledWith(min, max);
+				expect(PlayerManager.adjustScore)
+					.toHaveBeenCalledWith(state, -adjustment);
+				expect(result).toMatchObject({
+					score: adjustedScore,
 				});
 			});
 	});
