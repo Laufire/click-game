@@ -18,7 +18,7 @@ const getStyle = {
 };
 
 const Score = () =>
-	<div style={ style }>
+	<div style={ style } role="score">
 		<Stars style={ getStyle }/>
 		{ context.state.score }
 		{ ActivePowers() }
