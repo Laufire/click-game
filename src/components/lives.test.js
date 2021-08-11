@@ -10,13 +10,5 @@ describe('Lives', () => {
 		const component = getByRole('lives');
 
 		expect(component).toBeInTheDocument();
-		expect(component).toHaveStyle({
-			position: 'absolute',
-			top: '0%',
-			right: '0%',
-			background: 'silver',
-			fontSize: '4vw',
-			textAlign: 'center',
-		});
 	});
 });

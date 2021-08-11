@@ -20,10 +20,5 @@ describe('Board', () => {
 		const component = render(Board()).getByRole('board');
 
 		expect(component).toBeInTheDocument();
-		expect(component).toHaveStyle({
-			position: 'absolute',
-			height: '100%',
-			width: '100%',
-		});
 	});
 });
