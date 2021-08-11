@@ -10,6 +10,7 @@ const style = {
 
 const Restart = () =>
 	<div
+		role="restart"
 		style={ style }
 		onClick={ context.actions.restart }
 	> Restart </div>;
