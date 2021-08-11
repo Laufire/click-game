@@ -4,7 +4,7 @@ import { rndValue } from '@laufire/utils/random';
 import { fireEvent, render } from '@testing-library/react';
 import config from '../core/config';
 import context from '../core/context';
-
+import * as PositionService from '../services/positionService';
 import PowerManager from '../services/powerManager';
 import Power from './power';
 
@@ -14,15 +14,28 @@ describe('Power', () => {
 	const power = PowerManager.getPower({ type });
 
 	test('renders the component with appropriate styling', () => {
-		const { getByRole } = render(Power(power));
+		const projectedPower = {
+			x: 10,
+			y: 15,
+			width: 20,
+			height: 25,
+		};
+		const { x, y, width, height } = projectedPower;
 
+		jest.spyOn(PositionService, 'project')
+			.mockImplementation(jest.fn(() => projectedPower));
+
+		const { getByRole } = render(Power(power));
 		const component = getByRole('power');
 
+		expect(PositionService.project).toHaveBeenCalledWith(power);
 		expect(component).toBeInTheDocument();
 		expect(component).toHaveStyle({
 			position: 'absolute',
-			height: `${ power.height }vw`,
-			width: `${ power.width }vw`,
+			top: `${ y }%`,
+			left: `${ x }%`,
+			height: `${ height }vw`,
+			width: `${ width }vw`,
 		});
 	});
 

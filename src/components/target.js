@@ -1,16 +1,15 @@
 import { React } from 'react';
 import context from '../core/context';
-
-const two = 2;
+import { project } from '../services/positionService';
 
 const Target = (target) => {
 	const { actions } = context;
-	const { id, x, y, height, width, image } = target;
+	const { id, x, y, height, width, image } = project(target);
 
 	const style = {
 		position: 'absolute',
-		top: `${ y - (height / two) }%`,
-		left: `${ x - (width / two) }%`,
+		top: `${ y }%`,
+		left: `${ x }%`,
 		height: `${ height }vw`,
 		width: `${ width }vw`,
 	};

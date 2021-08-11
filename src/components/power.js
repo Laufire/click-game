@@ -1,15 +1,14 @@
 import { React } from 'react';
 import context from '../core/context';
-
-const two = 2;
+import { project } from '../services/positionService';
 
 const getStyle = (power) => {
-	const { x, y, height, width } = power;
+	const { x, y, height, width } = project(power);
 
 	return {
 		position: 'absolute',
-		top: `${ y - (height / two) }%`,
-		left: `${ x - (width / two) }%`,
+		top: `${ y }%`,
+		left: `${ x }%`,
 		height: `${ height }vw`,
 		width: `${ width }vw`,
 	};

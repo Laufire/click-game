@@ -1,7 +1,11 @@
 /* eslint-disable max-lines-per-function */
 
 import * as random from '@laufire/utils/random';
-import { getRandomX, getRandomY } from './positionService';
+import { keys } from '@laufire/utils/lib';
+import config from '../core/config';
+import { getRandomX, getRandomY, project } from './positionService';
+import PowerManager from './powerManager';
+import TargetManager from './targetManager';
 
 describe('PositionService', () => {
 	test('getRandomX delegates positioning to rndBetween', () => {
@@ -30,5 +34,22 @@ describe('PositionService', () => {
 
 		expect(random.rndBetween).toHaveBeenCalledWith(min, max);
 		expect(result).toEqual(mockValue);
+	});
+
+	test('project returns the adjusted position', () => {
+		const type = random.rndValue(keys(config.powers));
+		const power = PowerManager.getPower({ type });
+		const target = TargetManager.getTarget();
+		const position = random.rndValue([power, target]);
+		const { x, y, width, height } = position;
+		const two = 2;
+
+		const result = project(position);
+
+		expect(result).toMatchObject({
+			x: x - (width / two),
+			y: y - (height / two),
+			...position,
+		});
 	});
 });
