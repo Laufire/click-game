@@ -1,16 +1,11 @@
 import { React } from 'react';
 import context from '../core/context';
-
-const boardStyle = {
-	position: 'absolute',
-	height: '100%',
-	width: '100%',
-};
+import '../App.scss';
 
 const Board = () =>
 	<div
 		role="board"
-		style={ boardStyle }
+		className="board"
 		onClick={ context.actions.decreaseLives }
 	/>;
 

@@ -16,3 +16,23 @@ body {
 .demoImage{
 	background-image: url('http://localhost:3001/logo192.png');
 }
+
+.board {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+.lives {
+	position: absolute;
+	top: 0%;
+	right: 0%;
+	background: silver;
+	font-size: 4vw;
+	text-align: center;
+}
+
+.favorite {
+	color: 'red';
+	font-size: '3vw';
+}
