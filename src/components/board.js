@@ -9,8 +9,8 @@ const boardStyle = {
 
 const Board = () =>
 	<div
-		style={ boardStyle }
 		role="board"
+		style={ boardStyle }
 		onClick={ context.actions.decreaseLives }
 	/>;
 

@@ -13,8 +13,13 @@ describe('Board', () => {
 
 		fireEvent.click(component);
 
-		expect(component).toBeInTheDocument();
 		expect(actions.decreaseLives).toHaveBeenCalled();
+	});
+
+	test('renders the component with appropriate styling', () => {
+		const component = render(Board()).getByRole('board');
+
+		expect(component).toBeInTheDocument();
 		expect(component).toHaveStyle({
 			position: 'absolute',
 			height: '100%',
