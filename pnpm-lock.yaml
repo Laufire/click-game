@@ -2,7 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@laufire/resist': ^0.0.4
-  '@laufire/utils': ^2.9.1
+  '@laufire/utils': ^2.9.2
   '@material-ui/core': ^4.12.3
   '@material-ui/icons': ^4.11.2
   '@testing-library/jest-dom': ^5.14.1
@@ -22,7 +22,7 @@ specifiers:
 
 dependencies:
   '@laufire/resist': 0.0.4
-  '@laufire/utils': 2.9.1
+  '@laufire/utils': 2.9.2
   '@material-ui/core': 4.12.3_react-dom@17.0.2+react@17.0.2
   '@material-ui/icons': 4.11.2_fced322086cd04afb0b6feec9e866920
   '@testing-library/jest-dom': 5.14.1
@@ -1810,11 +1810,11 @@ packages:
     resolution: {integrity: sha512-nral5Lf1wM+Bio7DUKxg+tBMfdHDGTOiBDuvAAf5P6kE6dX5mPzMGFhqH76s9K7xZHYcUV/fYoI3ims6P0mhOw==}
     engines: {node: '>=7.6'}
     dependencies:
-      '@laufire/utils': 2.9.1
+      '@laufire/utils': 2.9.2
     dev: false
 
-  /@laufire/utils/2.9.1:
-    resolution: {integrity: sha512-m5QnE4xD0e2Rf/6HEeYbAFotn4hjkFoMDOvfA9hZCZCFhZy4i9xzmkZB3kw2hIKZ+VIPpcAoAadD15uJrotPyQ==}
+  /@laufire/utils/2.9.2:
+    resolution: {integrity: sha512-faEv6RkFJujqrkcrbyDmE30VIBhm6NRAXwVhhvQgQdYFgtATOSNeyWHuHOTLyajC1JFIKPv+em3ySxxc7+GMMQ==}
     dependencies:
       '@babel/runtime': 7.14.6
     optionalDependencies:
