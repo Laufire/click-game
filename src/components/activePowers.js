@@ -9,7 +9,11 @@ const style = {
 };
 
 const getPower = (powerType) =>
-	<img style={ style } src={ config.powers[powerType].image }/> ;
+	<img
+		style={ style }
+		role="active-power"
+		src={ config.powers[powerType].image }
+	/> ;
 
 const ActivePowers = () => {
 	const powers = PowerManager.getActivePowers(context).map(getPower);
