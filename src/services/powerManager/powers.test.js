@@ -9,7 +9,7 @@ import * as helper from '../helperService';
 import TargetManager from '../targetManager';
 
 describe('Powers', () => {
-	const { bomb, ice, superBat, spoiler, gift } = Powers;
+	const { bomb, ice, superBat, gift, spoiler } = Powers;
 
 	describe('bomb', () => {
 		const randomTargets = Mock.getRandomTargets();

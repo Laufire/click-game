@@ -1,6 +1,7 @@
 /* eslint-disable max-statements */
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines-per-function */
+
 import * as random from '@laufire/utils/random';
 import TargetManager from './targetManager';
 import config from '../core/config';
@@ -10,6 +11,7 @@ import * as PositionService from './positionService';
 import * as HelperService from './helperService';
 import Mocks from '../../test/mock';
 import PowerManager from './powerManager';
+import PlayerManager from './playerManager';
 
 beforeEach(() => {
 	jest.restoreAllMocks();
@@ -42,7 +44,7 @@ describe('TargetManager', () => {
 		});
 	});
 
-	describe('getTarget', () => {
+	describe('getTarget returns target', () => {
 		const { getTarget } = TargetManager;
 		const type = 'ant';
 		const typeConfig = config.targets[type];
@@ -53,7 +55,7 @@ describe('TargetManager', () => {
 			width: width * variance,
 		};
 
-		test('getTarget returns a target', () => {
+		test('returns a target while params are passed', () => {
 			jest.spyOn(HelperService, 'getId')
 				.mockImplementation(jest.fn(() => id));
 			jest.spyOn(HelperService, 'getVariance')
@@ -80,7 +82,8 @@ describe('TargetManager', () => {
 				.mockImplementation(jest.fn(() => id));
 			jest.spyOn(random, 'rndValue')
 				.mockImplementation(jest.fn(() => 'ant'));
-			HelperService.getVariance = jest.fn().mockImplementation(() => variance);
+			jest.spyOn(HelperService, 'getVariance')
+				.mockImplementation(jest.fn(() => variance));
 			jest.spyOn(PositionService,	'getRandomX')
 				.mockImplementation(jest.fn(() => x));
 			jest.spyOn(PositionService,	'getRandomY')
@@ -106,20 +109,23 @@ describe('TargetManager', () => {
 		});
 	});
 
-	describe('swatTarget', () => {
+	describe('swatTarget reduces life', () => {
 		const { swatTarget } = TargetManager;
+		const lives = 3;
+		const score = 10;
+		const spoiler = TargetManager.getTarget({ type: 'spoiler' });
 		const state = secure({
-			targets: targets,
-			lives: 3,
+			targets,
+			lives,
+			score,
 		});
 
-		test('swatTarget reduces the life of the swatted target', () => {
+		test('returns reduced life of the swatted target', () => {
 			const targetToSwat = random.rndValue(targets);
-			const swattedTarget = {
+			const swattedTarget = secure({
 				...targetToSwat,
 				lives: targetToSwat.lives - config.swatDamage,
-			};
-
+			});
 			const expectedTargets = replace(
 				targets, targetToSwat, swattedTarget
 			);
@@ -129,12 +135,34 @@ describe('TargetManager', () => {
 			expect(result).toMatchObject({ targets: expectedTargets });
 		});
 
-		test('swatTarget reduces player life when a butterfly is swatted',
+		test('returns reduced player life when a butterfly is swatted',
 			() => {
 				const result = swatTarget({ state: state, data: butterfly });
 
 				expect(result).toMatchObject({
 					lives: state.lives - config.penalDamage,
+				});
+			});
+
+		test('returns reduced player score when a spoiler is swatted',
+			() => {
+				const { min, max } = config.targets.spoiler.effect.score;
+				const adjustment = 5;
+				const adjustedScore = Symbol('adjustment');
+
+				jest.spyOn(random, 'rndBetween')
+					.mockImplementation(jest.fn(() => adjustment));
+				jest.spyOn(PlayerManager, 'adjustScore')
+					.mockImplementation(jest.fn(() => adjustedScore));
+
+				const result = swatTarget({ state: state, data: spoiler });
+
+				expect(random.rndBetween)
+					.toHaveBeenCalledWith(min, max);
+				expect(PlayerManager.adjustScore)
+					.toHaveBeenCalledWith(state, -adjustment);
+				expect(result).toMatchObject({
+					score: adjustedScore,
 				});
 			});
 	});
@@ -222,7 +250,7 @@ describe('TargetManager', () => {
 			data: [targetToRetain] });
 
 		const expectedResult = targets.filter((item) =>
-		!targetsToRemove.includes(item));
+			!targetsToRemove.includes(item));
 
 		const result = removeTargets({ state: { targets },
 			data: targetsToRemove });
@@ -231,8 +259,7 @@ describe('TargetManager', () => {
 			.toEqual(expectedResult);
 	});
 
-
-	describe('moveTargets', () => {
+	describe('moveTargets returns moved targets', () => {
 		const { moveTargets } = TargetManager;
 		const state = secure({
 			targets: targets,
@@ -241,7 +268,7 @@ describe('TargetManager', () => {
 
 		const position = secure({ x, y });
 
-		test('moveTargets moves the targets', () => {
+		test('returns the moved targets', () => {
 			const expectedResult = secure([
 				{ ...ant, ...position },
 				{ ...mosquito, ...position },
@@ -263,15 +290,15 @@ describe('TargetManager', () => {
 
 		test('returns targets without changing position while isFrozen is true',
 			() => {
+				const expectedResult = targets;
+
 				jest.spyOn(PowerManager, 'isFrozen')
 					.mockImplementation(jest.fn(() => true));
-
-				const expectedResult = targets;
 
 				const result = moveTargets({ state });
 
 				expect(PowerManager.isFrozen).toHaveBeenCalledWith(state);
 				expect(result).toEqual(expectedResult);
-		});
+			});
 	});
 });

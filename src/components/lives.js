@@ -1,24 +1,11 @@
 import { Favorite } from '@material-ui/icons';
 import { React } from 'react';
 import context from '../core/context';
-
-const style = {
-	position: 'absolute',
-	top: '0%',
-	right: '0%',
-	background: 'silver',
-	fontSize: '4vw',
-	textAlign: 'center',
-};
-
-const getStyle = {
-	color: 'red',
-	fontSize: '3vw',
-};
+import '../App.scss';
 
 const Lives = () =>
-	<div style={ style }>
-		<Favorite style={ getStyle }/>
+	<div role="lives" className="lives">
+		<Favorite className="favorite"/>
 		{ context.state.lives } </div>;
 
 export default Lives;

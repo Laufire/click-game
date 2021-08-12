@@ -19,7 +19,7 @@ const decreaseLives = ({ state }) => ({
 });
 
 const removeTarget = (context) => ({
-	targets: TargetManager.removeTargets({ ...context, data: [context.data]}),
+	targets: TargetManager.removeTargets({ ...context, data: [context.data] }),
 });
 
 const activatePower = (context) =>

@@ -3,18 +3,14 @@ import config from '../core/config';
 import PowerManager from '../services/powerManager';
 import context from '../core/context';
 
-const style = {
-	height: 15,
-	width: 15,
-};
-
 const getPower = (powerType) =>
-	<img style={ style } src={ config.powers[powerType].image }/> ;
+	<img
+		key={ powerType }
+		className="active-power"
+		role="active-power"
+		src={ config.powers[powerType].image }
+	/> ;
 
-const ActivePowers = () => {
-	const powers = PowerManager.getActivePowers(context).map(getPower);
-
-	return powers;
-};
+const ActivePowers = () => PowerManager.getActivePowers(context).map(getPower);
 
 export default ActivePowers;

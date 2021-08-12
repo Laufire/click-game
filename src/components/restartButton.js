@@ -1,17 +1,11 @@
 import { React } from 'react';
 import context from '../core/context';
 
-const style = {
-	marginTop: '0.5em',
-	background: 'silver',
-	fontSize: '30pt',
-	textAlign: 'center',
-};
-
 const Restart = () =>
 	<div
-		style={ style }
+		role="restart"
+		className="restart"
 		onClick={ context.actions.restart }
-	> Restart </div>;
+	> RESTART </div>;
 
 export default Restart;
