@@ -1,5 +1,4 @@
 /* eslint-disable react/display-name */
-// TODO: write the test,  desc: component renders the appropriate icon
 jest.mock('@material-ui/icons/Favorite', () => () => <div role="favorite"/>);
 jest.mock('../core/context', () => ({ state: { lives: 2 }}));
 
