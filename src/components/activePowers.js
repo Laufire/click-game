@@ -10,15 +10,12 @@ const style = {
 
 const getPower = (powerType) =>
 	<img
-		style={ style }
+		key={ powerType }
 		role="active-power"
+		style={ style }
 		src={ config.powers[powerType].image }
 	/> ;
 
-const ActivePowers = () => {
-	const powers = PowerManager.getActivePowers(context).map(getPower);
-
-	return powers;
-};
+const ActivePowers = () => PowerManager.getActivePowers(context).map(getPower);
 
 export default ActivePowers;
