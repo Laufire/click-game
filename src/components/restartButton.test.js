@@ -14,12 +14,7 @@ describe('Restart', () => {
 		fireEvent.click(component);
 
 		expect(component).toBeInTheDocument();
-		expect(component).toHaveStyle({
-			marginTop: '0.5em',
-			background: 'silver',
-			fontSize: '30pt',
-			textAlign: 'center',
-		});
+		expect(component).toHaveClass('restart');
 		expect(actions.restart).toHaveBeenCalled();
 	});
 });
