@@ -24,7 +24,7 @@ describe('PlayerManager', () => {
 
 		const expectedResult = state.lives - config.penalDamage;
 
-		const result = decreaseLives(state);
+		const result = decreaseLives({ state });
 
 		expect(result).toEqual(expectedResult);
 	});

@@ -14,8 +14,8 @@ const addTargets = (context) => ({
 	targets: TargetManager.addTargets(context),
 });
 
-const decreaseLives = ({ state }) => ({
-	lives: PlayerManager.decreaseLives(state),
+const decreaseLives = (context) => ({
+	lives: PlayerManager.decreaseLives(context),
 });
 
 const removeTarget = (context) => ({

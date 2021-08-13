@@ -4,7 +4,7 @@ import config from '../core/config';
 const adjustScore = (state, score) =>
 	Math.max(state.score + score, 0);
 
-const decreaseLives = (state) => state.lives - config.penalDamage;
+const decreaseLives = ({ state }) => state.lives - config.penalDamage;
 
 const PlayerManager = {
 	adjustScore,
