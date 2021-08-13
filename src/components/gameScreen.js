@@ -1,14 +1,15 @@
 import { React } from 'react';
-import Board from './board';
-import Target from './target';
 import context from '../core/context';
+import Board from './board';
+import Container from './container';
 import Power from './power';
+import Target from './target';
 
 const GameScreen = () =>
 	<>
-		{ Board(context) }
-		{ context.state.targets.map(Target) }
-		{ context.state.powers.map(Power) }
+		{ Board() }
+		{ Container(context.state.targets, Target) }
+		{ Container(context.state.powers, Power) }
 	</>;
 
 export default GameScreen;
