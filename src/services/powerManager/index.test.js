@@ -179,12 +179,14 @@ describe('PowerManager', () => {
 
 	describe('isFrozen', () => {
 		const input = Symbol('Future');
+		const data = { frozenTill: 0 };
 
 		test('whether isFuture is called', () => {
 			jest.spyOn(helper, 'isFuture')
-				.mockImplementation(() => input);
-			const result = helper.isFuture();
+				.mockImplementation(jest.fn(() => input));
+			const result = PowerManager.isFrozen(data);
 
+			expect(helper.isFuture).toHaveBeenCalledWith(data.frozenTill);
 			expect(result).toEqual(input);
 		});
 	});
