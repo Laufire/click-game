@@ -53,7 +53,7 @@ describe('PowerManager', () => {
 
 		test('test the removeExpiredPower with rndBetween', () => {
 			jest.spyOn(random, 'rndBetween')
-				.mockImplementation(jest.fn(() => 0));
+				.mockImplementation(() => 0);
 
 			const result = PowerManager
 				.removeExpiredPowers({ state: { powers }});
@@ -83,7 +83,7 @@ describe('PowerManager', () => {
 			const data = { type };
 
 			jest.spyOn(Powers, type)
-				.mockImplementation(jest.fn(() => returnValue));
+				.mockImplementation(() => returnValue);
 
 			const powerHandler = Powers[type];
 
@@ -156,7 +156,7 @@ describe('PowerManager', () => {
 			describe('addPowers adds powers based on prob', () => {
 				test('No powers added with 0 prob', () => {
 					jest.spyOn(random, 'rndBetween')
-						.mockImplementation(jest.fn(() => 0));
+						.mockImplementation(() => 0);
 
 					const result = PowerManager.addPowers({ state: { powers }});
 
@@ -165,7 +165,7 @@ describe('PowerManager', () => {
 
 				test('Added powers with prob 1', () => {
 					jest.spyOn(random, 'rndBetween')
-						.mockImplementation(jest.fn(() => 1));
+						.mockImplementation(() => 1);
 
 					const result = PowerManager
 						.addPowers({ state: { powers: [] }});
@@ -182,7 +182,7 @@ describe('PowerManager', () => {
 
 		test('whether isFuture is called', () => {
 			jest.spyOn(helper, 'isFuture')
-				.mockImplementation(jest.fn(() => input));
+				.mockImplementation(() => input);
 			const result = helper.isFuture();
 
 			expect(result).toEqual(input);

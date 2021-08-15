@@ -11,7 +11,7 @@ describe('Actions', () => {
 			const { moveTargets } = Actions;
 
 			jest.spyOn(TargetManager,
-				'moveTargets').mockImplementation(jest.fn(() => targets));
+				'moveTargets').mockImplementation(() => targets);
 			const result = moveTargets({ state });
 
 			expect(TargetManager.moveTargets).toHaveBeenCalledWith({ state });

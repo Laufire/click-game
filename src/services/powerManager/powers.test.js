@@ -21,15 +21,15 @@ describe('Powers', () => {
 
 		test('bomb', () => {
 			jest.spyOn(Math,
-				'min').mockImplementation(jest.fn(() => count));
+				'min').mockImplementation(() => count);
 			jest.spyOn(random,
-				'rndValues').mockImplementation(jest.fn(() =>
-				randomTargets));
+				'rndValues').mockImplementation(() =>
+				randomTargets);
 			jest.spyOn(random,
-				'rndBetween').mockImplementation(jest.fn(() => damage));
+				'rndBetween').mockImplementation(() => damage);
 			jest.spyOn(TargetManager,
-				'decreaseTargetLives').mockImplementation(jest.fn(() =>
-				targets));
+				'decreaseTargetLives').mockImplementation(() =>
+				targets);
 
 			const result = bomb({ targets });
 
@@ -61,10 +61,10 @@ describe('Powers', () => {
 
 		test('ice return the frozenTill', () => {
 			jest.spyOn(helper, 'adjustTime')
-				.mockImplementation(jest.fn(() => newTime));
+				.mockImplementation(() => newTime);
 
 			jest.spyOn(random, 'rndBetween')
-				.mockImplementation(jest.fn(() => frozenDuration));
+				.mockImplementation(() => frozenDuration);
 
 			const result = ice(state);
 
@@ -91,7 +91,7 @@ describe('Powers', () => {
 
 		test('superBat return the superTill', () => {
 			jest.spyOn(helper, 'adjustTime')
-				.mockImplementation(jest.fn(() => newTime));
+				.mockImplementation(() => newTime);
 
 			const result = superBat(state);
 
@@ -115,7 +115,7 @@ describe('Powers', () => {
 
 		test('spoiler reduce the score', () => {
 			jest.spyOn(random, 'rndBetween')
-				.mockImplementation(jest.fn(() => reduceScore));
+				.mockImplementation(() => reduceScore);
 			const result = spoiler(state);
 
 			expect(result).toMatchObject({
@@ -139,8 +139,8 @@ describe('Powers', () => {
 			const { min, max } = config.powers.gift.score;
 
 			jest.spyOn(random, 'rndBetween')
-				.mockImplementationOnce(jest.fn(() => 1))
-				.mockImplementationOnce(jest.fn(() => addScore));
+				.mockImplementationOnce(() => 1)
+				.mockImplementationOnce(() => addScore);
 
 			const result = gift(state);
 
@@ -153,7 +153,7 @@ describe('Powers', () => {
 
 		test('gift sometimes increase the lives', () => {
 			jest.spyOn(random, 'rndBetween')
-				.mockImplementation(jest.fn(() => 0));
+				.mockImplementation(() => 0);
 
 			const result = gift(state);
 

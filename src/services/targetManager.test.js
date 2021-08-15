@@ -28,7 +28,7 @@ describe('TargetManager', () => {
 
 		test('returns targets with new targets added', () => {
 			jest.spyOn(random, 'rndBetween')
-				.mockImplementation(jest.fn(() => 1));
+				.mockImplementation(() => 1);
 
 			const result = addTargets({ state: { targets: [] }});
 			const resultKeys = result.map((item) => item.type);
@@ -57,9 +57,9 @@ describe('TargetManager', () => {
 
 		test('returns a target while params are passed', () => {
 			jest.spyOn(HelperService, 'getId')
-				.mockImplementation(jest.fn(() => id));
+				.mockImplementation(() => id);
 			jest.spyOn(HelperService, 'getVariance')
-				.mockImplementation(jest.fn(() => variance));
+				.mockImplementation(() => variance);
 
 			const expectedResult = {
 				id,
@@ -79,15 +79,15 @@ describe('TargetManager', () => {
 
 		test('getTarget params are optional', () => {
 			jest.spyOn(HelperService,	'getId')
-				.mockImplementation(jest.fn(() => id));
+				.mockImplementation(() => id);
 			jest.spyOn(random, 'rndValue')
-				.mockImplementation(jest.fn(() => 'ant'));
+				.mockImplementation(() => 'ant');
 			jest.spyOn(HelperService, 'getVariance')
-				.mockImplementation(jest.fn(() => variance));
+				.mockImplementation(() => variance);
 			jest.spyOn(PositionService,	'getRandomX')
-				.mockImplementation(jest.fn(() => x));
+				.mockImplementation(() => x);
 			jest.spyOn(PositionService,	'getRandomY')
-				.mockImplementation(jest.fn(() => y));
+				.mockImplementation(() => y);
 
 			const expectedResult = {
 				id,
@@ -151,9 +151,9 @@ describe('TargetManager', () => {
 				const adjustedScore = Symbol('adjustment');
 
 				jest.spyOn(random, 'rndBetween')
-					.mockImplementation(jest.fn(() => adjustment));
+					.mockImplementation(() => adjustment);
 				jest.spyOn(PlayerManager, 'adjustScore')
-					.mockImplementation(jest.fn(() => adjustedScore));
+					.mockImplementation(() => adjustedScore);
 
 				const result = swatTarget({ state: state, data: spoiler });
 
@@ -276,11 +276,11 @@ describe('TargetManager', () => {
 			]);
 
 			jest.spyOn(PositionService, 'getRandomX')
-				.mockImplementation(jest.fn(() => x));
+				.mockImplementation(() => x);
 			jest.spyOn(PositionService, 'getRandomY')
-				.mockImplementation(jest.fn(() => y));
+				.mockImplementation(() => y);
 			jest.spyOn(PowerManager, 'isFrozen')
-				.mockImplementation(jest.fn(() => false));
+				.mockImplementation(() => false);
 
 			const result = moveTargets({ state });
 
@@ -293,7 +293,7 @@ describe('TargetManager', () => {
 				const expectedResult = targets;
 
 				jest.spyOn(PowerManager, 'isFrozen')
-					.mockImplementation(jest.fn(() => true));
+					.mockImplementation(() => true);
 
 				const result = moveTargets({ state });
 

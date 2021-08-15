@@ -10,7 +10,7 @@ describe('ActivePowers', () => {
 		const possiblePowers = ['ice', 'superBat'];
 
 		jest.spyOn(PowerManager, 'getActivePowers')
-			.mockImplementation(jest.fn(() => possiblePowers));
+			.mockImplementation(() => possiblePowers);
 
 		const activePowers = render(ActivePowers())
 			.getAllByRole('active-power');

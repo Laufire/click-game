@@ -52,7 +52,7 @@ describe('HelperService', () => {
 
 		test('returns a random number between variance range', () => {
 			jest.spyOn(random, 'rndBetween')
-				.mockImplementation(jest.fn(() => input));
+				.mockImplementation(() => input);
 			const { rndBetween } = random;
 			const result = getVariance(0.2);
 
