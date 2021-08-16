@@ -16,13 +16,14 @@ describe('Score', () => {
 		expect(getByRole('active-powers')).toBeInTheDocument();
 		expect(component).toHaveTextContent(context.state.score);
 		expect(component).toBeInTheDocument();
+		expect(component).toHaveClass('score');
 	});
 
 	test('renders the star component with appropriate styling', () => {
-		const { getByRole, getByTitle } = render(Score());
+		const { getByTitle } = render(Score());
 		const component = getByTitle('icon');
 
-		expect(getByRole('active-powers')).toBeInTheDocument();
 		expect(component).toBeInTheDocument();
+		expect(component).toHaveClass('score-icon');
 	});
 });
