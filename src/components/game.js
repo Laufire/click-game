@@ -5,9 +5,10 @@ import Lives from './lives';
 import GameScreen from './gameScreen';
 import GameOverScreen from './gameOverScreen';
 import PowerManager from '../services/powerManager';
+import { isAlive } from '../services/helperService';
 
 const Game = () => {
-	const Screen = context.state.lives === 0 ? GameOverScreen : GameScreen;
+	const Screen = isAlive(context) ? GameOverScreen : GameScreen;
 	const className = `${ PowerManager.getBatType(context.state) }-bat`;
 
 	return (

@@ -12,8 +12,9 @@ import * as helper from './helperService';
 import { adjustDate } from '../../test/helpers';
 
 describe('HelperService', () => {
+	const { getId, isFuture, getVariance, adjustTime, isAlive } = helper;
+
 	describe('getId', () => {
-		const { getId } = helper;
 		const { rndString } = random;
 
 		test('getId gives a rndString of the configured idLength', () => {
@@ -29,8 +30,6 @@ describe('HelperService', () => {
 	});
 
 	describe('isFuture', () => {
-		const { isFuture } = helper;
-
 		test('isFuture returns false when input date is less than new date',
 			() => {
 				const result = isFuture(adjustDate(new Date(), -1));
@@ -47,7 +46,6 @@ describe('HelperService', () => {
 	});
 
 	describe('getVariance', () => {
-		const { getVariance } = helper;
 		const input = 100;
 
 		test('returns a random number between variance range', () => {
@@ -62,8 +60,6 @@ describe('HelperService', () => {
 	});
 
 	describe('adjustTime', () => {
-		const { adjustTime } = helper;
-
 		test('returns adjustedTime', () => {
 			const adjustment = Symbol('adjustment');
 			const baseDate = new Date();
@@ -81,6 +77,27 @@ describe('HelperService', () => {
 			expect(momentSpy).toHaveBeenCalledWith(baseDate);
 			expect(Date).toHaveBeenCalledWith(adjustment);
 			expect(result).toEqual(Fn.mock.instances[0]);
+		});
+	});
+
+	describe('isAlive', () => {
+		test('returns true if lives is equal to zero', () => {
+			const context = {
+				state: { lives: 0 },
+			};
+
+			const result = isAlive(context);
+
+			expect(result).toEqual(true);
+		});
+		test('returns false if lives is greater than zero', () => {
+			const context = {
+				state: { lives: 3 },
+			};
+
+			const result = isAlive(context);
+
+			expect(result).toEqual(false);
 		});
 	});
 });
