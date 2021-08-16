@@ -5,11 +5,12 @@ import Powers from './powers';
 import config from '../../core/config';
 import Mock from '../../../test/mock';
 import * as random from '@laufire/utils/random';
+import * as collection from '@laufire/utils/collection';
 import * as helper from '../helperService';
 import TargetManager from '../targetManager';
 
 describe('Powers', () => {
-	const { bomb, ice, superBat, gift } = Powers;
+	const { bomb, ice, superBat, gift, surprise } = Powers;
 
 	describe('bomb', () => {
 		const randomTargets = Mock.getRandomTargets();
@@ -139,6 +140,29 @@ describe('Powers', () => {
 			expect(result).toMatchObject({
 				lives: lives + config.powers.gift.lives,
 			});
+		});
+	});
+
+	describe('surprise', () => {
+		const state = Symbol('state');
+		const returnValue = Symbol('returnValue');
+
+		test('surprise return rnd power', () => {
+			const filteredPowerKeys = collection.keys(Powers)
+				.filter((data) => data !== 'surprise');
+			const power = random.rndValue(filteredPowerKeys);
+
+			jest.spyOn(collection, 'keys');
+			jest.spyOn(random, 'rndValue').mockImplementation(() => power);
+			jest.spyOn(Powers, power).mockImplementation(() => returnValue);
+
+			const result = surprise(state);
+
+			expect(collection.keys).toHaveBeenCalledWith(Powers);
+			expect(random.rndValue)
+				.toHaveBeenCalledWith(filteredPowerKeys);
+			expect(Powers[power]).toHaveBeenCalledWith(state);
+			expect(result).toEqual(returnValue);
 		});
 	});
 });
