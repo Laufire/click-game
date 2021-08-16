@@ -11,7 +11,7 @@ const Game = () => {
 	const className = `${ PowerManager.getBatType(context.state) }-bat`;
 
 	return (
-		<div className={ className }>
+		<div className={ className } role="game">
 			{ Screen() }
 			{ Score() }
 			{ Lives() }
