@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-magic-numbers */
 const replace = (
 	array, target, replacement
 ) => {
@@ -10,4 +12,7 @@ const replace = (
 
 const unique = (array) => array.filter((elm, i) => i === array.indexOf(elm));
 
-export { replace, unique };
+const adjustDate = (baseDate, adjustment) =>
+	new Date(baseDate.setDate(baseDate.getDate() + adjustment));
+
+export { replace, unique, adjustDate };
