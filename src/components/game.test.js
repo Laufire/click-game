@@ -5,14 +5,14 @@ jest.mock('./gameOverScreen', () => () => <div role="gameOverScreen"/>);
 jest.mock('./score', () => () => <div role="score"/>);
 jest.mock('./lives', () => () => <div role="lives"/>);
 jest.mock('../services/powerManager');
-jest.mock('../services/helperService');
+jest.mock('../services/playerManager');
 
 import React from 'react';
 import { render } from '@testing-library/react';
 import PowerManager from '../services/powerManager';
 import context from '../core/context';
-import * as HelperService from '../services/helperService';
 import Game from './game';
+import PlayerManager from '../services/playerManager';
 
 describe('Game', () => {
 	test('Game renders the score,lives', () => {
@@ -23,20 +23,20 @@ describe('Game', () => {
 	});
 
 	test('Game render gameOverScreen when the lives is 0', () => {
-		jest.spyOn(HelperService, 'isAlive').mockReturnValue(false);
+		jest.spyOn(PlayerManager, 'isAlive').mockReturnValue(false);
 
 		const component = render(Game()).getByRole('gameOverScreen');
 
-		expect(HelperService.isAlive).toHaveBeenCalledWith(context);
+		expect(PlayerManager.isAlive).toHaveBeenCalledWith(context);
 		expect(component).toBeInTheDocument();
 	});
 
 	test('Game render gameScreen when the lives is greater than 0', () => {
-		jest.spyOn(HelperService, 'isAlive').mockReturnValue(true);
+		jest.spyOn(PlayerManager, 'isAlive').mockReturnValue(true);
 
 		const component = render(Game()).getByRole('gameScreen');
 
-		expect(HelperService.isAlive).toHaveBeenCalledWith(context);
+		expect(PlayerManager.isAlive).toHaveBeenCalledWith(context);
 		expect(component).toBeInTheDocument();
 	});
 

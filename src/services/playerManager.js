@@ -6,9 +6,12 @@ const adjustScore = (state, score) =>
 
 const decreaseLives = ({ state }) => state.lives - config.penalDamage;
 
+const isAlive = (context) => context.state.lives !== 0;
+
 const PlayerManager = {
 	adjustScore,
 	decreaseLives,
+	isAlive,
 };
 
 export default PlayerManager;

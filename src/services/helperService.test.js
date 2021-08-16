@@ -12,7 +12,7 @@ import * as helper from './helperService';
 import { adjustDate } from '../../test/helpers';
 
 describe('HelperService', () => {
-	const { getId, isFuture, getVariance, adjustTime, isAlive } = helper;
+	const { getId, isFuture, getVariance, adjustTime } = helper;
 
 	describe('getId', () => {
 		const { rndString } = random;
@@ -77,27 +77,6 @@ describe('HelperService', () => {
 			expect(momentSpy).toHaveBeenCalledWith(baseDate);
 			expect(Date).toHaveBeenCalledWith(adjustment);
 			expect(result).toEqual(Fn.mock.instances[0]);
-		});
-	});
-
-	describe('isAlive', () => {
-		test('returns false if lives is equal to zero', () => {
-			const context = {
-				state: { lives: 0 },
-			};
-
-			const result = isAlive(context);
-
-			expect(result).toEqual(false);
-		});
-		test('returns true if lives is greater than zero', () => {
-			const context = {
-				state: { lives: 3 },
-			};
-
-			const result = isAlive(context);
-
-			expect(result).toEqual(true);
 		});
 	});
 });
