@@ -66,26 +66,23 @@ const decreaseTargetLives = (
 const getDeadTargets = ({ state: { targets }}) =>
 	targets.filter((target) => target.lives <= 0);
 
-const swatActionDefault = (state, data) => ({
-	targets: decreaseTargetLives(
-		state.targets, [data], PowerManager.getDamage(state)
-	),
-});
-
-const swatActions = {
-	butterfly: (state, data) => ({
+// TODO: Extract this into a separate module.
+const swatEffects = {
+	butterfly: (state) => ({
 		lives: state.lives - 1,
-		...swatActionDefault(state, data),
 	}),
 	spoiler: (state, data) => ({
 		score: PlayerManager.adjustScore(state,
 			-rndBetween(data.effect.score.min, data.effect.score.max)),
-		...swatActionDefault(state, data),
 	}),
 };
 
-const swatTarget = ({ state, data }) =>
-	(swatActions[data.type] || swatActionDefault)(state, data);
+const swatTarget = ({ state, data }) => ({
+	...swatEffects[data.type] && swatEffects[data.type](state, data),
+	targets: decreaseTargetLives(
+		state.targets, [data], PowerManager.getDamage(state)
+	),
+});
 
 const TargetManager = {
 	moveTargets,
