@@ -42,6 +42,10 @@
     "collectCoverageFrom": [
       "./src/**/*.js"
     ],
+    "coveragePathIgnorePatterns": [
+      "./src/index.js",
+      "./src/reportWebVitals.js"
+    ],
     "coverageThreshold": {
       "global": {
         "branches": 100,
