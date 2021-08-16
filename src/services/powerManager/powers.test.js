@@ -9,7 +9,7 @@ import * as helper from '../helperService';
 import TargetManager from '../targetManager';
 
 describe('Powers', () => {
-	const { bomb, ice, superBat, gift, spoiler } = Powers;
+	const { bomb, ice, superBat, gift } = Powers;
 
 	describe('bomb', () => {
 		const randomTargets = Mock.getRandomTargets();
@@ -102,27 +102,6 @@ describe('Powers', () => {
 			expect(result).toMatchObject({
 				superTill: newTime,
 			});
-		});
-	});
-
-	describe.skip('spoiler', () => {
-		const score = 10;
-		const state = {
-			score,
-		};
-		const reduceScore = 3;
-		const { min, max } = config.targets.spoiler.effect.score;
-
-		test('spoiler reduce the score', () => {
-			jest.spyOn(random, 'rndBetween')
-				.mockImplementation(() => reduceScore);
-			const result = spoiler(state);
-
-			expect(result).toMatchObject({
-				score: score - reduceScore,
-			});
-			expect(random.rndBetween)
-				.toHaveBeenCalledWith(min, max);
 		});
 	});
 
