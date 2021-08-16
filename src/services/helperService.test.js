@@ -81,23 +81,23 @@ describe('HelperService', () => {
 	});
 
 	describe('isAlive', () => {
-		test('returns true if lives is equal to zero', () => {
+		test('returns false if lives is equal to zero', () => {
 			const context = {
 				state: { lives: 0 },
 			};
 
 			const result = isAlive(context);
 
-			expect(result).toEqual(true);
+			expect(result).toEqual(false);
 		});
-		test('returns false if lives is greater than zero', () => {
+		test('returns true if lives is greater than zero', () => {
 			const context = {
 				state: { lives: 3 },
 			};
 
 			const result = isAlive(context);
 
-			expect(result).toEqual(false);
+			expect(result).toEqual(true);
 		});
 	});
 });

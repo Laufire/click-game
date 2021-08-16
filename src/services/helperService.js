@@ -17,6 +17,6 @@ const adjustTime = (
 
 const isFuture = (date) => date > new Date();
 
-const isAlive = (context) => context.state.lives === 0;
+const isAlive = (context) => context.state.lives !== 0;
 
 export { getId, getVariance, adjustTime, isFuture, isAlive };
