@@ -5,7 +5,7 @@ import '../App.scss';
 
 const Lives = () =>
 	<div role="lives" className="lives">
-		<Favorite className="favorite"/>
+		<Favorite title="favorite" className="favorite"/>
 		{ context.state.lives } </div>;
 
 export default Lives;
