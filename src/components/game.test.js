@@ -1,16 +1,18 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable react/display-name */
-jest.mock('../core/context', () => ({ state: { lives: 3 }}));
 jest.mock('./gameScreen', () => () => <div role="gameScreen"/>);
 jest.mock('./gameOverScreen', () => () => <div role="gameOverScreen"/>);
 jest.mock('./score', () => () => <div role="score"/>);
 jest.mock('./lives', () => () => <div role="lives"/>);
+jest.mock('../services/powerManager');
+jest.mock('../services/helperService');
 
 import React from 'react';
 import { render } from '@testing-library/react';
-import Game from './game';
 import PowerManager from '../services/powerManager';
 import context from '../core/context';
+import * as HelperService from '../services/helperService';
+import Game from './game';
 
 describe('Game', () => {
 	test('Game renders the score,lives', () => {
@@ -20,23 +22,28 @@ describe('Game', () => {
 		expect(getByRole('lives')).toBeInTheDocument();
 	});
 
-	test.skip('Game render gameOverScreen when the lives is 0', () => {
+	test('Game render gameOverScreen when the lives is 0', () => {
+		jest.spyOn(HelperService, 'isAlive').mockReturnValue(false);
+
 		const component = render(Game()).getByRole('gameOverScreen');
 
+		expect(HelperService.isAlive).toHaveBeenCalledWith(context);
 		expect(component).toBeInTheDocument();
 	});
 
 	test('Game render gameScreen when the lives is greater than 0', () => {
+		jest.spyOn(HelperService, 'isAlive').mockReturnValue(true);
+
 		const component = render(Game()).getByRole('gameScreen');
 
+		expect(HelperService.isAlive).toHaveBeenCalledWith(context);
 		expect(component).toBeInTheDocument();
 	});
 
 	test('className super-bat when the power super-bat is active', () => {
 		const batType = 'super';
 
-		jest.spyOn(PowerManager, 'getBatType')
-			.mockImplementation(jest.fn(() => batType));
+		jest.spyOn(PowerManager, 'getBatType').mockReturnValue(batType);
 
 		const component = render(Game()).getByRole('game');
 
@@ -47,8 +54,7 @@ describe('Game', () => {
 	test('className normal-bat when the power super-bat is not active', () => {
 		const batType = 'normal';
 
-		jest.spyOn(PowerManager, 'getBatType')
-			.mockImplementation(jest.fn(() => batType));
+		jest.spyOn(PowerManager, 'getBatType').mockReturnValue(batType);
 
 		const component = render(Game()).getByRole('game');
 

@@ -8,7 +8,7 @@ import PowerManager from '../services/powerManager';
 import { isAlive } from '../services/helperService';
 
 const Game = () => {
-	const Screen = isAlive(context) ? GameOverScreen : GameScreen;
+	const Screen = isAlive(context) ? GameScreen : GameOverScreen;
 	const className = `${ PowerManager.getBatType(context.state) }-bat`;
 
 	return (
