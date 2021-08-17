@@ -21,7 +21,8 @@ describe('PlayerManager', () => {
 		expect(result).toEqual(expectedResult);
 	});
 
-	test('decreaseLives returns the state lives if shield is inactive', () => {
+	test('decreaseLives returns unchanged '
+		+ 'lives when the shield is active', () => {
 		const expectedResult = state.lives;
 
 		jest.spyOn(PowerManager, 'isShielded').mockReturnValue(true);
@@ -32,7 +33,8 @@ describe('PlayerManager', () => {
 		expect(result).toEqual(expectedResult);
 	});
 
-	test('decreaseLives returns decreased lives', () => {
+	test('decreaseLives returns decreased lives'
+	+ 'when the shield is inactive', () => {
 		const expectedResult = state.lives - config.penalDamage;
 
 		jest.spyOn(PowerManager, 'isShielded').mockReturnValue(false);

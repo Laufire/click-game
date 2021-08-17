@@ -211,17 +211,15 @@ describe('PowerManager', () => {
 			});
 	});
 
-	describe('isShielded', () => {
+	test('whether isFuture is called', () => {
 		const input = Symbol('Future');
 		const data = { shieldTill: 0 };
 
-		test('whether isFuture is called', () => {
-			jest.spyOn(helper, 'isFuture')
-				.mockImplementation(() => input);
-			const result = PowerManager.isShielded(data);
+		jest.spyOn(helper, 'isFuture')
+			.mockImplementation(() => input);
+		const result = PowerManager.isShielded(data);
 
-			expect(helper.isFuture).toHaveBeenCalledWith(data.shieldTill);
-			expect(result).toEqual(input);
-		});
+		expect(helper.isFuture).toHaveBeenCalledWith(data.shieldTill);
+		expect(result).toEqual(input);
 	});
 });
