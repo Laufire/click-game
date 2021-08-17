@@ -1,8 +1,9 @@
+/* eslint-disable id-length */
 import config from '../core/config';
 import { rndBetween, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import { getRandomX, getRandomY } from './positionService';
-import { getId, getVariance } from './helperService';
+import { adjustTime, getId, getVariance } from './helperService';
 import PowerManager from './powerManager';
 import PlayerManager from './playerManager';
 
@@ -12,6 +13,7 @@ const targetTypeKeys = keys(config.targets);
 const getTarget = ({ x, y, type } = {}) => {
 	const typeConfig = config.targets[type || rndValue(targetTypeKeys)];
 	const variance = getVariance(typeConfig.variance);
+	const lifespan = typeConfig.lifespan * variance;
 	const size = {
 		height: typeConfig.height * variance,
 		width: typeConfig.width * variance,
@@ -23,6 +25,9 @@ const getTarget = ({ x, y, type } = {}) => {
 		y: y !== undefined ? y : getRandomY(size),
 		...typeConfig,
 		...size,
+		livesTill: adjustTime(
+			new Date(), lifespan, 'seconds'
+		),
 	};
 };
 
@@ -84,6 +89,9 @@ const swatTarget = ({ state, data }) => ({
 	),
 });
 
+const removeExpiredTargets = ({ state }) =>
+	state.targets.filter((target) => target.livesTill > new Date());
+
 const TargetManager = {
 	moveTargets,
 	addTargets,
@@ -93,6 +101,7 @@ const TargetManager = {
 	decreaseTargetLives,
 	getDeadTargets,
 	swatTarget,
+	removeExpiredTargets,
 };
 
 export default TargetManager;
