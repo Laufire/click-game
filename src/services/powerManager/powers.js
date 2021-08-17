@@ -81,6 +81,18 @@ const Powers = {
 			powers: [],
 		};
 	},
+
+	double: (state) => {
+		const { duration } = config.powers.double;
+
+		return {
+			doubleTill: adjustTime(
+				state.doubleTill,
+				duration,
+				'seconds',
+			),
+		};
+	},
 };
 
 export default Powers;

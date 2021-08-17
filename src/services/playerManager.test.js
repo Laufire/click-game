@@ -1,3 +1,4 @@
+/* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines-per-function */
 import { secure } from '@laufire/utils/collection';
 import config from '../core/config';
@@ -11,14 +12,33 @@ describe('PlayerManager', () => {
 		score: 10,
 	});
 
-	test('adjustScore returns adjusted score', () => {
-		const score = -5;
+	describe('adjustScore', () => {
+		test('adjusts score while isDouble is inactive', () => {
+			const score = -5;
 
-		const expectedResult = state.score + score;
+			const expectedResult = state.score + score;
 
-		const result = adjustScore(state, score);
+			jest.spyOn(PowerManager, 'isDouble')
+				.mockImplementation(() => false);
 
-		expect(result).toEqual(expectedResult);
+			const result = adjustScore(state, score);
+
+			expect(result).toEqual(expectedResult);
+		});
+
+		test('adjusts score as 2X while isDouble is active', () => {
+			const score = 5;
+			const expectedResult = state.score
+			+ (score * config.powers.double.effects.multiplier);
+
+			jest.spyOn(PowerManager, 'isDouble')
+				.mockImplementation(() => true);
+
+			const result = PlayerManager.adjustScore(state, score);
+
+			expect(PowerManager.isDouble).toHaveBeenCalledWith(state);
+			expect(result).toEqual(expectedResult);
+		});
 	});
 
 	test('decreaseLives returns unchanged '

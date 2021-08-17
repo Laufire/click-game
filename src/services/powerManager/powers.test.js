@@ -10,7 +10,8 @@ import * as helper from '../helperService';
 import TargetManager from '../targetManager';
 
 describe('Powers', () => {
-	const { bomb, ice, superBat, gift, surprise, shield, nuke } = Powers;
+	const { bomb, ice, superBat, gift, surprise, shield, nuke, double }
+		= Powers;
 
 	describe('bomb', () => {
 		const randomTargets = Mock.getRandomTargets();
@@ -214,6 +215,31 @@ describe('Powers', () => {
 				state.targets, state.targets, damage
 			);
 			expect(result).toMatchObject(expectedResult);
+		});
+	});
+
+	describe('double', () => {
+		const newTime = Symbol('newTime');
+		const doubleTill = Symbol('doubleTill');
+		const state = {
+			doubleTill,
+		};
+		const { duration } = config.powers.double;
+		const second = 'seconds';
+
+		test('double return the doubleTill', () => {
+			jest.spyOn(helper, 'adjustTime')
+				.mockImplementation(() => newTime);
+
+			const result = double(state);
+
+			expect(helper.adjustTime)
+				.toHaveBeenCalledWith(
+					doubleTill, duration, second
+				);
+			expect(result).toMatchObject({
+				doubleTill: newTime,
+			});
 		});
 	});
 });
