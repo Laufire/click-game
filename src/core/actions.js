@@ -3,11 +3,6 @@ import PlayerManager from '../services/playerManager';
 import PowerManager from '../services/powerManager';
 import TargetManager from '../services/targetManager';
 
-// TODO: check whether the function is unused.
-const increaseScore = (context) => ({
-	score: PlayerManager.adjustScore(context),
-});
-
 const moveTargets = (context) => ({
 	targets: TargetManager.moveTargets(context),
 });
@@ -67,7 +62,6 @@ const removeExpiredTargets = (context) => ({
 // ticker call only removeDeadTargets and computeScore
 
 const actions = {
-	increaseScore,
 	moveTargets,
 	addTargets,
 	decreaseLives,
