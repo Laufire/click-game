@@ -70,13 +70,6 @@ describe('Proxies', () => {
 			},
 			impactedKey: 'lives',
 		},
-		increaseScore: {
-			mock: {
-				library: PlayerManager,
-				func: 'adjustScore',
-			},
-			impactedKey: 'score',
-		},
 		activatePower: {
 			mock: {
 				library: PowerManager,
