@@ -17,6 +17,7 @@ const seed = {
 	frozenTill: timeZero,
 	superTill: timeZero,
 	shieldTill: timeZero,
+	doubleTill: timeZero,
 };
 
 export default seed;

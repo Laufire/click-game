@@ -44,6 +44,8 @@ const getDamage = (state) => damage[getBatType(state)];
 
 const isFrozen = ({ frozenTill }) => isFuture(frozenTill);
 
+const isDouble = ({ doubleTill }) => isFuture(doubleTill);
+
 const getActivePowers = ({ state }) => keys(stateKeysToPowers)
 	.filter((stateKey) => isFuture(state[stateKey]))
 	.map((stateKey) => stateKeysToPowers[stateKey]);
@@ -59,6 +61,7 @@ const PowerManager = {
 	getBatType,
 	getDamage,
 	isFrozen,
+	isDouble,
 	getActivePowers,
 	isShielded,
 };

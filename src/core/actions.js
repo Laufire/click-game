@@ -2,6 +2,7 @@ import PlayerManager from '../services/playerManager';
 import PowerManager from '../services/powerManager';
 import TargetManager from '../services/targetManager';
 
+// TODO: check whether the function is unused.
 const increaseScore = (context) => ({
 	score: PlayerManager.adjustScore(context),
 });
@@ -45,9 +46,11 @@ const removeDeadTargets = (context) => {
 	return {
 		targets: TargetManager
 			.removeTargets({ ...context, data: impactedTargets }),
-		score:
-			context.state.score + TargetManager
-				.getTargetsScore({ ...context, data: impactedTargets }),
+		score: PlayerManager.adjustScore(context.state,
+			TargetManager.getTargetsScore({
+				...context,
+				data: impactedTargets,
+			})),
 	};
 };
 

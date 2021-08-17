@@ -222,4 +222,16 @@ describe('PowerManager', () => {
 		expect(helper.isFuture).toHaveBeenCalledWith(data.shieldTill);
 		expect(result).toEqual(input);
 	});
+
+	test('isDouble returns true', () => {
+		const state = { doubleTill: 0 };
+
+		jest.spyOn(helper, 'isFuture')
+			.mockImplementation(() => true);
+
+		const result = PowerManager.isDouble(state);
+
+		expect(helper.isFuture).toHaveBeenCalledWith(state.doubleTill);
+		expect(result).toEqual(true);
+	});
 });

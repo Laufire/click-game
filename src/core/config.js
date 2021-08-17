@@ -10,6 +10,7 @@ import spoiler from '../image/spoiler.png';
 import flyswatter from '../image/flyswatter.png';
 import shield from '../image/shield.png';
 import nuke from '../image/nuke.png';
+import twox from '../image/double.png';
 
 const ms = 1000;
 const delay = 2;
@@ -21,6 +22,7 @@ const config = {
 	maxTargets: 5,
 	swatDamage: 1,
 	penalDamage: 1,
+
 	targets: {
 		mosquito: {
 			type: 'mosquito',
@@ -175,6 +177,18 @@ const config = {
 			width: 5,
 			duration: 5,
 			damage: 10,
+			prob: {
+				add: 1,
+				remove: 1,
+			},
+		},
+		double: {
+			type: 'double',
+			image: twox,
+			height: 10,
+			width: 10,
+			duration: 15,
+			effects: { multiplier: 2 },
 			prob: {
 				add: 1,
 				remove: 1,
