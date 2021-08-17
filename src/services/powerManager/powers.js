@@ -70,6 +70,17 @@ const Powers = {
 			),
 		};
 	},
+
+	nuke: (state) => {
+		const { damage } = config.powers.nuke;
+
+		return {
+			targets: TargetManager.decreaseTargetLives(
+				state.targets, state.targets, damage
+			),
+			powers: [],
+		};
+	},
 };
 
 export default Powers;

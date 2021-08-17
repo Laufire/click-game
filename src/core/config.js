@@ -9,6 +9,7 @@ import gift from '../image/gift.png';
 import spoiler from '../image/spoiler.png';
 import flyswatter from '../image/flyswatter.png';
 import shield from '../image/shield.png';
+import nuke from '../image/nuke.png';
 
 const ms = 1000;
 const delay = 2;
@@ -162,6 +163,18 @@ const config = {
 			height: 7,
 			width: 7,
 			duration: 5,
+			prob: {
+				add: 1,
+				remove: 1,
+			},
+		},
+		nuke: {
+			type: 'nuke',
+			image: nuke,
+			height: 5,
+			width: 5,
+			duration: 5,
+			damage: 10,
 			prob: {
 				add: 1,
 				remove: 1,

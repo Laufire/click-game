@@ -10,7 +10,7 @@ import * as helper from '../helperService';
 import TargetManager from '../targetManager';
 
 describe('Powers', () => {
-	const { bomb, ice, superBat, gift, surprise, shield } = Powers;
+	const { bomb, ice, superBat, gift, surprise, shield, nuke } = Powers;
 
 	describe('bomb', () => {
 		const randomTargets = Mock.getRandomTargets();
@@ -188,6 +188,32 @@ describe('Powers', () => {
 			expect(result).toMatchObject({
 				shieldTill: newTime,
 			});
+		});
+	});
+
+	describe('nuke', () => {
+		const targets = [Symbol('target')];
+		const powers = [];
+		const state = {
+			targets,
+		};
+		const { damage } = config.powers.nuke;
+		const expectedResult = {
+			targets,
+			powers,
+		};
+
+		test('Returns modified targets and powers', () => {
+			jest.spyOn(TargetManager,
+				'decreaseTargetLives').mockImplementation(() =>
+				targets);
+
+			const result = nuke(state);
+
+			expect(TargetManager.decreaseTargetLives).toHaveBeenCalledWith(
+				state.targets, state.targets, damage
+			);
+			expect(result).toMatchObject(expectedResult);
 		});
 	});
 });
