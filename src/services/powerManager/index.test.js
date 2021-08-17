@@ -210,4 +210,18 @@ describe('PowerManager', () => {
 				expect(result).toEqual(expected);
 			});
 	});
+
+	describe('isShielded', () => {
+		const input = Symbol('Future');
+		const data = { shieldTill: 0 };
+
+		test('whether isFuture is called', () => {
+			jest.spyOn(helper, 'isFuture')
+				.mockImplementation(() => input);
+			const result = PowerManager.isShielded(data);
+
+			expect(helper.isFuture).toHaveBeenCalledWith(data.shieldTill);
+			expect(result).toEqual(input);
+		});
+	});
 });

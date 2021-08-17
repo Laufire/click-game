@@ -16,6 +16,7 @@ const seed = {
 	lives: config.lives,
 	frozenTill: timeZero,
 	superTill: timeZero,
+	shieldTill: timeZero,
 };
 
 export default seed;

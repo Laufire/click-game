@@ -58,6 +58,18 @@ const Powers = {
 			),
 		};
 	},
+
+	shield: (state) => {
+		const { duration } = config.powers.shield;
+
+		return {
+			shieldTill: adjustTime(
+				state.shieldTill,
+				duration,
+				'seconds',
+			),
+		};
+	},
 };
 
 export default Powers;

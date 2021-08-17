@@ -8,6 +8,7 @@ const damage = {
 const stateKeysToPowers = {
 	frozenTill: 'ice',
 	superTill: 'superBat',
+	shieldTill: 'shield',
 };
 
 export {

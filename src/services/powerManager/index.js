@@ -48,6 +48,8 @@ const getActivePowers = ({ state }) => keys(stateKeysToPowers)
 	.filter((stateKey) => isFuture(state[stateKey]))
 	.map((stateKey) => stateKeysToPowers[stateKey]);
 
+const isShielded = ({ shieldTill }) => isFuture(shieldTill);
+
 const PowerManager = {
 	getPower,
 	addPowers,
@@ -58,6 +60,7 @@ const PowerManager = {
 	getDamage,
 	isFrozen,
 	getActivePowers,
+	isShielded,
 };
 
 export default PowerManager;

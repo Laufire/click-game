@@ -8,6 +8,7 @@ import balloon from '../image/balloon.png';
 import gift from '../image/gift.png';
 import spoiler from '../image/spoiler.png';
 import flyswatter from '../image/flyswatter.png';
+import shield from '../image/shield.png';
 
 const ms = 1000;
 const delay = 2;
@@ -150,6 +151,17 @@ const config = {
 			width: 10,
 			duration: 5,
 			swatDamage: 10,
+			prob: {
+				add: 1,
+				remove: 1,
+			},
+		},
+		shield: {
+			type: 'shield',
+			image: shield,
+			height: 7,
+			width: 7,
+			duration: 5,
 			prob: {
 				add: 1,
 				remove: 1,

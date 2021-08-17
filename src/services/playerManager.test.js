@@ -2,6 +2,7 @@
 import { secure } from '@laufire/utils/collection';
 import config from '../core/config';
 import PlayerManager from './playerManager';
+import PowerManager from './powerManager';
 
 describe('PlayerManager', () => {
 	const { adjustScore, decreaseLives, isAlive } = PlayerManager;
@@ -20,11 +21,25 @@ describe('PlayerManager', () => {
 		expect(result).toEqual(expectedResult);
 	});
 
-	test('decreaseLives returns decreased lives', () => {
-		const expectedResult = state.lives - config.penalDamage;
+	test('decreaseLives returns the state lives if shield is inactive', () => {
+		const expectedResult = state.lives;
+
+		jest.spyOn(PowerManager, 'isShielded').mockReturnValue(true);
 
 		const result = decreaseLives({ state });
 
+		expect(PowerManager.isShielded).toHaveBeenCalledWith(state);
+		expect(result).toEqual(expectedResult);
+	});
+
+	test('decreaseLives returns decreased lives', () => {
+		const expectedResult = state.lives - config.penalDamage;
+
+		jest.spyOn(PowerManager, 'isShielded').mockReturnValue(false);
+
+		const result = decreaseLives({ state });
+
+		expect(PowerManager.isShielded).toHaveBeenCalledWith(state);
 		expect(result).toEqual(expectedResult);
 	});
 
