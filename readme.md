@@ -2,7 +2,6 @@
 
 	A simple game to train on React.
 
-
 ## Requirements
 
 ### Powers
@@ -40,3 +39,5 @@
 * Use two configs, one for dev and another for prod. Use routes to control this.
 
 * Make the config configurable through URL query params.
+
+* Change all new Date() to Date.now().
