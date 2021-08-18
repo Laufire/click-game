@@ -13,9 +13,9 @@ const project = (position) => {
 	const { x, y, width, height } = position;
 
 	return {
+		...position,
 		x: x - (width / two),
 		y: y - (height / two),
-		...position,
 	};
 };
 

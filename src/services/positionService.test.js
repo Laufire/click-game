@@ -47,9 +47,9 @@ describe('PositionService', () => {
 		const result = project(position);
 
 		expect(result).toMatchObject({
+			...position,
 			x: x - (width / two),
 			y: y - (height / two),
-			...position,
 		});
 	});
 });
