@@ -45,11 +45,15 @@ describe('TargetManager', () => {
 	});
 
 	describe('getTarget returns target', () => {
+		const adjustedTime = Symbol('adjustedTime');
+		const livesTill = adjustedTime;
+		const currentTime = Symbol('currentTime');
 		const { getTarget } = TargetManager;
 		const type = 'ant';
 		const typeConfig = config.targets[type];
 		const { variance } = typeConfig;
 		const { height, width } = typeConfig;
+		const lifespan = typeConfig.lifespan * variance;
 		const size = {
 			height: height * variance,
 			width: width * variance,
@@ -60,6 +64,9 @@ describe('TargetManager', () => {
 				.mockImplementation(() => id);
 			jest.spyOn(HelperService, 'getVariance')
 				.mockImplementation(() => variance);
+			jest.spyOn(HelperService, 'adjustTime')
+				.mockImplementation(() => adjustedTime);
+			jest.spyOn(Date, 'now').mockImplementation(() => currentTime);
 
 			const expectedResult = {
 				id,
@@ -68,12 +75,16 @@ describe('TargetManager', () => {
 				type,
 				...typeConfig,
 				...size,
+				livesTill,
 			};
 
 			const result = getTarget({ x, y, type });
 
 			expect(HelperService.getId).toHaveBeenCalled();
 			expect(HelperService.getVariance).toHaveBeenCalledWith(variance);
+			expect(HelperService.adjustTime).toHaveBeenCalledWith(
+				currentTime, lifespan, 'seconds'
+			);
 			expect(result).toMatchObject(expectedResult);
 		});
 
@@ -300,5 +311,16 @@ describe('TargetManager', () => {
 				expect(PowerManager.isFrozen).toHaveBeenCalledWith(state);
 				expect(result).toEqual(expectedResult);
 			});
+	});
+
+	test('removeExpiredTargets remove the expired target'
+			+ 'when targets livesTill is less than currentTime', () => {
+		const state = {
+			targets,
+		};
+		const result = TargetManager.removeExpiredTargets({ state });
+		const expectedResult = [ant, mosquito];
+
+		expect(result).toEqual(expectedResult);
 	});
 });

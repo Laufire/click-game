@@ -1,3 +1,4 @@
+/* eslint-disable id-length */
 import PlayerManager from '../services/playerManager';
 import PowerManager from '../services/powerManager';
 import TargetManager from '../services/targetManager';
@@ -37,6 +38,7 @@ const removeActivatedPower = (context) => ({
 
 const removeDeadTargets = (context) => {
 	const impactedTargets = TargetManager.getDeadTargets(context);
+	// rename getKilledTargets
 
 	return {
 		targets: TargetManager
@@ -48,9 +50,16 @@ const removeDeadTargets = (context) => {
 			})),
 	};
 };
-
+// separate a action score into compute score and call in ticker.
 const swatTarget = (context) =>
 	TargetManager.swatTarget(context);
+
+const removeExpiredTargets = (context) => ({
+	targets: TargetManager.removeExpiredTargets(context),
+});
+// rename getExpiredTargets and write getExpiredPowers in service only
+// and call in removeDeadTargest concat the expired and killed
+// ticker call only removeDeadTargets and computeScore
 
 const actions = {
 	moveTargets,
@@ -64,6 +73,7 @@ const actions = {
 	removeActivatedPower,
 	removeDeadTargets,
 	swatTarget,
+	removeExpiredTargets,
 };
 
 export default actions;

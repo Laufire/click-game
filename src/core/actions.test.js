@@ -82,6 +82,13 @@ describe('Proxies', () => {
 				func: 'swatTarget',
 			},
 		},
+		removeExpiredTargets: {
+			mock: {
+				library: TargetManager,
+				func: 'removeExpiredTargets',
+			},
+			impactedKey: 'targets',
+		},
 	};
 
 	map(proxies, (params, action) =>

@@ -31,6 +31,7 @@ const config = {
 			height: 10,
 			width: 20,
 			variance: 0.2,
+			lifespan: 10,
 			lives: 1,
 			prob: {
 				add: 0.2,
@@ -43,6 +44,7 @@ const config = {
 			height: 5,
 			width: 10,
 			variance: 0.5,
+			lifespan: 5,
 			lives: 1,
 			prob: {
 				add: 0.6,
@@ -55,6 +57,7 @@ const config = {
 			height: 5,
 			width: 10,
 			variance: 0.2,
+			lifespan: 5,
 			lives: 3,
 			prob: {
 				add: 0.1,
@@ -67,6 +70,7 @@ const config = {
 			height: 10,
 			width: 10,
 			variance: 0.3,
+			lifespan: 3,
 			lives: 1,
 			prob: {
 				add: 0.1,
@@ -78,6 +82,7 @@ const config = {
 			height: 7,
 			width: 10,
 			variance: 0.3,
+			lifespan: 5,
 			lives: 1,
 			score: 0,
 			prob: {

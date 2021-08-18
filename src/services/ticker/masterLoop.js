@@ -6,6 +6,7 @@ const masterLoop = [
 	'removeExpiredPowers',
 	'addPowers',
 	'removeDeadTargets',
+	'removeExpiredTargets',
 ];
 
 const runMasterLoop = () =>
