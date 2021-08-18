@@ -20,6 +20,7 @@ describe('ActivePowers', () => {
 			expect(component).toBeInTheDocument();
 			expect(component)
 				.toHaveAttribute('src', config.powers[possiblePowers[i]].image);
+			expect(component).toHaveClass('active-power');
 		});
 	});
 });
