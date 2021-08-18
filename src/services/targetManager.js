@@ -1,4 +1,3 @@
-/* eslint-disable id-length */
 import config from '../core/config';
 import { rndBetween, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
@@ -14,6 +13,7 @@ const getTarget = ({ x, y, type } = {}) => {
 	const typeConfig = config.targets[type || rndValue(targetTypeKeys)];
 	const variance = getVariance(typeConfig.variance);
 	const lifespan = typeConfig.lifespan * variance;
+	const currentTime = Date.now();
 	const size = {
 		height: typeConfig.height * variance,
 		width: typeConfig.width * variance,
@@ -26,7 +26,7 @@ const getTarget = ({ x, y, type } = {}) => {
 		...typeConfig,
 		...size,
 		livesTill: adjustTime(
-			new Date(), lifespan, 'seconds'
+			currentTime, lifespan, 'seconds'
 		),
 	};
 };
