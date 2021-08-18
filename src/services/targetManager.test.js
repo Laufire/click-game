@@ -178,9 +178,9 @@ describe('TargetManager', () => {
 			});
 	});
 
-	test('getDeadTargets returns all dead targets from the given targets',
+	test('getKilledTargets returns all dead targets from the given targets',
 		() => {
-			const { getDeadTargets } = TargetManager;
+			const { getKilledTargets } = TargetManager;
 			const deadTarget = secure({
 				...mosquito,
 				lives: 0,
@@ -190,7 +190,7 @@ describe('TargetManager', () => {
 				deadTarget,
 			]);
 
-			const result = getDeadTargets({ state:
+			const result = getKilledTargets({ state:
 				{ targets: allTargets }});
 
 			expect(result).toEqual([deadTarget]);
@@ -313,14 +313,16 @@ describe('TargetManager', () => {
 			});
 	});
 
-	test('removeExpiredTargets remove the expired target'
+	test('getExpiredTargets remove the expired target'
 			+ 'when targets livesTill is less than currentTime', () => {
-		const state = {
-			targets,
-		};
-		const result = TargetManager.removeExpiredTargets({ state });
-		const expectedResult = [ant, mosquito];
+		const state = getRandomTargets();
 
+		jest.spyOn(HelperService, 'isFuture').mockReturnValue(false);
+
+		const result = TargetManager.getExpiredTargets({ state });
+
+		expect(HelperService.isFuture)
+			.toHaveBeenCalledWith(getRandomTargets().livesTill);
 		expect(result).toEqual(expectedResult);
 	});
 });

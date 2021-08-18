@@ -1,12 +1,12 @@
 import context from '../../core/context';
 
 const masterLoop = [
+	'computeScore',
 	'moveTargets',
 	'addTargets',
 	'removeExpiredPowers',
 	'addPowers',
 	'removeDeadTargets',
-	'removeExpiredTargets',
 ];
 
 const runMasterLoop = () =>

@@ -82,13 +82,6 @@ describe('Proxies', () => {
 				func: 'swatTarget',
 			},
 		},
-		removeExpiredTargets: {
-			mock: {
-				library: TargetManager,
-				func: 'removeExpiredTargets',
-			},
-			impactedKey: 'targets',
-		},
 	};
 
 	map(proxies, (params, action) =>
@@ -122,7 +115,7 @@ describe('Proxies', () => {
 		const removedTargets = [Symbol('removedTargets')];
 		const impactedTargets = [Symbol('impactedTargets')];
 
-		jest.spyOn(TargetManager, 'getDeadTargets')
+		jest.spyOn(TargetManager, 'getKilledTargets')
 			.mockImplementation(jest.fn(() => impactedTargets));
 		jest.spyOn(TargetManager, 'removeTargets')
 			.mockImplementation(jest.fn(() => removedTargets));
@@ -138,7 +131,7 @@ describe('Proxies', () => {
 		const { removeDeadTargets } = Actions;
 		const result = removeDeadTargets(mockContext);
 
-		expect(TargetManager.getDeadTargets)
+		expect(TargetManager.getKilledTargets)
 			.toHaveBeenCalledWith(mockContext);
 		expect(TargetManager.removeTargets)
 			.toHaveBeenCalledWith({ ...mockContext, data: impactedTargets });

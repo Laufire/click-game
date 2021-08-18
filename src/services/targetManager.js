@@ -2,7 +2,7 @@ import config from '../core/config';
 import { rndBetween, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import { getRandomX, getRandomY } from './positionService';
-import { adjustTime, getId, getVariance } from './helperService';
+import { adjustTime, getId, getVariance, isFuture } from './helperService';
 import PowerManager from './powerManager';
 import PlayerManager from './playerManager';
 
@@ -68,7 +68,7 @@ const decreaseTargetLives = (
 			: target));
 };
 
-const getDeadTargets = ({ state: { targets }}) =>
+const getKilledTargets = ({ state: { targets }}) =>
 	targets.filter((target) => target.lives <= 0);
 
 // TODO: Extract this into a separate module.
@@ -89,8 +89,8 @@ const swatTarget = ({ state, data }) => ({
 	),
 });
 
-const removeExpiredTargets = ({ state }) =>
-	state.targets.filter((target) => target.livesTill > new Date());
+const getExpiredTargets = ({ state }) =>
+	state.targets.filter((target) => !isFuture(target.livesTill));
 
 const TargetManager = {
 	moveTargets,
@@ -99,9 +99,9 @@ const TargetManager = {
 	removeTargets,
 	getTargetsScore,
 	decreaseTargetLives,
-	getDeadTargets,
+	getKilledTargets,
 	swatTarget,
-	removeExpiredTargets,
+	getExpiredTargets,
 };
 
 export default TargetManager;
