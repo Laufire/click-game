@@ -8,6 +8,7 @@ import * as random from '@laufire/utils/random';
 import * as collection from '@laufire/utils/collection';
 import * as helper from '../helperService';
 import TargetManager from '../targetManager';
+import PlayerManager from '../playerManager';
 
 describe('Powers', () => {
 	const { bomb, ice, superBat, gift, surprise, shield, nuke, double }
@@ -115,6 +116,7 @@ describe('Powers', () => {
 		const score = 5;
 		const lives = 3;
 		const addScore = 5;
+		const addLife = config.powers.gift.effect.lives;
 		const state = {
 			score,
 			lives,
@@ -126,9 +128,12 @@ describe('Powers', () => {
 			jest.spyOn(random, 'rndBetween')
 				.mockImplementationOnce(() => 1)
 				.mockImplementationOnce(() => addScore);
+			jest.spyOn(PlayerManager, 'adjustScore');
 
 			const result = gift(state);
 
+			expect(PlayerManager.adjustScore)
+				.toHaveBeenLastCalledWith(state, addScore);
 			expect(random.rndBetween)
 				.toHaveBeenCalledWith(min, max);
 			expect(result).toMatchObject({
@@ -139,11 +144,14 @@ describe('Powers', () => {
 		test('gift sometimes increase the lives', () => {
 			jest.spyOn(random, 'rndBetween')
 				.mockImplementation(() => 0);
+			jest.spyOn(PlayerManager, 'increaseLives');
 
 			const result = gift(state);
 
+			expect(PlayerManager.increaseLives)
+				.toHaveBeenCalledWith(state, addLife);
 			expect(result).toMatchObject({
-				lives: lives + config.powers.gift.effect.lives,
+				lives,
 			});
 		});
 	});

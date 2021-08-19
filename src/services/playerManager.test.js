@@ -6,7 +6,8 @@ import PlayerManager from './playerManager';
 import PowerManager from './powerManager';
 
 describe('PlayerManager', () => {
-	const { adjustScore, decreaseLives, isAlive } = PlayerManager;
+	const { adjustScore, decreaseLives, isAlive, increaseLives }
+		= PlayerManager;
 	const state = secure({
 		lives: 3,
 		score: 10,
@@ -84,5 +85,19 @@ describe('PlayerManager', () => {
 
 			expect(result).toEqual(true);
 		});
+	});
+	describe('increaseLives', () => {
+		test('returns increased lives while lives is less than max limit',
+			() => {
+				const result = increaseLives({ lives: config.lives - 1 }, 1);
+
+				expect(result).toEqual(config.lives);
+			});
+		test('returns the same lives while lives is greater than max limit',
+			() => {
+				const result = increaseLives({ lives: config.lives }, 1);
+
+				expect(result).toEqual(config.lives);
+			});
 	});
 });

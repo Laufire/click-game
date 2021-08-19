@@ -3,6 +3,7 @@ import { keys } from '@laufire/utils/collection';
 import config from '../../core/config';
 import TargetManager from '../targetManager';
 import { adjustTime, getVariance } from '../helperService';
+import PlayerManager from '../playerManager';
 
 const Powers = {
 	bomb: (state) => {
@@ -42,8 +43,9 @@ const Powers = {
 		const { score, lives } = config.powers.gift.effect;
 
 		return rndBetween(0, 1)
-			? { score: state.score + rndBetween(score.min, score.max) }
-			: { lives: state.lives + lives };
+			? { score: PlayerManager.adjustScore(state,
+				rndBetween(score.min, score.max)) }
+			: { lives: PlayerManager.increaseLives(state, lives) };
 	},
 
 	superBat: (state) => {

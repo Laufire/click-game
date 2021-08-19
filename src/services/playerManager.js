@@ -11,11 +11,15 @@ const decreaseLives = ({ state }) =>
 		? state.lives
 		: state.lives - config.penalDamage);
 
+const increaseLives = (state, lives) =>
+	Math.min(state.lives + lives, config.lives);
+
 const isAlive = (context) => context.state.lives !== 0;
 
 const PlayerManager = {
 	adjustScore,
 	decreaseLives,
+	increaseLives,
 	isAlive,
 };
 
