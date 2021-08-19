@@ -13,7 +13,6 @@ const Powers = {
 		return {
 			targets: TargetManager.decreaseTargetLives(
 				state.targets, impactedTargets,
-				// TODO: Need to add separate configuration for damage
 				rndBetween(damage.min, damage.max)
 			),
 		};
@@ -48,7 +47,6 @@ const Powers = {
 
 	superBat: (state) => {
 		const { duration } = config.powers.superBat;
-		// TODO: Introduce player manager.
 
 		return {
 			superTill: adjustTime(
