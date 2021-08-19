@@ -82,13 +82,6 @@ describe('Proxies', () => {
 				func: 'swatTarget',
 			},
 		},
-		removeExpiredTargets: {
-			mock: {
-				library: TargetManager,
-				func: 'removeExpiredTargets',
-			},
-			impactedKey: 'targets',
-		},
 	};
 
 	map(proxies, (params, action) =>
@@ -120,30 +113,62 @@ describe('Proxies', () => {
 
 	test('removeDeadTargets', () => {
 		const removedTargets = [Symbol('removedTargets')];
-		const impactedTargets = [Symbol('impactedTargets')];
+		const killedTargets = [Symbol('killedTargets')];
+		const expiredTargets = [Symbol('expiredTargets')];
+		const deadTargets = [
+			...killedTargets,
+			...expiredTargets,
+		];
 
-		jest.spyOn(TargetManager, 'getDeadTargets')
-			.mockImplementation(jest.fn(() => impactedTargets));
+		jest.spyOn(TargetManager, 'getKilledTargets')
+			.mockReturnValue(killedTargets);
+		jest.spyOn(TargetManager, 'getExpiredTargets')
+			.mockReturnValue(expiredTargets);
 		jest.spyOn(TargetManager, 'removeTargets')
-			.mockImplementation(jest.fn(() => removedTargets));
-		jest.spyOn(TargetManager, 'getTargetsScore')
-			.mockImplementation(jest.fn(() => 1));
+			.mockReturnValue(removedTargets);
 
 		const mockContext = {
 			data: [returned],
-			state: {
-				score: 1,
-			},
 		};
 		const { removeDeadTargets } = Actions;
 		const result = removeDeadTargets(mockContext);
 
-		expect(TargetManager.getDeadTargets)
+		expect(TargetManager.getKilledTargets)
+			.toHaveBeenCalledWith(mockContext);
+		expect(TargetManager.getExpiredTargets)
 			.toHaveBeenCalledWith(mockContext);
 		expect(TargetManager.removeTargets)
-			.toHaveBeenCalledWith({ ...mockContext, data: impactedTargets });
+			.toHaveBeenCalledWith({ ...mockContext, data: deadTargets });
+		expect(result).toMatchObject({ targets: removedTargets });
+	});
+
+	test('computeScore', () => {
+		const killedTargets = [Symbol('killedTargets')];
+		const targetsScore = Symbol('targetsScore');
+		const score = Symbol('score');
+
+		jest.spyOn(PlayerManager, 'adjustScore')
+			.mockReturnValue(score);
+		jest.spyOn(TargetManager, 'getKilledTargets')
+			.mockReturnValue(killedTargets);
+		jest.spyOn(TargetManager, 'getTargetsScore')
+			.mockReturnValue(targetsScore);
+
+		const mockContext = {
+			state: {
+				score,
+			},
+		};
+
+		const { computeScore } = Actions;
+		const result = computeScore(mockContext);
+
+		expect(PlayerManager.adjustScore)
+			.toHaveBeenCalledWith(mockContext.state, targetsScore);
+		expect(TargetManager.getKilledTargets)
+			.toHaveBeenCalledWith(mockContext);
 		expect(TargetManager.getTargetsScore)
-			.toHaveBeenCalledWith({ ...mockContext, data: impactedTargets });
-		expect(result).toMatchObject({ targets: removedTargets, score: 2 });
+			.toHaveBeenCalledWith({ ...mockContext, data: killedTargets });
+		expect(result).toMatchObject({ score });
 	});
 });
