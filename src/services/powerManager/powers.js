@@ -19,7 +19,7 @@ const Powers = {
 	},
 
 	ice: (state) => {
-		const { duration } = config.powers.ice.effect;
+		const { duration } = config.powers.ice;
 
 		return {
 			frozenTill: adjustTime(
@@ -46,7 +46,7 @@ const Powers = {
 	},
 
 	superBat: (state) => {
-		const { duration } = config.powers.superBat.effect;
+		const { duration } = config.powers.superBat;
 
 		return {
 			superTill: adjustTime(
@@ -58,7 +58,7 @@ const Powers = {
 	},
 
 	shield: (state) => {
-		const { duration } = config.powers.shield.effect;
+		const { duration } = config.powers.shield;
 
 		return {
 			shieldTill: adjustTime(
@@ -81,7 +81,7 @@ const Powers = {
 	},
 
 	double: (state) => {
-		const { duration } = config.powers.double.effect;
+		const { duration } = config.powers.double;
 
 		return {
 			doubleTill: adjustTime(

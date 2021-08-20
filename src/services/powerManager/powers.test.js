@@ -58,7 +58,7 @@ describe('Powers', () => {
 			frozenTill,
 		};
 		const frozenDuration = Symbol('frozenDuration');
-		const { duration } = config.powers.ice.effect;
+		const { duration } = config.powers.ice;
 		const second = 'seconds';
 
 		test('ice return the frozenTill', () => {
@@ -88,7 +88,7 @@ describe('Powers', () => {
 		const state = {
 			superTill,
 		};
-		const { duration } = config.powers.superBat.effect;
+		const { duration } = config.powers.superBat;
 		const second = 'seconds';
 
 		test('superBat return the superTill', () => {
@@ -173,7 +173,7 @@ describe('Powers', () => {
 		const state = {
 			shieldTill,
 		};
-		const { duration } = config.powers.shield.effect;
+		const { duration } = config.powers.shield;
 		const second = 'seconds';
 
 		test('shield returns the shieldTill', () => {
@@ -224,7 +224,7 @@ describe('Powers', () => {
 		const state = {
 			doubleTill,
 		};
-		const { duration } = config.powers.double.effect;
+		const { duration } = config.powers.double;
 		const second = 'seconds';
 
 		test('double return the doubleTill', () => {

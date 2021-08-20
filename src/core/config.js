@@ -124,11 +124,9 @@ const config = {
 				add: 1,
 				remove: 1,
 			},
-			effect: {
-				duration: {
-					min: 5,
-					max: 7,
-				},
+			duration: {
+				min: 5,
+				max: 7,
 			},
 		},
 		surprise: {
@@ -181,9 +179,7 @@ const config = {
 				add: 1,
 				remove: 1,
 			},
-			effect: {
-				duration: 5,
-			},
+			duration: 5,
 		},
 		nuke: {
 			type: 'nuke',
