@@ -29,7 +29,7 @@ describe('PlayerManager', () => {
 		test('adjusts score as 2X while isDouble is active', () => {
 			const score = 5;
 			const expectedResult = state.score
-			+ (score * config.powers.double.effects.multiplier);
+			+ (score * config.powers.double.effect.multiplier);
 
 			jest.spyOn(PowerManager, 'isDouble')
 				.mockImplementation(() => true);

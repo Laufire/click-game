@@ -96,21 +96,23 @@ const config = {
 			},
 		},
 	},
-	maxPowers: 1,
+
 	powers: {
 		bomb: {
 			type: 'bomb',
 			image: bombImage,
 			height: 7,
 			width: 7,
-			targetsCount: 3,
-			damage: {
-				min: 1,
-				max: 3,
-			},
 			prob: {
 				add: 1,
 				remove: 1,
+			},
+			effect: {
+				targetsCount: 3,
+				damage: {
+					min: 1,
+					max: 3,
+				},
 			},
 		},
 		ice: {
@@ -122,9 +124,11 @@ const config = {
 				add: 1,
 				remove: 1,
 			},
-			duration: {
-				min: 5,
-				max: 7,
+			effect: {
+				duration: {
+					min: 5,
+					max: 7,
+				},
 			},
 		},
 		surprise: {
@@ -146,22 +150,26 @@ const config = {
 				add: 1,
 				remove: 1,
 			},
-			score: {
-				min: 5,
-				max: 10,
+			effect: {
+				lives: 1,
+				score: {
+					min: 5,
+					max: 10,
+				},
 			},
-			lives: 1,
 		},
 		superBat: {
 			type: 'superBat',
 			image: flyswatter,
 			height: 10,
 			width: 10,
-			duration: 5,
-			swatDamage: 10,
 			prob: {
 				add: 1,
 				remove: 1,
+			},
+			effect: {
+				duration: 5,
+				swatDamage: 10,
 			},
 		},
 		shield: {
@@ -169,10 +177,12 @@ const config = {
 			image: shield,
 			height: 7,
 			width: 7,
-			duration: 5,
 			prob: {
 				add: 1,
 				remove: 1,
+			},
+			effect: {
+				duration: 5,
 			},
 		},
 		nuke: {
@@ -180,11 +190,12 @@ const config = {
 			image: nuke,
 			height: 5,
 			width: 5,
-			duration: 5,
-			damage: 10,
 			prob: {
 				add: 1,
 				remove: 1,
+			},
+			effect: {
+				damage: 10,
 			},
 		},
 		double: {
@@ -192,11 +203,13 @@ const config = {
 			image: twox,
 			height: 10,
 			width: 10,
-			duration: 15,
-			effects: { multiplier: 2 },
 			prob: {
 				add: 1,
 				remove: 1,
+			},
+			effect: {
+				multiplier: 2,
+				duration: 15,
 			},
 		},
 	},

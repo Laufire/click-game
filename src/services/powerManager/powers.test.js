@@ -15,8 +15,8 @@ describe('Powers', () => {
 
 	describe('bomb', () => {
 		const randomTargets = Mock.getRandomTargets();
-		const { min, max } = config.powers.bomb.damage;
-		const { targetsCount } = config.powers.bomb;
+		const { min, max } = config.powers.bomb.effect.damage;
+		const { targetsCount } = config.powers.bomb.effect;
 		const targets = [Symbol('target')];
 		const count = Symbol('count');
 		const damage = Symbol('damage');
@@ -58,7 +58,7 @@ describe('Powers', () => {
 			frozenTill,
 		};
 		const frozenDuration = Symbol('frozenDuration');
-		const { duration } = config.powers.ice;
+		const { duration } = config.powers.ice.effect;
 		const second = 'seconds';
 
 		test('ice return the frozenTill', () => {
@@ -88,7 +88,7 @@ describe('Powers', () => {
 		const state = {
 			superTill,
 		};
-		const { duration } = config.powers.superBat;
+		const { duration } = config.powers.superBat.effect;
 		const second = 'seconds';
 
 		test('superBat return the superTill', () => {
@@ -117,7 +117,7 @@ describe('Powers', () => {
 		};
 
 		test('gift sometimes increase the score', () => {
-			const { min, max } = config.powers.gift.score;
+			const { min, max } = config.powers.gift.effect.score;
 
 			jest.spyOn(random, 'rndBetween')
 				.mockImplementationOnce(() => 1)
@@ -139,7 +139,7 @@ describe('Powers', () => {
 			const result = gift(state);
 
 			expect(result).toMatchObject({
-				lives: lives + config.powers.gift.lives,
+				lives: lives + config.powers.gift.effect.lives,
 			});
 		});
 	});
@@ -173,7 +173,7 @@ describe('Powers', () => {
 		const state = {
 			shieldTill,
 		};
-		const { duration } = config.powers.shield;
+		const { duration } = config.powers.shield.effect;
 		const second = 'seconds';
 
 		test('shield returns the shieldTill', () => {
@@ -198,7 +198,7 @@ describe('Powers', () => {
 		const state = {
 			targets,
 		};
-		const { damage } = config.powers.nuke;
+		const { damage } = config.powers.nuke.effect;
 		const expectedResult = {
 			targets,
 			powers,
@@ -224,7 +224,7 @@ describe('Powers', () => {
 		const state = {
 			doubleTill,
 		};
-		const { duration } = config.powers.double;
+		const { duration } = config.powers.double.effect;
 		const second = 'seconds';
 
 		test('double return the doubleTill', () => {

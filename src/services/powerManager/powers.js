@@ -6,7 +6,7 @@ import { adjustTime } from '../helperService';
 
 const Powers = {
 	bomb: (state) => {
-		const { damage, targetsCount } = config.powers.bomb;
+		const { damage, targetsCount } = config.powers.bomb.effect;
 		const count = Math.min(targetsCount, state.targets.length);
 		const impactedTargets = rndValues(state.targets, count);
 
@@ -19,7 +19,7 @@ const Powers = {
 	},
 
 	ice: (state) => {
-		const { duration } = config.powers.ice;
+		const { duration } = config.powers.ice.effect;
 
 		return {
 			frozenTill: adjustTime(
@@ -38,7 +38,7 @@ const Powers = {
 	},
 
 	gift: (state) => {
-		const { score, lives } = config.powers.gift;
+		const { score, lives } = config.powers.gift.effect;
 
 		return rndBetween(0, 1)
 			? { score: state.score + rndBetween(score.min, score.max) }
@@ -46,7 +46,7 @@ const Powers = {
 	},
 
 	superBat: (state) => {
-		const { duration } = config.powers.superBat;
+		const { duration } = config.powers.superBat.effect;
 
 		return {
 			superTill: adjustTime(
@@ -58,7 +58,7 @@ const Powers = {
 	},
 
 	shield: (state) => {
-		const { duration } = config.powers.shield;
+		const { duration } = config.powers.shield.effect;
 
 		return {
 			shieldTill: adjustTime(
@@ -70,7 +70,7 @@ const Powers = {
 	},
 
 	nuke: (state) => {
-		const { damage } = config.powers.nuke;
+		const { damage } = config.powers.nuke.effect;
 
 		return {
 			targets: TargetManager.decreaseTargetLives(
@@ -81,7 +81,7 @@ const Powers = {
 	},
 
 	double: (state) => {
-		const { duration } = config.powers.double;
+		const { duration } = config.powers.double.effect;
 
 		return {
 			doubleTill: adjustTime(
