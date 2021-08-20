@@ -103,6 +103,7 @@ const config = {
 			image: bombImage,
 			height: 7,
 			width: 7,
+			variance: 0.3,
 			prob: {
 				add: 1,
 				remove: 1,
@@ -120,19 +121,18 @@ const config = {
 			image: iceImage,
 			height: 10,
 			width: 10,
+			variance: 0.2,
 			prob: {
 				add: 1,
 				remove: 1,
 			},
-			duration: {
-				min: 5,
-				max: 7,
-			},
+			duration: 5,
 		},
 		surprise: {
 			type: 'surprise',
 			image: balloon,
 			height: 7,
+			variance: 0.3,
 			width: 4,
 			prob: {
 				add: 1,
@@ -143,6 +143,7 @@ const config = {
 			type: 'gift',
 			image: gift,
 			height: 5,
+			variance: 0.3,
 			width: 5,
 			prob: {
 				add: 1,
@@ -161,6 +162,7 @@ const config = {
 			image: flyswatter,
 			height: 10,
 			width: 10,
+			variance: 0.3,
 			duration: 5,
 			prob: {
 				add: 1,
@@ -175,6 +177,7 @@ const config = {
 			image: shield,
 			height: 7,
 			width: 7,
+			variance: 0.2,
 			prob: {
 				add: 1,
 				remove: 1,
@@ -186,6 +189,7 @@ const config = {
 			image: nuke,
 			height: 5,
 			width: 5,
+			variance: 0.3,
 			prob: {
 				add: 1,
 				remove: 1,
@@ -199,6 +203,7 @@ const config = {
 			image: twox,
 			height: 10,
 			width: 10,
+			variance: 0.3,
 			duration: 15,
 			prob: {
 				add: 1,

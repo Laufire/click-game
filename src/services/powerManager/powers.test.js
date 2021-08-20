@@ -57,24 +57,24 @@ describe('Powers', () => {
 		const state = {
 			frozenTill,
 		};
-		const frozenDuration = Symbol('frozenDuration');
-		const { duration } = config.powers.ice;
+		const { duration, variance } = config.powers.ice;
+		const adjustment = variance * duration;
 		const second = 'seconds';
 
 		test('ice return the frozenTill', () => {
 			jest.spyOn(helper, 'adjustTime')
 				.mockImplementation(() => newTime);
 
-			jest.spyOn(random, 'rndBetween')
-				.mockImplementation(() => frozenDuration);
+			jest.spyOn(helper, 'getVariance')
+				.mockImplementation(() => variance);
 
 			const result = ice(state);
 
-			expect(random.rndBetween)
-				.toHaveBeenCalledWith(duration.min, duration.max);
+			expect(helper.getVariance)
+				.toHaveBeenCalledWith(variance);
 			expect(helper.adjustTime)
 				.toHaveBeenCalledWith(
-					frozenTill, frozenDuration, second
+					frozenTill, adjustment, second
 				);
 			expect(result).toMatchObject({
 				frozenTill: newTime,
@@ -88,18 +88,22 @@ describe('Powers', () => {
 		const state = {
 			superTill,
 		};
-		const { duration } = config.powers.superBat;
+		const { duration, variance } = config.powers.superBat;
+		const adjustment = variance * duration;
 		const second = 'seconds';
 
 		test('superBat return the superTill', () => {
 			jest.spyOn(helper, 'adjustTime')
 				.mockImplementation(() => newTime);
+			jest.spyOn(helper, 'getVariance')
+				.mockImplementation(() => variance);
 
 			const result = superBat(state);
 
+			expect(helper.getVariance).toHaveBeenCalledWith(variance);
 			expect(helper.adjustTime)
 				.toHaveBeenCalledWith(
-					superTill, duration, second
+					superTill, adjustment, second
 				);
 			expect(result).toMatchObject({
 				superTill: newTime,
@@ -173,18 +177,22 @@ describe('Powers', () => {
 		const state = {
 			shieldTill,
 		};
-		const { duration } = config.powers.shield;
+		const { duration, variance } = config.powers.shield;
+		const adjustment = variance * duration;
 		const second = 'seconds';
 
 		test('shield returns the shieldTill', () => {
+			jest.spyOn(helper, 'getVariance')
+				.mockImplementation(() => variance);
 			jest.spyOn(helper, 'adjustTime')
 				.mockImplementation(() => newTime);
 
 			const result = shield(state);
 
+			expect(helper.getVariance).toHaveBeenCalledWith(variance);
 			expect(helper.adjustTime)
 				.toHaveBeenCalledWith(
-					shieldTill, duration, second
+					shieldTill, adjustment, second
 				);
 			expect(result).toMatchObject({
 				shieldTill: newTime,
@@ -224,18 +232,22 @@ describe('Powers', () => {
 		const state = {
 			doubleTill,
 		};
-		const { duration } = config.powers.double;
+		const { duration, variance } = config.powers.double;
+		const adjustment = variance * duration;
 		const second = 'seconds';
 
 		test('double return the doubleTill', () => {
 			jest.spyOn(helper, 'adjustTime')
 				.mockImplementation(() => newTime);
+			jest.spyOn(helper, 'getVariance')
+				.mockImplementation(() => variance);
 
 			const result = double(state);
 
+			expect(helper.getVariance).toHaveBeenCalledWith(variance);
 			expect(helper.adjustTime)
 				.toHaveBeenCalledWith(
-					doubleTill, duration, second
+					doubleTill, adjustment, second
 				);
 			expect(result).toMatchObject({
 				doubleTill: newTime,

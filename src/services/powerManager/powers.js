@@ -2,7 +2,7 @@ import { rndBetween, rndValue, rndValues } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import config from '../../core/config';
 import TargetManager from '../targetManager';
-import { adjustTime } from '../helperService';
+import { adjustTime, getVariance } from '../helperService';
 
 const Powers = {
 	bomb: (state) => {
@@ -19,12 +19,13 @@ const Powers = {
 	},
 
 	ice: (state) => {
-		const { duration } = config.powers.ice;
+		const { duration, variance } = config.powers.ice;
+		const adjustment = getVariance(variance) * duration;
 
 		return {
 			frozenTill: adjustTime(
 				state.frozenTill,
-				rndBetween(duration.min, duration.max),
+				adjustment,
 				'seconds'
 			),
 		};
@@ -46,24 +47,26 @@ const Powers = {
 	},
 
 	superBat: (state) => {
-		const { duration } = config.powers.superBat;
+		const { duration, variance } = config.powers.superBat;
+		const adjustment = getVariance(variance) * duration;
 
 		return {
 			superTill: adjustTime(
 				state.superTill,
-				duration,
+				adjustment,
 				'seconds',
 			),
 		};
 	},
 
 	shield: (state) => {
-		const { duration } = config.powers.shield;
+		const { duration, variance } = config.powers.shield;
+		const adjustment = getVariance(variance) * duration;
 
 		return {
 			shieldTill: adjustTime(
 				state.shieldTill,
-				duration,
+				adjustment,
 				'seconds',
 			),
 		};
@@ -81,12 +84,13 @@ const Powers = {
 	},
 
 	double: (state) => {
-		const { duration } = config.powers.double;
+		const { duration, variance } = config.powers.double;
+		const adjustment = getVariance(variance) * duration;
 
 		return {
 			doubleTill: adjustTime(
 				state.doubleTill,
-				duration,
+				adjustment,
 				'seconds',
 			),
 		};
