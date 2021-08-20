@@ -8,6 +8,7 @@ const masterLoop = [
 	'removeExpiredPowers',
 	'addPowers',
 	'removeDeadTargets',
+	'attackPlayer',
 ];
 
 const runMasterLoop = () =>

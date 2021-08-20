@@ -7,10 +7,6 @@ import TargetManager from '../services/targetManager';
 import PowerManager from '../services/powerManager/index';
 import PlayerManager from '../services/playerManager';
 
-beforeEach(() => {
-	jest.restoreAllMocks();
-});
-
 describe('Proxies', () => {
 	const context = Symbol('context');
 	const returned = Symbol('returned');
@@ -63,13 +59,6 @@ describe('Proxies', () => {
 			},
 			impactedKey: 'powers',
 		},
-		decreaseLives: {
-			mock: {
-				library: PlayerManager,
-				func: 'decreaseLives',
-			},
-			impactedKey: 'lives',
-		},
 		activatePower: {
 			mock: {
 				library: PowerManager,
@@ -81,6 +70,13 @@ describe('Proxies', () => {
 				library: TargetManager,
 				func: 'swatTarget',
 			},
+		},
+		attackPlayer: {
+			mock: {
+				library: TargetManager,
+				func: 'attackPlayer',
+			},
+			impactedKey: 'lives',
 		},
 	};
 
@@ -170,5 +166,27 @@ describe('Proxies', () => {
 		expect(TargetManager.getTargetsScore)
 			.toHaveBeenCalledWith({ ...mockContext, data: killedTargets });
 		expect(result).toMatchObject({ score });
+	});
+
+	test('decreaseLives', () => {
+		jest.spyOn(PlayerManager, 'decreaseLives')
+			.mockReturnValue(returned);
+
+		const mockContext = {
+			config: {
+				penalDamage: Symbol('penalDamage'),
+			},
+			data: Symbol('data'),
+		};
+
+		const { decreaseLives } = Actions;
+		const result = decreaseLives(mockContext);
+
+		expect(PlayerManager.decreaseLives)
+			.toHaveBeenCalledWith({
+				...mockContext,
+				data: mockContext.config.penalDamage,
+			});
+		expect(result).toMatchObject({ lives: returned });
 	});
 });

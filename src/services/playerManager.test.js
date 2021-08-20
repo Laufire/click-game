@@ -44,28 +44,36 @@ describe('PlayerManager', () => {
 		});
 	});
 
-	test('decreaseLives returns unchanged '
+	describe('decreaseLives', () => {
+		const context = {
+			state,
+		};
+
+		test('decreaseLives returns unchanged '
 		+ 'lives when the shield is active', () => {
-		const expectedResult = state.lives;
+			const expectedResult = state.lives;
 
-		jest.spyOn(PowerManager, 'isActive').mockReturnValue(true);
+			jest.spyOn(PowerManager, 'isActive').mockReturnValue(true);
 
-		const result = decreaseLives({ state });
+			const result = decreaseLives({ ...context,
+				data: config.penalDamage });
 
-		expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'shield');
-		expect(result).toEqual(expectedResult);
-	});
+			expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'shield');
+			expect(result).toEqual(expectedResult);
+		});
 
-	test('decreaseLives returns decreased lives'
+		test('decreaseLives returns decreased lives'
 	+ 'when the shield is inactive', () => {
-		const expectedResult = state.lives - config.penalDamage;
+			const expectedResult = state.lives - config.penalDamage;
 
-		jest.spyOn(PowerManager, 'isActive').mockReturnValue(false);
+			jest.spyOn(PowerManager, 'isActive').mockReturnValue(false);
 
-		const result = decreaseLives({ state });
+			const result = decreaseLives({ ...context,
+				data: config.penalDamage });
 
-		expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'shield');
-		expect(result).toEqual(expectedResult);
+			expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'shield');
+			expect(result).toEqual(expectedResult);
+		});
 	});
 
 	describe('isAlive', () => {

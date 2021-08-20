@@ -8,10 +8,10 @@ const adjustScore = (state, score) => Math.max(state.score
 			? score * config.powers.double.effect.multiplier
 			: score), 0);
 
-const decreaseLives = ({ state }) =>
+const decreaseLives = ({ state, data: damage }) =>
 	(PowerManager.isActive(state, 'shield')
 		? state.lives
-		: state.lives - config.penalDamage);
+		: Math.max(state.lives - damage, 0));
 
 const increaseLives = (state, lives) =>
 	Math.min(state.lives + lives, config.maxLives);

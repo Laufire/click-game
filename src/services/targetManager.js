@@ -92,6 +92,13 @@ const swatTarget = ({ state, data }) => ({
 const getExpiredTargets = ({ state }) =>
 	state.targets.filter((target) => !isFuture(target.livesTill));
 
+const attackPlayer = (context) => PlayerManager.decreaseLives({
+	...context,
+	data: context.state.targets.filter((target) =>
+		rndBetween(1, 1 / target.prob.attack) === 1)
+		.reduce((acc, target) => acc + target.damage, 0),
+});
+
 const TargetManager = {
 	moveTargets,
 	addTargets,
@@ -102,6 +109,7 @@ const TargetManager = {
 	getKilledTargets,
 	swatTarget,
 	getExpiredTargets,
+	attackPlayer,
 };
 
 export default TargetManager;
