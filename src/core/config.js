@@ -45,8 +45,10 @@ const config = {
 			variance: 0.2,
 			lifespan: 10,
 			lives: 1,
+			damage: 1,
 			prob: {
 				add: 0.2,
+				attack: 0.5,
 			},
 		},
 		ant: {
@@ -58,8 +60,10 @@ const config = {
 			variance: 0.5,
 			lifespan: 5,
 			lives: 1,
+			damage: 1,
 			prob: {
-				add: 0.6,
+				attack: 0.5,
+				add: 1,
 			},
 		},
 		spider: {
@@ -70,9 +74,11 @@ const config = {
 			width: 10,
 			variance: 0.2,
 			lifespan: 5,
+			damage: 1,
 			lives: 3,
 			prob: {
-				add: 0.1,
+				attack: 0.5,
+				add: 1,
 			},
 		},
 		butterfly: {
@@ -83,8 +89,10 @@ const config = {
 			width: 10,
 			variance: 0.3,
 			lifespan: 3,
+			damage: 1,
 			lives: 1,
 			prob: {
+				attack: 0.5,
 				add: 0.1,
 			},
 		},
@@ -95,10 +103,12 @@ const config = {
 			width: 10,
 			variance: 0.3,
 			lifespan: 5,
+			damage: 1,
 			lives: 1,
 			score: 0,
 			prob: {
 				add: 0.5,
+				attack: 0.5,
 			},
 			effect: {
 				score: {

@@ -11,7 +11,8 @@ const addTargets = (context) => ({
 });
 
 const decreaseLives = (context) => ({
-	lives: PlayerManager.decreaseLives(context),
+	lives: PlayerManager
+		.decreaseLives({ ...context, data: context.config.penalDamage }),
 });
 
 const removeTarget = (context) => ({
@@ -58,6 +59,10 @@ const computeScore = (context) => ({
 const swatTarget = (context) =>
 	TargetManager.swatTarget(context);
 
+const attackPlayer = (context) => ({
+	lives: TargetManager.attackPlayer(context),
+});
+
 const actions = {
 	moveTargets,
 	addTargets,
@@ -71,6 +76,7 @@ const actions = {
 	removeDeadTargets,
 	swatTarget,
 	computeScore,
+	attackPlayer,
 };
 
 export default actions;
