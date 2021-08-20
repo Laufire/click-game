@@ -3,7 +3,7 @@
 jest.mock('./gameScreen', () => () => <div role="gameScreen"/>);
 jest.mock('./gameOverScreen', () => () => <div role="gameOverScreen"/>);
 jest.mock('./score', () => () => <div role="score"/>);
-jest.mock('./lives', () => () => <div role="lives"/>);
+jest.mock('./healthBar', () => () => <div role="healthBar"/>);
 jest.mock('../services/powerManager');
 jest.mock('../services/playerManager');
 
@@ -15,11 +15,11 @@ import Game from './game';
 import PlayerManager from '../services/playerManager';
 
 describe('Game', () => {
-	test('Game renders the score,lives', () => {
+	test('Game renders the score, lives', () => {
 		const { getByRole } = render(Game());
 
 		expect(getByRole('score')).toBeInTheDocument();
-		expect(getByRole('lives')).toBeInTheDocument();
+		expect(getByRole('healthBar')).toBeInTheDocument();
 	});
 
 	test('Game render gameOverScreen when the lives is 0', () => {

@@ -1,11 +1,11 @@
 import { React } from 'react';
 import context from '../core/context';
 import Score from './score';
-import Lives from './lives';
 import GameScreen from './gameScreen';
 import GameOverScreen from './gameOverScreen';
 import PowerManager from '../services/powerManager';
 import PlayerManager from '../services/playerManager';
+import healthBar from './healthBar';
 
 const Game = () => {
 	const Screen = PlayerManager.isAlive(context) ? GameScreen : GameOverScreen;
@@ -15,7 +15,7 @@ const Game = () => {
 		<div className={ className } role="game">
 			{ Screen() }
 			{ Score() }
-			{ Lives() }
+			{ healthBar() }
 		</div>
 	);
 };

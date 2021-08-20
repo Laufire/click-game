@@ -18,10 +18,22 @@ const delay = 2;
 const config = {
 	tickerDelay: ms * delay,
 	idLength: 8,
-	lives: 3,
+	//	TODO: Rename it as health.
+	maxLives: 100,
 	maxTargets: 5,
 	swatDamage: 1,
 	penalDamage: 1,
+
+	healthBar: {
+		interval: 25,
+		colors: {
+			100: 'lightgreen',
+			75: 'lightgreen',
+			50: 'yellow',
+			25: 'yellow',
+			0: 'orangered',
+		},
+	},
 
 	targets: {
 		mosquito: {

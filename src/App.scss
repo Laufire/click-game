@@ -37,18 +37,20 @@ body {
 		}
 	}
 
-	.lives {
+	.health-bar{
 		position: absolute;
 		top: 0%;
 		right: 0%;
-		background: silver;
-		font-size: 4vw;
-		text-align: center;
-
-			.favorite {
-				color: red;
-				font-size: 3vw;
-			}
+		border: 1px solid black;
+		width: 15vw;
+		height: 5vh;
+		.indicator{
+			height: 100%;
+			position: absolute;
+		}
+		.life-indicator{
+			position: absolute;
+		}
 	}
 
 	.game-over-screen {

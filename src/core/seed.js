@@ -13,7 +13,7 @@ const seed = {
 	],
 	powers: [],
 	score: 0,
-	lives: config.lives,
+	lives: config.maxLives,
 	frozenTill: timeZero,
 	superTill: timeZero,
 	shieldTill: timeZero,

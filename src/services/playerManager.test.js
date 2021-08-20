@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines-per-function */
 import { secure } from '@laufire/utils/collection';
@@ -6,8 +7,9 @@ import PlayerManager from './playerManager';
 import PowerManager from './powerManager';
 
 describe('PlayerManager', () => {
-	const { adjustScore, decreaseLives, isAlive, increaseLives }
-		= PlayerManager;
+	const { adjustScore, decreaseLives, isAlive, increaseLives,
+		getHealthRatio, getHealthColor } = PlayerManager;
+
 	const state = secure({
 		lives: 3,
 		score: 10,
@@ -89,15 +91,38 @@ describe('PlayerManager', () => {
 	describe('increaseLives', () => {
 		test('returns increased lives while lives is less than max limit',
 			() => {
-				const result = increaseLives({ lives: config.lives - 1 }, 1);
+				const result = increaseLives({ lives: config.maxLives - 1 }, 1);
 
-				expect(result).toEqual(config.lives);
+				expect(result).toEqual(config.maxLives);
 			});
 		test('returns the same lives while lives is greater than max limit',
 			() => {
-				const result = increaseLives({ lives: config.lives }, 1);
+				const result = increaseLives({ lives: config.maxLives }, 1);
 
-				expect(result).toEqual(config.lives);
+				expect(result).toEqual(config.maxLives);
 			});
 	});
+	test('getHealthRatio returns the ratio between state lives & max lives',
+		() => {
+			const context = {
+				state: { lives: 73 },
+			};
+
+			const expectedResult = 0.73;
+
+			const result = getHealthRatio(context);
+
+			expect(result).toEqual(expectedResult);
+		});
+
+	test('getHealthColor returns the color according to health percentage',
+		() => {
+			const healthRatio = [0.93, 0.73, 0.23];
+
+			const expectedResult = ['lightgreen', 'yellow', 'orangered'];
+
+			const result = healthRatio.map(getHealthColor);
+
+			expect(result).toEqual(expectedResult);
+		});
 });
