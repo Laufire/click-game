@@ -4,12 +4,12 @@ import PowerManager from './powerManager';
 const hundred = 100;
 
 const adjustScore = (state, score) => Math.max(state.score
-		+ (PowerManager.isDouble(state)
+		+ (PowerManager.isActive(state, 'double')
 			? score * config.powers.double.effect.multiplier
 			: score), 0);
 
 const decreaseLives = ({ state }) =>
-	(PowerManager.isShielded(state)
+	(PowerManager.isActive(state, 'shield')
 		? state.lives
 		: state.lives - config.penalDamage);
 

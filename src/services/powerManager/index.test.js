@@ -177,20 +177,6 @@ describe('PowerManager', () => {
 		});
 	});
 
-	describe('isFrozen', () => {
-		const input = Symbol('Future');
-		const data = { frozenTill: 0 };
-
-		test('whether isFuture is called', () => {
-			jest.spyOn(helper, 'isFuture')
-				.mockImplementation(jest.fn(() => input));
-			const result = PowerManager.isFrozen(data);
-
-			expect(helper.isFuture).toHaveBeenCalledWith(data.frozenTill);
-			expect(result).toEqual(input);
-		});
-	});
-
 	describe('getActivePowers', () => {
 		const date = new Date();
 		const [activePower, inactivePower] = shuffle(values(stateKeysToPowers));
@@ -211,27 +197,20 @@ describe('PowerManager', () => {
 			});
 	});
 
-	test('whether isFuture is called', () => {
+	describe('isActive', () => {
 		const input = Symbol('Future');
-		const data = { shieldTill: 0 };
+		const powers = ['ice', 'shield', 'double', 'superBat'];
+		const state
+		= { frozenTill: 1, superTill: 2, shieldTill: 3, doubleTill: 4 };
 
-		jest.spyOn(helper, 'isFuture')
-			.mockImplementation(() => input);
-		const result = PowerManager.isShielded(data);
+		test('whether isFuture is called', () => {
+			jest.spyOn(helper, 'isFuture')
+				.mockImplementation(jest.fn(() => input));
+			const result
+				= PowerManager.isActive(state, powers[1]);
 
-		expect(helper.isFuture).toHaveBeenCalledWith(data.shieldTill);
-		expect(result).toEqual(input);
-	});
-
-	test('isDouble returns true', () => {
-		const state = { doubleTill: 0 };
-
-		jest.spyOn(helper, 'isFuture')
-			.mockImplementation(() => true);
-
-		const result = PowerManager.isDouble(state);
-
-		expect(helper.isFuture).toHaveBeenCalledWith(state.doubleTill);
-		expect(result).toEqual(true);
+			expect(helper.isFuture).toHaveBeenCalledWith(state.shieldTill);
+			expect(result).toEqual(input);
+		});
 	});
 });

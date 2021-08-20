@@ -16,12 +16,12 @@ describe('PlayerManager', () => {
 	});
 
 	describe('adjustScore', () => {
-		test('adjusts score while isDouble is inactive', () => {
+		test('adjusts score while double is inactive', () => {
 			const score = -5;
 
 			const expectedResult = state.score + score;
 
-			jest.spyOn(PowerManager, 'isDouble')
+			jest.spyOn(PowerManager, 'isActive')
 				.mockImplementation(() => false);
 
 			const result = adjustScore(state, score);
@@ -29,17 +29,17 @@ describe('PlayerManager', () => {
 			expect(result).toEqual(expectedResult);
 		});
 
-		test('adjusts score as 2X while isDouble is active', () => {
+		test('adjusts score as 2X while double is active', () => {
 			const score = 5;
 			const expectedResult = state.score
 			+ (score * config.powers.double.effect.multiplier);
 
-			jest.spyOn(PowerManager, 'isDouble')
+			jest.spyOn(PowerManager, 'isActive')
 				.mockImplementation(() => true);
 
 			const result = PlayerManager.adjustScore(state, score);
 
-			expect(PowerManager.isDouble).toHaveBeenCalledWith(state);
+			expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'double');
 			expect(result).toEqual(expectedResult);
 		});
 	});
@@ -48,11 +48,11 @@ describe('PlayerManager', () => {
 		+ 'lives when the shield is active', () => {
 		const expectedResult = state.lives;
 
-		jest.spyOn(PowerManager, 'isShielded').mockReturnValue(true);
+		jest.spyOn(PowerManager, 'isActive').mockReturnValue(true);
 
 		const result = decreaseLives({ state });
 
-		expect(PowerManager.isShielded).toHaveBeenCalledWith(state);
+		expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'shield');
 		expect(result).toEqual(expectedResult);
 	});
 
@@ -60,11 +60,11 @@ describe('PlayerManager', () => {
 	+ 'when the shield is inactive', () => {
 		const expectedResult = state.lives - config.penalDamage;
 
-		jest.spyOn(PowerManager, 'isShielded').mockReturnValue(false);
+		jest.spyOn(PowerManager, 'isActive').mockReturnValue(false);
 
 		const result = decreaseLives({ state });
 
-		expect(PowerManager.isShielded).toHaveBeenCalledWith(state);
+		expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'shield');
 		expect(result).toEqual(expectedResult);
 	});
 

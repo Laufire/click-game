@@ -32,7 +32,7 @@ const getTarget = ({ x, y, type } = {}) => {
 };
 
 const moveTargets = ({ state }) =>
-	(PowerManager.isFrozen(state)
+	(PowerManager.isActive(state, 'ice')
 		? state.targets
 		: state.targets.map((target) => ({
 			...target,

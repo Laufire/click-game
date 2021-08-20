@@ -37,20 +37,26 @@ const activatePower = ({ state, data }) => Powers[data.type](state);
 const removePower = ({ state: { powers }, data }) =>
 	powers.filter((current) => current.id !== data.id);
 
-const getBatType = ({ superTill }) => (
-	isFuture(superTill) ? 'super' : 'normal');
-
-const getDamage = (state) => damage[getBatType(state)];
-
-const isFrozen = ({ frozenTill }) => isFuture(frozenTill);
-
-const isDouble = ({ doubleTill }) => isFuture(doubleTill);
-
 const getActivePowers = ({ state }) => keys(stateKeysToPowers)
 	.filter((stateKey) => isFuture(state[stateKey]))
 	.map((stateKey) => stateKeysToPowers[stateKey]);
 
-const isShielded = ({ shieldTill }) => isFuture(shieldTill);
+const isActive = (state, power) => {
+	const powers = {
+		ice: 'frozenTill',
+		shield: 'shieldTill',
+		superBat: 'superTill',
+		double: 'doubleTill',
+	};
+	const powerTill = powers[power];
+
+	return isFuture(state[powerTill]);
+};
+
+const getBatType = (state) => (
+	isActive(state, 'superBat') ? 'super' : 'normal');
+
+const getDamage = (state) => damage[getBatType(state)];
 
 const PowerManager = {
 	getPower,
@@ -60,10 +66,8 @@ const PowerManager = {
 	removePower,
 	getBatType,
 	getDamage,
-	isFrozen,
-	isDouble,
 	getActivePowers,
-	isShielded,
+	isActive,
 };
 
 export default PowerManager;

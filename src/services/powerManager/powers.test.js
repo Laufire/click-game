@@ -151,7 +151,7 @@ describe('Powers', () => {
 			expect(PlayerManager.increaseLives)
 				.toHaveBeenCalledWith(state, addLife);
 			expect(result).toMatchObject({
-				lives,
+				lives: lives + addLife,
 			});
 		});
 	});

@@ -279,7 +279,7 @@ describe('TargetManager', () => {
 
 		const position = secure({ x, y });
 
-		test('returns the moved targets', () => {
+		test('returns the moved targets while ice is inactive', () => {
 			const expectedResult = secure([
 				{ ...ant, ...position },
 				{ ...mosquito, ...position },
@@ -290,25 +290,26 @@ describe('TargetManager', () => {
 				.mockImplementation(() => x);
 			jest.spyOn(PositionService, 'getRandomY')
 				.mockImplementation(() => y);
-			jest.spyOn(PowerManager, 'isFrozen')
+			jest.spyOn(PowerManager, 'isActive')
 				.mockImplementation(() => false);
 
 			const result = moveTargets({ state });
 
-			expect(PowerManager.isFrozen).toHaveBeenCalledWith(state);
+			expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'ice');
 			expect(result).toEqual(expectedResult);
 		});
 
-		test('returns targets without changing position while isFrozen is true',
+		test('returns targets without changing position while ice is active',
 			() => {
 				const expectedResult = targets;
 
-				jest.spyOn(PowerManager, 'isFrozen')
+				jest.spyOn(PowerManager, 'isActive')
 					.mockImplementation(() => true);
 
 				const result = moveTargets({ state });
 
-				expect(PowerManager.isFrozen).toHaveBeenCalledWith(state);
+				expect(PowerManager.isActive)
+					.toHaveBeenCalledWith(state, 'ice');
 				expect(result).toEqual(expectedResult);
 			});
 	});
