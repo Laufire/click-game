@@ -163,12 +163,12 @@ const config = {
 			image: flyswatter,
 			height: 10,
 			width: 10,
+			duration: 5,
 			prob: {
 				add: 1,
 				remove: 1,
 			},
 			effect: {
-				duration: 5,
 				swatDamage: 10,
 			},
 		},
@@ -203,13 +203,13 @@ const config = {
 			image: twox,
 			height: 10,
 			width: 10,
+			duration: 15,
 			prob: {
 				add: 1,
 				remove: 1,
 			},
 			effect: {
 				multiplier: 2,
-				duration: 15,
 			},
 		},
 	},
