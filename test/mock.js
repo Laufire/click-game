@@ -10,6 +10,10 @@ const ant = secure({
 	lives: 1,
 	score: 10,
 	livesTill: livesTill,
+	damage: 1,
+	prob: {
+		attack: 1,
+	},
 });
 const mosquito = secure({
 	type: 'mosquito',
@@ -17,6 +21,10 @@ const mosquito = secure({
 	lives: 1,
 	score: 5,
 	livesTill: livesTill,
+	damage: 1,
+	prob: {
+		attack: 1,
+	},
 });
 const butterfly = secure({
 	type: 'butterfly',
@@ -24,6 +32,10 @@ const butterfly = secure({
 	lives: 1,
 	score: 0,
 	livesTill: livesTill,
+	damage: 1,
+	prob: {
+		attack: 1,
+	},
 });
 const targets = secure([
 	ant,

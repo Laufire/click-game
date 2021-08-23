@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-statements */
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines-per-function */
@@ -13,6 +14,7 @@ import Mocks from '../../test/mock';
 import PowerManager from './powerManager';
 import PlayerManager from './playerManager';
 
+// TODO: Remove restoreAllMocks //
 beforeEach(() => {
 	jest.restoreAllMocks();
 });
@@ -343,6 +345,43 @@ describe('TargetManager', () => {
 			expect(HelperService.isFuture)
 				.toHaveBeenCalledWith(livesTill);
 			expect(result).toEqual(expectedResult);
+		});
+	});
+
+	describe('attackPlayer', () => {
+		const context = {
+			state: {
+				targets,
+			},
+		};
+		const decreasedHealth = Symbol('decreasedHealth');
+
+		test('returns 0 damage when rndBetween is 0 ', () => {
+			const damage = 0;
+
+			jest.spyOn(random, 'rndBetween').mockReturnValue(0);
+			jest.spyOn(PlayerManager, 'decreaseLives')
+				.mockReturnValue(decreasedHealth);
+
+			const result = TargetManager.attackPlayer(context);
+
+			expect(PlayerManager.decreaseLives)
+				.toHaveBeenCalledWith({ ...context, data: damage });
+			expect(result).toEqual(decreasedHealth);
+		});
+
+		test('returns damage when rndBetween is 1,', () => {
+			const damage = 3;
+
+			jest.spyOn(random, 'rndBetween').mockReturnValue(1);
+			jest.spyOn(PlayerManager, 'decreaseLives')
+				.mockReturnValue(decreasedHealth);
+
+			const result = TargetManager.attackPlayer(context);
+
+			expect(PlayerManager.decreaseLives)
+				.toHaveBeenCalledWith({ ...context, data: damage });
+			expect(result).toEqual(decreasedHealth);
 		});
 	});
 });
