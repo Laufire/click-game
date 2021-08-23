@@ -54,9 +54,8 @@ describe('Powers', () => {
 
 	describe('ice', () => {
 		const newTime = Symbol('newTime');
-		const frozenTill = Symbol('frozenTill');
 		const state = {
-			frozenTill,
+			duration: { ice: Symbol('ice') },
 		};
 		const { duration, variance } = config.powers.ice;
 		const adjustment = variance * duration;
@@ -75,19 +74,18 @@ describe('Powers', () => {
 				.toHaveBeenCalledWith(variance);
 			expect(helper.adjustTime)
 				.toHaveBeenCalledWith(
-					frozenTill, adjustment, second
+					state.duration.ice, adjustment, second
 				);
-			expect(result).toMatchObject({
-				frozenTill: newTime,
-			});
+			expect(result).toMatchObject({ duration: {
+				ice: newTime,
+			}});
 		});
 	});
 
 	describe('superBat', () => {
 		const newTime = Symbol('newTime');
-		const superTill = Symbol('superTill');
 		const state = {
-			superTill,
+			duration: { superBat: Symbol('superBat') },
 		};
 		const { duration, variance } = config.powers.superBat;
 		const adjustment = variance * duration;
@@ -104,18 +102,18 @@ describe('Powers', () => {
 			expect(helper.getVariance).toHaveBeenCalledWith(variance);
 			expect(helper.adjustTime)
 				.toHaveBeenCalledWith(
-					superTill, adjustment, second
+					state.duration.superBat, adjustment, second
 				);
-			expect(result).toMatchObject({
-				superTill: newTime,
-			});
+			expect(result).toMatchObject({ duration: {
+				superBat: newTime,
+			}});
 		});
 	});
 
 	describe('gift randomly increases the score or lives', () => {
 		const score = 5;
 		const lives = 3;
-		const addScore = 5;
+		const addScore = Symbol('score');
 		const addLife = config.powers.gift.effect.lives;
 		const state = {
 			score,
@@ -128,7 +126,8 @@ describe('Powers', () => {
 			jest.spyOn(random, 'rndBetween')
 				.mockImplementationOnce(() => 1)
 				.mockImplementationOnce(() => addScore);
-			jest.spyOn(PlayerManager, 'adjustScore');
+			jest.spyOn(PlayerManager, 'adjustScore')
+				.mockImplementation(() => addScore);
 
 			const result = gift(state);
 
@@ -137,7 +136,7 @@ describe('Powers', () => {
 			expect(random.rndBetween)
 				.toHaveBeenCalledWith(min, max);
 			expect(result).toMatchObject({
-				score: score + addScore,
+				score: addScore,
 			});
 		});
 
@@ -181,9 +180,8 @@ describe('Powers', () => {
 
 	describe('shield', () => {
 		const newTime = Symbol('newTime');
-		const shieldTill = Symbol('shieldTill');
 		const state = {
-			shieldTill,
+			duration: { shield: Symbol('shield') },
 		};
 		const { duration, variance } = config.powers.shield;
 		const adjustment = variance * duration;
@@ -200,11 +198,11 @@ describe('Powers', () => {
 			expect(helper.getVariance).toHaveBeenCalledWith(variance);
 			expect(helper.adjustTime)
 				.toHaveBeenCalledWith(
-					shieldTill, adjustment, second
+					state.duration.shield, adjustment, second
 				);
-			expect(result).toMatchObject({
-				shieldTill: newTime,
-			});
+			expect(result).toMatchObject({ duration: {
+				shield: newTime,
+			}});
 		});
 	});
 
@@ -236,9 +234,8 @@ describe('Powers', () => {
 
 	describe('double', () => {
 		const newTime = Symbol('newTime');
-		const doubleTill = Symbol('doubleTill');
 		const state = {
-			doubleTill,
+			duration: { double: Symbol('double') },
 		};
 		const { duration, variance } = config.powers.double;
 		const adjustment = variance * duration;
@@ -255,11 +252,11 @@ describe('Powers', () => {
 			expect(helper.getVariance).toHaveBeenCalledWith(variance);
 			expect(helper.adjustTime)
 				.toHaveBeenCalledWith(
-					doubleTill, adjustment, second
+					state.duration.double, adjustment, second
 				);
-			expect(result).toMatchObject({
-				doubleTill: newTime,
-			});
+			expect(result).toMatchObject({ duration: {
+				double: newTime,
+			}});
 		});
 	});
 });
