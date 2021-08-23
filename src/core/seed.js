@@ -14,10 +14,13 @@ const seed = {
 	powers: [],
 	score: 0,
 	lives: config.maxLives,
-	frozenTill: timeZero,
-	superTill: timeZero,
-	shieldTill: timeZero,
-	doubleTill: timeZero,
+	duration: {
+		// TODO: Auto populate the values.
+		ice: timeZero,
+		superBat: timeZero,
+		shield: timeZero,
+		double: timeZero,
+	},
 };
 
 export default seed;

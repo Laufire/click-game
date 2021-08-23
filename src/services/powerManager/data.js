@@ -5,13 +5,6 @@ const damage = {
 	normal: config.swatDamage,
 };
 
-const stateKeysToPowers = {
-	frozenTill: 'ice',
-	superTill: 'superBat',
-	shieldTill: 'shield',
-};
-
 export {
 	damage,
-	stateKeysToPowers,
 };
