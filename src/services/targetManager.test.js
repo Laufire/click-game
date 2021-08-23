@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable max-statements */
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines-per-function */
@@ -125,30 +126,45 @@ describe('TargetManager', () => {
 		const lives = 3;
 		const score = 10;
 		const spoiler = TargetManager.getTarget({ type: 'spoiler' });
+		const decreasedTargetLive = Symbol('decreasedTargetLive');
+		const damage = Symbol('damage');
 		const state = secure({
 			targets,
 			lives,
 			score,
 		});
 
+		const spyOn = () => {
+			jest.spyOn(TargetManager, 'decreaseTargetLives')
+				.mockImplementation(() => decreasedTargetLive);
+			jest.spyOn(PowerManager, 'getDamage')
+				.mockImplementation(() => damage);
+		};
+
 		test('returns reduced life of the swatted target', () => {
+			spyOn();
+
 			const targetToSwat = random.rndValue(targets);
-			const swattedTarget = secure({
-				...targetToSwat,
-				lives: targetToSwat.lives - config.swatDamage,
-			});
-			const expectedTargets = replace(
-				targets, targetToSwat, swattedTarget
-			);
 
 			const result = swatTarget({ state: state, data: targetToSwat });
 
-			expect(result).toMatchObject({ targets: expectedTargets });
+			expect(result).toMatchObject({ targets: decreasedTargetLive });
+			expect(TargetManager.decreaseTargetLives)
+				.toHaveBeenCalledWith(
+					state.targets, [targetToSwat], damage
+				);
+			expect(PowerManager.getDamage)
+				.toHaveBeenCalledWith(state);
 		});
 
 		test('returns reduced player life when a butterfly is swatted',
 			() => {
-				const result = swatTarget({ state: state, data: butterfly });
+				spyOn();
+
+				const targetToSwat = TargetManager
+					.getTarget({ type: 'butterfly' });
+
+				const result = swatTarget({ state: state, data: targetToSwat });
 
 				expect(result).toMatchObject({
 					lives: state.lives - config.penalDamage,
@@ -157,14 +173,16 @@ describe('TargetManager', () => {
 
 		test('returns reduced player score when a spoiler is swatted',
 			() => {
-				const { min, max } = config.targets.spoiler.effect.score;
-				const adjustment = 5;
 				const adjustedScore = Symbol('adjustment');
+				const adjustment = 5;
 
+				spyOn();
 				jest.spyOn(random, 'rndBetween')
 					.mockImplementation(() => adjustment);
 				jest.spyOn(PlayerManager, 'adjustScore')
 					.mockImplementation(() => adjustedScore);
+
+				const { min, max } = config.targets.spoiler.effect.score;
 
 				const result = swatTarget({ state: state, data: spoiler });
 
