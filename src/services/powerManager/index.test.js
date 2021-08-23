@@ -7,10 +7,11 @@
 import * as random from '@laufire/utils/random';
 import config from '../../core/config';
 import PowerManager from '../powerManager';
-import { damage, stateKeysToPowers } from './data';
+import { damage } from './data';
 import Powers from './powers';
 import * as helper from '../helperService';
-import { keys, map, secure, shuffle, values } from '@laufire/utils/collection';
+import { keys, map, secure, shuffle } from '@laufire/utils/collection';
+import context from '../../core/context';
 
 describe('PowerManager', () => {
 	const { adjustTime } = helper;
@@ -92,101 +93,120 @@ describe('PowerManager', () => {
 			expect(powerHandler).toHaveBeenCalledWith(state);
 			expect(result).toEqual(returnValue);
 		});
+	});
 
-		describe('getDamage', () => {
-			test('geDamage returns superbat when power is active', () => {
-				const date = new Date();
-				const adjustment = 5;
-				const unit = 'seconds';
+	describe('getDamage', () => {
+		const superBat = new Date();
 
-				const superTill = adjustTime(
-					date, adjustment, unit
-				);
-				const expectedDamage = damage.super;
-				const result = PowerManager
-					.getDamage({ superTill });
+		test('geDamage returns superbat when power is active', () => {
+			const expectedDamage = damage.super;
 
-				expect(result).toEqual(expectedDamage);
-			});
-			test('geDamage returns normalbat when power is not active', () => {
-				const date = new Date();
-				const adjustment = -5;
-				const unit = 'seconds';
+			jest.spyOn(helper, 'isFuture')
+				.mockImplementation(() => true);
 
-				const superTill = adjustTime(
-					date, adjustment, unit
-				);
-				const expectedDamage = damage.normal;
-				const result = PowerManager.getDamage({ superTill });
+			const result = PowerManager
+				.getDamage({
+					duration: { superBat },
+				});
 
-				expect(result).toEqual(expectedDamage);
-			});
+			expect(helper.isFuture).toHaveBeenCalledWith(superBat);
+			expect(result).toEqual(expectedDamage);
 		});
-		describe('getBatType', () => {
-			test('getBatType returns super when the super is active', () => {
-				const date = new Date();
-				const adjustment = 5;
-				const unit = 'seconds';
+		test('geDamage returns normalbat when power is not active', () => {
+			const expectedDamage = damage.normal;
 
-				const superTill = adjustTime(
-					date, adjustment, unit
-				);
-				const expectedBatType = 'super';
+			jest.spyOn(helper, 'isFuture')
+				.mockImplementation(() => false);
 
-				const result = PowerManager.getBatType({ superTill });
-
-				expect(result).toEqual(expectedBatType);
+			const result = PowerManager.getDamage({
+				duration: { superBat },
 			});
 
-			test('getBatType returns normal the when super is inactive', () => {
-				const date = new Date();
-				const adjustment = -5;
-				const unit = 'seconds';
+			expect(helper.isFuture).toHaveBeenCalledWith(superBat);
+			expect(result).toEqual(expectedDamage);
+		});
+	});
+	describe('getBatType', () => {
+		const superBat = new Date();
 
-				const superTill = adjustTime(
-					date, adjustment, unit
-				);
-				const expectedBatType = 'normal';
+		test('getBatType returns normal when superBat is inactive',
+			() => {
+				jest.spyOn(helper, 'isFuture')
+					.mockImplementation(() => false);
 
-				const result = PowerManager.getBatType({ superTill });
-
-				expect(result).toEqual(expectedBatType);
-			});
-
-			describe('addPowers adds powers based on prob', () => {
-				test('No powers added with 0 prob', () => {
-					jest.spyOn(random, 'rndBetween')
-						.mockImplementation(() => 0);
-
-					const result = PowerManager.addPowers({ state: { powers }});
-
-					expect(result).toEqual(powers);
+				const result = PowerManager.getBatType({
+					duration: { superBat },
 				});
 
-				test('Added powers with prob 1', () => {
-					jest.spyOn(random, 'rndBetween')
-						.mockImplementation(() => 1);
-
-					const result = PowerManager
-						.addPowers({ state: { powers: [] }});
-					const resultKeys = result.map((item) => item.type);
-
-					expect(resultKeys).toEqual(keys(config.powers));
-				});
+				expect(helper.isFuture).toHaveBeenCalledWith(superBat);
+				expect(result).toEqual('normal');
 			});
+
+		test('getBatType returns super when superBat is active',
+			() => {
+				jest.spyOn(helper, 'isFuture')
+					.mockImplementation(() => true);
+
+				const result = PowerManager.getBatType({
+					duration: { superBat },
+				});
+
+				expect(helper.isFuture).toHaveBeenCalledWith(superBat);
+				expect(result).toEqual('super');
+			});
+	});
+
+	describe('addPowers adds powers based on prob', () => {
+		const bomb = {
+			id: 'abcd',
+			type: 'bomb',
+			prob: {
+				remove: 0,
+			},
+		};
+		const ice = {
+			id: 'efgh',
+			type: 'ice',
+			prob: {
+				remove: 0,
+			},
+		};
+		const powers = [bomb, ice];
+
+		test('No powers added with 0 prob', () => {
+			jest.spyOn(random, 'rndBetween')
+				.mockImplementation(() => 0);
+
+			const result = PowerManager.addPowers({ state: { powers }});
+
+			expect(result).toEqual(powers);
+		});
+
+		test('Added powers with prob 1', () => {
+			jest.spyOn(random, 'rndBetween')
+				.mockImplementation(() => 1);
+
+			const result = PowerManager
+				.addPowers({ state: { powers: [] }});
+			const resultKeys = result.map((item) => item.type);
+
+			expect(resultKeys).toEqual(keys(config.powers));
 		});
 	});
 
 	describe('getActivePowers', () => {
 		const date = new Date();
-		const [activePower, inactivePower] = shuffle(values(stateKeysToPowers));
+		const [activePower, inactivePower]
+			= shuffle(keys(context.seed.duration));
 		const adjustments = {
 			[activePower]: 5,
 			[inactivePower]: -5,
 		};
-		const state = secure(map(stateKeysToPowers, (power) => adjustTime(
-			date, adjustments[power], 'hours'
-		)));
+		const state = {
+			duration: secure(map(adjustments, (adjustment) => adjustTime(
+				date, adjustment, 'hours'
+			))),
+		};
 
 		test('getActivePowers returns a list of all active powers',
 			() => {
@@ -199,17 +219,17 @@ describe('PowerManager', () => {
 
 	describe('isActive', () => {
 		const input = Symbol('Future');
-		const powers = ['ice', 'shield', 'double', 'superBat'];
+		const power = 'ice';
 		const state
-		= { frozenTill: 1, superTill: 2, shieldTill: 3, doubleTill: 4 };
+		= { duration: { ice: 1 }};
 
 		test('whether isFuture is called', () => {
 			jest.spyOn(helper, 'isFuture')
 				.mockImplementation(jest.fn(() => input));
 			const result
-				= PowerManager.isActive(state, powers[1]);
+				= PowerManager.isActive(state, power);
 
-			expect(helper.isFuture).toHaveBeenCalledWith(state.shieldTill);
+			expect(helper.isFuture).toHaveBeenCalledWith(state.duration[power]);
 			expect(result).toEqual(input);
 		});
 	});

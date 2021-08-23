@@ -24,11 +24,14 @@ const Powers = {
 		const adjustment = getVariance(variance) * duration;
 
 		return {
-			frozenTill: adjustTime(
-				state.frozenTill,
-				adjustment,
-				'seconds'
-			),
+			duration: {
+				...duration,
+				ice: adjustTime(
+					state.duration.ice,
+					adjustment,
+					'seconds'
+				),
+			},
 		};
 	},
 
@@ -53,11 +56,14 @@ const Powers = {
 		const adjustment = getVariance(variance) * duration;
 
 		return {
-			superTill: adjustTime(
-				state.superTill,
-				adjustment,
-				'seconds',
-			),
+			duration: {
+				...duration,
+				superBat: adjustTime(
+					state.duration.superBat,
+					adjustment,
+					'seconds'
+				),
+			},
 		};
 	},
 
@@ -66,11 +72,14 @@ const Powers = {
 		const adjustment = getVariance(variance) * duration;
 
 		return {
-			shieldTill: adjustTime(
-				state.shieldTill,
-				adjustment,
-				'seconds',
-			),
+			duration: {
+				...duration,
+				shield: adjustTime(
+					state.duration.shield,
+					adjustment,
+					'seconds'
+				),
+			},
 		};
 	},
 
@@ -90,11 +99,14 @@ const Powers = {
 		const adjustment = getVariance(variance) * duration;
 
 		return {
-			doubleTill: adjustTime(
-				state.doubleTill,
-				adjustment,
-				'seconds',
-			),
+			duration: {
+				...duration,
+				double: adjustTime(
+					state.duration.double,
+					adjustment,
+					'seconds',
+				),
+			},
 		};
 	},
 };

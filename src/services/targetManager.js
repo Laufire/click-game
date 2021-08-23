@@ -84,7 +84,8 @@ const swatEffects = {
 
 const swatTarget = ({ state, data }) => ({
 	...swatEffects[data.type] && swatEffects[data.type](state, data),
-	targets: decreaseTargetLives(
+	// eslint-disable-next-line no-use-before-define
+	targets: TargetManager.decreaseTargetLives(
 		state.targets, [data], PowerManager.getDamage(state)
 	),
 });

@@ -4,7 +4,7 @@ import config from '../../core/config';
 import { getRandomX, getRandomY } from '../positionService';
 import { getId, isFuture } from '../helperService';
 import Powers from './powers';
-import { damage, stateKeysToPowers } from './data';
+import { damage } from './data';
 
 const powerKeys = keys(config.powers);
 
@@ -37,24 +37,14 @@ const activatePower = ({ state, data }) => Powers[data.type](state);
 const removePower = ({ state: { powers }, data }) =>
 	powers.filter((current) => current.id !== data.id);
 
-const getActivePowers = ({ state }) => keys(stateKeysToPowers)
-	.filter((stateKey) => isFuture(state[stateKey]))
-	.map((stateKey) => stateKeysToPowers[stateKey]);
+const getActivePowers = ({ state }) => keys(state.duration)
+	.filter((stateKey) => isFuture(state.duration[stateKey]));
 
-const isActive = (state, power) => {
-	const powers = {
-		ice: 'frozenTill',
-		shield: 'shieldTill',
-		superBat: 'superTill',
-		double: 'doubleTill',
-	};
-	const powerTill = powers[power];
+const isActive = (state, power) => isFuture(state.duration[power]);
 
-	return isFuture(state[powerTill]);
-};
-
-const getBatType = (state) => (
-	isActive(state, 'superBat') ? 'super' : 'normal');
+// TODO: Standardise the input parameter as Context.
+const getBatType = (state) =>
+	(isActive(state, 'superBat') ? 'super' : 'normal');
 
 const getDamage = (state) => damage[getBatType(state)];
 
