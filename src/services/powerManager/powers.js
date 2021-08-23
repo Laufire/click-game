@@ -1,9 +1,10 @@
 import { rndBetween, rndValue, rndValues } from '@laufire/utils/random';
-import { keys } from '@laufire/utils/collection';
+import { keys, map } from '@laufire/utils/collection';
 import config from '../../core/config';
 import TargetManager from '../targetManager';
 import { adjustTime, getVariance } from '../helperService';
 import PlayerManager from '../playerManager';
+import { getTransientPowers } from '../../core/helpers';
 
 const Powers = {
 	bomb: (state) => {
@@ -16,22 +17,6 @@ const Powers = {
 				state.targets, impactedTargets,
 				rndBetween(damage.min, damage.max)
 			),
-		};
-	},
-
-	ice: (state) => {
-		const { duration, variance } = config.powers.ice;
-		const adjustment = getVariance(variance) * duration;
-
-		return {
-			duration: {
-				...duration,
-				ice: adjustTime(
-					state.duration.ice,
-					adjustment,
-					'seconds'
-				),
-			},
 		};
 	},
 
@@ -51,38 +36,6 @@ const Powers = {
 			: { lives: PlayerManager.increaseLives(state, lives) };
 	},
 
-	superBat: (state) => {
-		const { duration, variance } = config.powers.superBat;
-		const adjustment = getVariance(variance) * duration;
-
-		return {
-			duration: {
-				...duration,
-				superBat: adjustTime(
-					state.duration.superBat,
-					adjustment,
-					'seconds'
-				),
-			},
-		};
-	},
-
-	shield: (state) => {
-		const { duration, variance } = config.powers.shield;
-		const adjustment = getVariance(variance) * duration;
-
-		return {
-			duration: {
-				...duration,
-				shield: adjustTime(
-					state.duration.shield,
-					adjustment,
-					'seconds'
-				),
-			},
-		};
-	},
-
 	nuke: (state) => {
 		const { damage } = config.powers.nuke.effect;
 
@@ -94,21 +47,21 @@ const Powers = {
 		};
 	},
 
-	double: (state) => {
-		const { duration, variance } = config.powers.double;
+	...map(getTransientPowers(), (power, powerKey) => (state) => {
+		const { duration, variance } = power;
 		const adjustment = getVariance(variance) * duration;
 
 		return {
 			duration: {
 				...duration,
-				double: adjustTime(
-					state.duration.double,
+				[powerKey]: adjustTime(
+					state.duration[powerKey],
 					adjustment,
-					'seconds',
+					'seconds'
 				),
 			},
 		};
-	},
+	}),
 };
 
 export default Powers;
