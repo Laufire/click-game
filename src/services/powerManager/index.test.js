@@ -109,6 +109,7 @@ describe('PowerManager', () => {
 					duration: { superBat },
 				});
 
+			expect(helper.isFuture).toHaveBeenCalledWith(superBat);
 			expect(result).toEqual(expectedDamage);
 		});
 		test('geDamage returns normalbat when power is not active', () => {
@@ -121,6 +122,7 @@ describe('PowerManager', () => {
 				duration: { superBat },
 			});
 
+			expect(helper.isFuture).toHaveBeenCalledWith(superBat);
 			expect(result).toEqual(expectedDamage);
 		});
 	});
@@ -136,6 +138,7 @@ describe('PowerManager', () => {
 					duration: { superBat },
 				});
 
+				expect(helper.isFuture).toHaveBeenCalledWith(superBat);
 				expect(result).toEqual('normal');
 			});
 
@@ -148,6 +151,7 @@ describe('PowerManager', () => {
 					duration: { superBat },
 				});
 
+				expect(helper.isFuture).toHaveBeenCalledWith(superBat);
 				expect(result).toEqual('super');
 			});
 	});
