@@ -47,21 +47,17 @@ const Powers = {
 		};
 	},
 
-	...map(getTransientPowers(), (power, powerKey) => (state) => {
-		const { duration, variance } = power;
-		const adjustment = getVariance(variance) * duration;
-
-		return {
+	...map(getTransientPowers(), ({ duration, variance }, powerKey) =>
+		(state) => ({
 			duration: {
 				...duration,
 				[powerKey]: adjustTime(
 					state.duration[powerKey],
-					adjustment,
+					getVariance(variance) * duration,
 					'seconds'
 				),
 			},
-		};
-	}),
+		})),
 };
 
 export default Powers;
