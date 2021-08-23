@@ -1,5 +1,7 @@
 import config from './config';
 import TargetManager from '../services/targetManager';
+import { map } from '@laufire/utils/collection';
+import { getTransientPowers } from './helpers';
 
 const { getTarget } = TargetManager;
 const timeZero = new Date();
@@ -14,13 +16,7 @@ const seed = {
 	powers: [],
 	score: 0,
 	lives: config.maxLives,
-	duration: {
-		// TODO: Auto populate the values.
-		ice: timeZero,
-		superBat: timeZero,
-		shield: timeZero,
-		double: timeZero,
-	},
+	duration: { ...map(getTransientPowers(), () => timeZero) },
 };
 
 export default seed;
