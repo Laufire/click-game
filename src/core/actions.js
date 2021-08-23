@@ -10,9 +10,8 @@ const addTargets = (context) => ({
 	targets: TargetManager.addTargets(context),
 });
 
-const decreaseLives = (context) => ({
-	lives: PlayerManager
-		.decreaseLives({ ...context, data: context.config.penalDamage }),
+const swatBoard = (context) => ({
+	lives: PlayerManager.penalize(context),
 });
 
 const removeTarget = (context) => ({
@@ -66,7 +65,7 @@ const attackPlayer = (context) => ({
 const actions = {
 	moveTargets,
 	addTargets,
-	decreaseLives,
+	swatBoard,
 	restart,
 	removeTarget,
 	activatePower,

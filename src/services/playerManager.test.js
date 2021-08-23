@@ -8,7 +8,7 @@ import PowerManager from './powerManager';
 
 describe('PlayerManager', () => {
 	const { adjustScore, decreaseLives, isAlive, increaseLives,
-		getHealthRatio, getHealthColor } = PlayerManager;
+		getHealthRatio, getHealthColor, penalize } = PlayerManager;
 
 	const state = secure({
 		lives: 3,
@@ -44,36 +44,16 @@ describe('PlayerManager', () => {
 		});
 	});
 
-	describe('decreaseLives', () => {
+	test('decreaseLives returns decreased lives', () => {
 		const context = {
 			state,
 		};
+		const expectedResult = state.lives - config.penalDamage;
 
-		test('decreaseLives returns unchanged '
-		+ 'lives when the shield is active', () => {
-			const expectedResult = state.lives;
+		const result = decreaseLives({ ...context,
+			data: config.penalDamage });
 
-			jest.spyOn(PowerManager, 'isActive').mockReturnValue(true);
-
-			const result = decreaseLives({ ...context,
-				data: config.penalDamage });
-
-			expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'shield');
-			expect(result).toEqual(expectedResult);
-		});
-
-		test('decreaseLives returns decreased lives'
-	+ 'when the shield is inactive', () => {
-			const expectedResult = state.lives - config.penalDamage;
-
-			jest.spyOn(PowerManager, 'isActive').mockReturnValue(false);
-
-			const result = decreaseLives({ ...context,
-				data: config.penalDamage });
-
-			expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'shield');
-			expect(result).toEqual(expectedResult);
-		});
+		expect(result).toEqual(expectedResult);
 	});
 
 	describe('isAlive', () => {
@@ -133,4 +113,34 @@ describe('PlayerManager', () => {
 
 			expect(result).toEqual(expectedResult);
 		});
+
+	describe('penalize', () => {
+		const context = {
+			state,
+			config,
+		};
+
+		test('penalize returns unchanged '
+			+ 'lives when the shield is active', () => {
+			const returned = state.lives;
+
+			jest.spyOn(PowerManager, 'isActive').mockReturnValue(true);
+
+			const result = penalize(context);
+
+			expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'shield');
+			expect(result).toEqual(returned);
+		});
+
+		test('penalize returns decreased lives'
+		+ 'when the shield is inactive', () => {
+			const expectedResult = context.state.lives - config.penalDamage;
+
+			jest.spyOn(PowerManager, 'isActive').mockReturnValue(false);
+
+			const result = penalize(context);
+
+			expect(result).toEqual(expectedResult);
+		});
+	});
 });

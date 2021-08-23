@@ -78,6 +78,13 @@ describe('Proxies', () => {
 			},
 			impactedKey: 'lives',
 		},
+		swatBoard: {
+			mock: {
+				library: PlayerManager,
+				func: 'penalize',
+			},
+			impactedKey: 'lives',
+		},
 	};
 
 	map(proxies, (params, action) =>
@@ -166,27 +173,5 @@ describe('Proxies', () => {
 		expect(TargetManager.getTargetsScore)
 			.toHaveBeenCalledWith({ ...mockContext, data: killedTargets });
 		expect(result).toMatchObject({ score });
-	});
-
-	test('decreaseLives', () => {
-		jest.spyOn(PlayerManager, 'decreaseLives')
-			.mockReturnValue(returned);
-
-		const mockContext = {
-			config: {
-				penalDamage: Symbol('penalDamage'),
-			},
-			data: Symbol('data'),
-		};
-
-		const { decreaseLives } = Actions;
-		const result = decreaseLives(mockContext);
-
-		expect(PlayerManager.decreaseLives)
-			.toHaveBeenCalledWith({
-				...mockContext,
-				data: mockContext.config.penalDamage,
-			});
-		expect(result).toMatchObject({ lives: returned });
 	});
 });

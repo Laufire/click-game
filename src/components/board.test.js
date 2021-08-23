@@ -14,12 +14,12 @@ describe('Board', () => {
 	});
 
 	test('when clicked triggers the action, decreaseLives', () => {
-		jest.spyOn(actions, 'decreaseLives').mockImplementation();
+		jest.spyOn(actions, 'swatBoard').mockImplementation();
 
 		const component = render(Board()).getByRole('board');
 
 		fireEvent.click(component);
 
-		expect(actions.decreaseLives).toHaveBeenCalled();
+		expect(actions.swatBoard).toHaveBeenCalled();
 	});
 });

@@ -9,9 +9,7 @@ const adjustScore = (state, score) => Math.max(state.score
 			: score), 0);
 
 const decreaseLives = ({ state, data: damage }) =>
-	(PowerManager.isActive(state, 'shield')
-		? state.lives
-		: Math.max(state.lives - damage, 0));
+	Math.max(state.lives - damage, 0);
 
 const increaseLives = (state, lives) =>
 	Math.min(state.lives + lives, config.maxLives);
@@ -26,6 +24,12 @@ const getHealthColor = (healthRatio) =>
 
 const isAlive = (context) => context.state.lives !== 0;
 
+const penalize = (context) => (
+	PowerManager.isActive(context.state, 'shield')
+		? context.state.lives
+		: decreaseLives({ ...context, data: context.config.penalDamage })
+);
+
 const PlayerManager = {
 	adjustScore,
 	decreaseLives,
@@ -33,6 +37,7 @@ const PlayerManager = {
 	getHealthRatio,
 	getHealthColor,
 	isAlive,
+	penalize,
 };
 
 export default PlayerManager;

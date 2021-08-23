@@ -6,7 +6,7 @@ const Board = () =>
 	<div
 		role="board"
 		className="board"
-		onClick={ context.actions.decreaseLives }
+		onClick={ context.actions.swatBoard }
 	/>;
 
 export default Board;
