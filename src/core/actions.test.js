@@ -7,88 +7,92 @@ import TargetManager from '../services/targetManager';
 import PowerManager from '../services/powerManager/index';
 import PlayerManager from '../services/playerManager';
 
-describe('Proxies', () => {
-	const context = Symbol('context');
+describe('actions', () => {
 	const returned = Symbol('returned');
-	const testProxy = ({ mock, impactedKey, action }) => {
-		const { library, func } = mock;
 
-		jest.spyOn(library,	func).mockImplementation(jest.fn(() => returned));
+	describe('proxies', () => {
+		const context = Symbol('context');
+		const testProxy = ({ mock, impactedKey, action }) => {
+			const { library, func } = mock;
 
-		const result = Actions[action](context);
+			jest.spyOn(library,	func)
+				.mockImplementation(jest.fn(() => returned));
 
-		expect(library[func]).toHaveBeenCalledWith(context);
-		impactedKey
-			? expect(result).toMatchObject({ [impactedKey]: returned })
-			: expect(result).toEqual(returned);
-	};
+			const result = Actions[action](context);
 
-	const proxies = {
-		moveTargets: {
-			mock: {
-				library: TargetManager,
-				func: 'moveTargets',
-			},
-			impactedKey: 'targets',
-		},
-		addTargets: {
-			mock: {
-				library: TargetManager,
-				func: 'addTargets',
-			},
-			impactedKey: 'targets',
-		},
-		removeExpiredPowers: {
-			mock: {
-				library: PowerManager,
-				func: 'removeExpiredPowers',
-			},
-			impactedKey: 'powers',
-		},
-		removeActivatedPower: {
-			mock: {
-				library: PowerManager,
-				func: 'removePower',
-			},
-			impactedKey: 'powers',
-		},
-		addPowers: {
-			mock: {
-				library: PowerManager,
-				func: 'addPowers',
-			},
-			impactedKey: 'powers',
-		},
-		activatePower: {
-			mock: {
-				library: PowerManager,
-				func: 'activatePower',
-			},
-		},
-		swatTarget: {
-			mock: {
-				library: TargetManager,
-				func: 'swatTarget',
-			},
-		},
-		attackPlayer: {
-			mock: {
-				library: PlayerManager,
-				func: 'isRepellent',
-			},
-			impactedKey: 'lives',
-		},
-		swatBoard: {
-			mock: {
-				library: PlayerManager,
-				func: 'penalize',
-			},
-			impactedKey: 'lives',
-		},
-	};
+			expect(library[func]).toHaveBeenCalledWith(context);
+			impactedKey
+				? expect(result).toMatchObject({ [impactedKey]: returned })
+				: expect(result).toEqual(returned);
+		};
 
-	map(proxies, (params, action) =>
-		test(action, () => testProxy({ ...params, action })));
+		const proxies = {
+			moveTargets: {
+				mock: {
+					library: TargetManager,
+					func: 'moveTargets',
+				},
+				impactedKey: 'targets',
+			},
+			addTargets: {
+				mock: {
+					library: TargetManager,
+					func: 'addTargets',
+				},
+				impactedKey: 'targets',
+			},
+			removeExpiredPowers: {
+				mock: {
+					library: PowerManager,
+					func: 'removeExpiredPowers',
+				},
+				impactedKey: 'powers',
+			},
+			removeActivatedPower: {
+				mock: {
+					library: PowerManager,
+					func: 'removePower',
+				},
+				impactedKey: 'powers',
+			},
+			addPowers: {
+				mock: {
+					library: PowerManager,
+					func: 'addPowers',
+				},
+				impactedKey: 'powers',
+			},
+			activatePower: {
+				mock: {
+					library: PowerManager,
+					func: 'activatePower',
+				},
+			},
+			swatTarget: {
+				mock: {
+					library: TargetManager,
+					func: 'swatTarget',
+				},
+			},
+			attackPlayer: {
+				mock: {
+					library: PlayerManager,
+					func: 'isRepellent',
+				},
+				impactedKey: 'lives',
+			},
+			swatBoard: {
+				mock: {
+					library: PlayerManager,
+					func: 'penalize',
+				},
+				impactedKey: 'lives',
+			},
+		};
+
+		map(proxies, (params, action) =>
+			test(action, () => testProxy({ ...params, action })));
+	});
 
 	test('seed returns seed', () => {
 		const seed = Symbol('seed');
@@ -102,15 +106,15 @@ describe('Proxies', () => {
 		jest.spyOn(TargetManager, 'removeTargets')
 			.mockImplementation(jest.fn(() => returned));
 
-		const mockContext = {
+		const context = {
 			data: Symbol('data'),
 		};
 
 		const { removeTarget } = Actions;
-		const result = removeTarget(mockContext);
+		const result = removeTarget(context);
 
 		expect(TargetManager.removeTargets)
-			.toHaveBeenCalledWith({ ...mockContext, data: [mockContext.data] });
+			.toHaveBeenCalledWith({ ...context, data: [context.data] });
 		expect(result).toMatchObject({ targets: returned });
 	});
 
@@ -130,18 +134,18 @@ describe('Proxies', () => {
 		jest.spyOn(TargetManager, 'removeTargets')
 			.mockReturnValue(removedTargets);
 
-		const mockContext = {
+		const context = {
 			data: [returned],
 		};
 		const { removeDeadTargets } = Actions;
-		const result = removeDeadTargets(mockContext);
+		const result = removeDeadTargets(context);
 
 		expect(TargetManager.getKilledTargets)
-			.toHaveBeenCalledWith(mockContext);
+			.toHaveBeenCalledWith(context);
 		expect(TargetManager.getExpiredTargets)
-			.toHaveBeenCalledWith(mockContext);
+			.toHaveBeenCalledWith(context);
 		expect(TargetManager.removeTargets)
-			.toHaveBeenCalledWith({ ...mockContext, data: deadTargets });
+			.toHaveBeenCalledWith({ ...context, data: deadTargets });
 		expect(result).toMatchObject({ targets: removedTargets });
 	});
 
@@ -157,21 +161,21 @@ describe('Proxies', () => {
 		jest.spyOn(TargetManager, 'getTargetsScore')
 			.mockReturnValue(targetsScore);
 
-		const mockContext = {
+		const context = {
 			state: {
 				score,
 			},
 		};
 
 		const { computeScore } = Actions;
-		const result = computeScore(mockContext);
+		const result = computeScore(context);
 
 		expect(PlayerManager.adjustScore)
-			.toHaveBeenCalledWith(mockContext.state, targetsScore);
+			.toHaveBeenCalledWith(context.state, targetsScore);
 		expect(TargetManager.getKilledTargets)
-			.toHaveBeenCalledWith(mockContext);
+			.toHaveBeenCalledWith(context);
 		expect(TargetManager.getTargetsScore)
-			.toHaveBeenCalledWith({ ...mockContext, data: killedTargets });
+			.toHaveBeenCalledWith({ ...context, data: killedTargets });
 		expect(result).toMatchObject({ score });
 	});
 });
