@@ -9,10 +9,11 @@ import * as collection from '@laufire/utils/collection';
 import * as helper from '../helperService';
 import TargetManager from '../targetManager';
 import PlayerManager from '../playerManager';
+import { getTransientPowers } from '../../core/helpers';
+import { map } from '@laufire/utils/collection';
 
 describe('Powers', () => {
-	const { bomb, ice, superBat, gift, surprise, shield, nuke, double }
-		= Powers;
+	const { bomb, gift, surprise, nuke } = Powers;
 
 	describe('bomb', () => {
 		const randomTargets = Mock.getRandomTargets();
@@ -49,64 +50,6 @@ describe('Powers', () => {
 			);
 
 			expect(result).toMatchObject({ targets });
-		});
-	});
-
-	describe('ice', () => {
-		const newTime = Symbol('newTime');
-		const state = {
-			duration: { ice: Symbol('ice') },
-		};
-		const { duration, variance } = config.powers.ice;
-		const adjustment = variance * duration;
-		const second = 'seconds';
-
-		test('ice return the frozenTill', () => {
-			jest.spyOn(helper, 'adjustTime')
-				.mockImplementation(() => newTime);
-
-			jest.spyOn(helper, 'getVariance')
-				.mockImplementation(() => variance);
-
-			const result = ice(state);
-
-			expect(helper.getVariance)
-				.toHaveBeenCalledWith(variance);
-			expect(helper.adjustTime)
-				.toHaveBeenCalledWith(
-					state.duration.ice, adjustment, second
-				);
-			expect(result).toMatchObject({ duration: {
-				ice: newTime,
-			}});
-		});
-	});
-
-	describe('superBat', () => {
-		const newTime = Symbol('newTime');
-		const state = {
-			duration: { superBat: Symbol('superBat') },
-		};
-		const { duration, variance } = config.powers.superBat;
-		const adjustment = variance * duration;
-		const second = 'seconds';
-
-		test('superBat return the superTill', () => {
-			jest.spyOn(helper, 'adjustTime')
-				.mockImplementation(() => newTime);
-			jest.spyOn(helper, 'getVariance')
-				.mockImplementation(() => variance);
-
-			const result = superBat(state);
-
-			expect(helper.getVariance).toHaveBeenCalledWith(variance);
-			expect(helper.adjustTime)
-				.toHaveBeenCalledWith(
-					state.duration.superBat, adjustment, second
-				);
-			expect(result).toMatchObject({ duration: {
-				superBat: newTime,
-			}});
 		});
 	});
 
@@ -178,34 +121,6 @@ describe('Powers', () => {
 		});
 	});
 
-	describe('shield', () => {
-		const newTime = Symbol('newTime');
-		const state = {
-			duration: { shield: Symbol('shield') },
-		};
-		const { duration, variance } = config.powers.shield;
-		const adjustment = variance * duration;
-		const second = 'seconds';
-
-		test('shield returns the shieldTill', () => {
-			jest.spyOn(helper, 'getVariance')
-				.mockImplementation(() => variance);
-			jest.spyOn(helper, 'adjustTime')
-				.mockImplementation(() => newTime);
-
-			const result = shield(state);
-
-			expect(helper.getVariance).toHaveBeenCalledWith(variance);
-			expect(helper.adjustTime)
-				.toHaveBeenCalledWith(
-					state.duration.shield, adjustment, second
-				);
-			expect(result).toMatchObject({ duration: {
-				shield: newTime,
-			}});
-		});
-	});
-
 	describe('nuke', () => {
 		const targets = [Symbol('target')];
 		const powers = [];
@@ -232,31 +147,34 @@ describe('Powers', () => {
 		});
 	});
 
-	describe('double', () => {
-		const newTime = Symbol('newTime');
-		const state = {
-			duration: { double: Symbol('double') },
-		};
-		const { duration, variance } = config.powers.double;
-		const adjustment = variance * duration;
-		const second = 'seconds';
+	describe('Transient Powers', () => {
+		map(getTransientPowers(), ({ duration, variance }, power) => {
+			const newTime = Symbol('newTime');
+			const state = {
+				duration: { [power]: Symbol(power) },
+			};
+			const adjustment = variance * duration;
+			const second = 'seconds';
 
-		test('double return the doubleTill', () => {
-			jest.spyOn(helper, 'adjustTime')
-				.mockImplementation(() => newTime);
-			jest.spyOn(helper, 'getVariance')
-				.mockImplementation(() => variance);
+			test(power, () => {
+				jest.spyOn(helper, 'adjustTime')
+					.mockImplementation(() => newTime);
 
-			const result = double(state);
+				jest.spyOn(helper, 'getVariance')
+					.mockImplementation(() => variance);
 
-			expect(helper.getVariance).toHaveBeenCalledWith(variance);
-			expect(helper.adjustTime)
-				.toHaveBeenCalledWith(
-					state.duration.double, adjustment, second
-				);
-			expect(result).toMatchObject({ duration: {
-				double: newTime,
-			}});
+				const result = Powers[power](state);
+
+				expect(helper.getVariance)
+					.toHaveBeenCalledWith(variance);
+				expect(helper.adjustTime)
+					.toHaveBeenCalledWith(
+						state.duration[power], adjustment, second
+					);
+				expect(result).toMatchObject({ duration: {
+					[power]: newTime,
+				}});
+			});
 		});
 	});
 });
