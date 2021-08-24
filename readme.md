@@ -6,7 +6,7 @@
 
 ### Powers
 
-* Repellent - Prevents the targets from attacking the player, for a set amount of time.
+* *none, yet.*
 
 ### Features
 
