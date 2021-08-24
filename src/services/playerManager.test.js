@@ -8,11 +8,11 @@ import PowerManager from './powerManager';
 import TargetManager from './targetManager';
 
 describe('PlayerManager', () => {
-	const { adjustScore, decreaseLives, isAlive, increaseLives,
+	const { adjustScore, decreaseHealth, isAlive, increaseHealth,
 		getHealthRatio, getHealthColor, penalize, getAttacked } = PlayerManager;
 
 	const state = secure({
-		lives: 3,
+		health: 3,
 		score: 10,
 	});
 
@@ -45,31 +45,31 @@ describe('PlayerManager', () => {
 		});
 	});
 
-	test('decreaseLives returns decreased lives', () => {
+	test('decreaseHealth returns decreased health', () => {
 		const context = {
 			state,
 		};
-		const expectedResult = state.lives - config.penalDamage;
+		const expectedResult = state.health - config.penalDamage;
 
-		const result = decreaseLives({ ...context,
+		const result = decreaseHealth({ ...context,
 			data: config.penalDamage });
 
 		expect(result).toEqual(expectedResult);
 	});
 
 	describe('isAlive', () => {
-		test('returns false if lives is equal to zero', () => {
+		test('returns false if health is equal to zero', () => {
 			const context = {
-				state: { lives: 0 },
+				state: { health: 0 },
 			};
 
 			const result = isAlive(context);
 
 			expect(result).toEqual(false);
 		});
-		test('returns true if lives is greater than zero', () => {
+		test('returns true if health is greater than zero', () => {
 			const context = {
-				state: { lives: 3 },
+				state: { health: 3 },
 			};
 
 			const result = isAlive(context);
@@ -77,24 +77,25 @@ describe('PlayerManager', () => {
 			expect(result).toEqual(true);
 		});
 	});
-	describe('increaseLives', () => {
-		test('returns increased lives while lives is less than max limit',
+	describe('increaseHealth', () => {
+		test('returns increased health while health is less than max limit',
 			() => {
-				const result = increaseLives({ lives: config.maxLives - 1 }, 1);
+				const result = increaseHealth({ health: config.maxHealth - 1 },
+					1);
 
-				expect(result).toEqual(config.maxLives);
+				expect(result).toEqual(config.maxHealth);
 			});
-		test('returns the same lives while lives is greater than max limit',
+		test('returns the same health while health is greater than max limit',
 			() => {
-				const result = increaseLives({ lives: config.maxLives }, 1);
+				const result = increaseHealth({ health: config.maxHealth }, 1);
 
-				expect(result).toEqual(config.maxLives);
+				expect(result).toEqual(config.maxHealth);
 			});
 	});
-	test('getHealthRatio returns the ratio between state lives & max lives',
+	test('getHealthRatio returns the ratio between state health & max health',
 		() => {
 			const context = {
-				state: { lives: 73 },
+				state: { health: 73 },
 			};
 
 			const expectedResult = 0.73;
@@ -122,8 +123,8 @@ describe('PlayerManager', () => {
 		};
 
 		test('penalize returns unchanged '
-			+ 'lives when the shield is active', () => {
-			const returned = state.lives;
+			+ 'health when the shield is active', () => {
+			const returned = state.health;
 
 			jest.spyOn(PowerManager, 'isActive').mockReturnValue(true);
 
@@ -133,9 +134,9 @@ describe('PlayerManager', () => {
 			expect(result).toEqual(returned);
 		});
 
-		test('penalize returns decreased lives'
+		test('penalize returns decreased health'
 		+ 'when the shield is inactive', () => {
-			const expectedResult = context.state.lives - config.penalDamage;
+			const expectedResult = context.state.health - config.penalDamage;
 
 			jest.spyOn(PowerManager, 'isActive').mockReturnValue(false);
 
@@ -151,8 +152,8 @@ describe('PlayerManager', () => {
 		};
 
 		test('getAttacked returns unchanged '
-			+ 'lives when the repellent is active', () => {
-			const returned = state.lives;
+			+ 'health when the repellent is active', () => {
+			const returned = state.health;
 
 			jest.spyOn(PowerManager, 'isActive').mockReturnValue(true);
 

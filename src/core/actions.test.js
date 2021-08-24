@@ -79,14 +79,14 @@ describe('actions', () => {
 					library: PlayerManager,
 					func: 'getAttacked',
 				},
-				impactedKey: 'lives',
+				impactedKey: 'health',
 			},
 			swatBoard: {
 				mock: {
 					library: PlayerManager,
 					func: 'penalize',
 				},
-				impactedKey: 'lives',
+				impactedKey: 'health',
 			},
 		};
 

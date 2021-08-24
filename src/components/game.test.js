@@ -15,14 +15,14 @@ import Game from './game';
 import PlayerManager from '../services/playerManager';
 
 describe('Game', () => {
-	test('Game renders the score, lives', () => {
+	test('Game renders the score, health', () => {
 		const { getByRole } = render(Game());
 
 		expect(getByRole('score')).toBeInTheDocument();
 		expect(getByRole('healthBar')).toBeInTheDocument();
 	});
 
-	test('Game render gameOverScreen when the lives is 0', () => {
+	test('Game render gameOverScreen when the health is 0', () => {
 		jest.spyOn(PlayerManager, 'isAlive').mockReturnValue(false);
 
 		const component = render(Game()).getByRole('gameOverScreen');
@@ -31,7 +31,7 @@ describe('Game', () => {
 		expect(component).toBeInTheDocument();
 	});
 
-	test('Game render gameScreen when the lives is greater than 0', () => {
+	test('Game render gameScreen when the health is greater than 0', () => {
 		jest.spyOn(PlayerManager, 'isAlive').mockReturnValue(true);
 
 		const component = render(Game()).getByRole('gameScreen');

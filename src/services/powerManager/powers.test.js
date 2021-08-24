@@ -32,7 +32,7 @@ describe('Powers', () => {
 			jest.spyOn(random,
 				'rndBetween').mockImplementation(() => damage);
 			jest.spyOn(TargetManager,
-				'decreaseTargetLives').mockImplementation(() =>
+				'decreaseTargetHealth').mockImplementation(() =>
 				targets);
 
 			const result = bomb({ targets });
@@ -45,7 +45,7 @@ describe('Powers', () => {
 			expect(random.rndBetween)
 				.toHaveBeenCalledWith(min, max);
 
-			expect(TargetManager.decreaseTargetLives).toHaveBeenCalledWith(
+			expect(TargetManager.decreaseTargetHealth).toHaveBeenCalledWith(
 				targets, randomTargets, damage
 			);
 
@@ -53,14 +53,14 @@ describe('Powers', () => {
 		});
 	});
 
-	describe('gift randomly increases the score or lives', () => {
+	describe('gift randomly increases the score or health', () => {
 		const score = 5;
-		const lives = 3;
+		const health = 3;
 		const addScore = Symbol('score');
-		const addLife = config.powers.gift.effect.lives;
+		const addLife = config.powers.gift.effect.health;
 		const state = {
 			score,
-			lives,
+			health,
 		};
 
 		test('gift sometimes increase the score', () => {
@@ -83,17 +83,17 @@ describe('Powers', () => {
 			});
 		});
 
-		test('gift sometimes increase the lives', () => {
+		test('gift sometimes increase the health', () => {
 			jest.spyOn(random, 'rndBetween')
 				.mockImplementation(() => 0);
-			jest.spyOn(PlayerManager, 'increaseLives');
+			jest.spyOn(PlayerManager, 'increaseHealth');
 
 			const result = gift(state);
 
-			expect(PlayerManager.increaseLives)
+			expect(PlayerManager.increaseHealth)
 				.toHaveBeenCalledWith(state, addLife);
 			expect(result).toMatchObject({
-				lives: lives + addLife,
+				health: health + addLife,
 			});
 		});
 	});
@@ -135,12 +135,12 @@ describe('Powers', () => {
 
 		test('Returns modified targets and powers', () => {
 			jest.spyOn(TargetManager,
-				'decreaseTargetLives').mockImplementation(() =>
+				'decreaseTargetHealth').mockImplementation(() =>
 				targets);
 
 			const result = nuke(state);
 
-			expect(TargetManager.decreaseTargetLives).toHaveBeenCalledWith(
+			expect(TargetManager.decreaseTargetHealth).toHaveBeenCalledWith(
 				state.targets, state.targets, damage
 			);
 			expect(result).toMatchObject(expectedResult);

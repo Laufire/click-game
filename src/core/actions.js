@@ -11,7 +11,7 @@ const addTargets = (context) => ({
 });
 
 const swatBoard = (context) => ({
-	lives: PlayerManager.penalize(context),
+	health: PlayerManager.penalize(context),
 });
 
 const removeTarget = (context) => ({
@@ -59,7 +59,7 @@ const swatTarget = (context) =>
 	TargetManager.swatTarget(context);
 
 const attackPlayer = (context) => ({
-	lives: PlayerManager.getAttacked(context),
+	health: PlayerManager.getAttacked(context),
 });
 
 const actions = {

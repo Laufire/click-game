@@ -48,7 +48,7 @@ describe('TargetManager', () => {
 
 	describe('getTarget returns target', () => {
 		const adjustedTime = Symbol('adjustedTime');
-		const livesTill = adjustedTime;
+		const healthTill = adjustedTime;
 		const currentTime = Symbol('currentTime');
 		const { getTarget } = TargetManager;
 		const type = 'ant';
@@ -77,7 +77,7 @@ describe('TargetManager', () => {
 				type,
 				...typeConfig,
 				...size,
-				livesTill,
+				healthTill,
 			};
 
 			const result = getTarget({ x, y, type });
@@ -124,19 +124,19 @@ describe('TargetManager', () => {
 
 	describe('swatTarget reduces life', () => {
 		const { swatTarget } = TargetManager;
-		const lives = 3;
+		const health = 3;
 		const score = 10;
 		const spoiler = TargetManager.getTarget({ type: 'spoiler' });
 		const decreasedTargetLive = Symbol('decreasedTargetLive');
 		const damage = Symbol('damage');
 		const state = secure({
 			targets,
-			lives,
+			health,
 			score,
 		});
 
 		const spyOn = () => {
-			jest.spyOn(TargetManager, 'decreaseTargetLives')
+			jest.spyOn(TargetManager, 'decreaseTargetHealth')
 				.mockImplementation(() => decreasedTargetLive);
 			jest.spyOn(PowerManager, 'getDamage')
 				.mockImplementation(() => damage);
@@ -150,7 +150,7 @@ describe('TargetManager', () => {
 			const result = swatTarget({ state: state, data: targetToSwat });
 
 			expect(result).toMatchObject({ targets: decreasedTargetLive });
-			expect(TargetManager.decreaseTargetLives)
+			expect(TargetManager.decreaseTargetHealth)
 				.toHaveBeenCalledWith(
 					state.targets, [targetToSwat], damage
 				);
@@ -168,7 +168,7 @@ describe('TargetManager', () => {
 				const result = swatTarget({ state: state, data: targetToSwat });
 
 				expect(result).toMatchObject({
-					lives: state.lives - config.penalDamage,
+					health: state.health - config.penalDamage,
 				});
 			});
 
@@ -202,7 +202,7 @@ describe('TargetManager', () => {
 			const { getKilledTargets } = TargetManager;
 			const deadTarget = secure({
 				...mosquito,
-				lives: 0,
+				health: 0,
 			});
 			const allTargets = secure([
 				...targets,
@@ -230,8 +230,8 @@ describe('TargetManager', () => {
 				.toEqual(score);
 		});
 
-	describe('decreaseTargetLives returns targets', () => {
-		const { decreaseTargetLives } = TargetManager;
+	describe('decreaseTargetHealth returns targets', () => {
+		const { decreaseTargetHealth } = TargetManager;
 		const impactedTargets = getRandomTargets();
 		const [randomTarget] = impactedTargets;
 
@@ -240,32 +240,32 @@ describe('TargetManager', () => {
 				const damage = 1;
 				const editedTarget = {
 					...randomTarget,
-					lives: randomTarget.lives - damage,
+					health: randomTarget.health - damage,
 				};
 
 				const expectedTargets = replace(
 					targets, randomTarget, editedTarget
 				);
 
-				const result = decreaseTargetLives(
+				const result = decreaseTargetHealth(
 					targets, impactedTargets, damage
 				);
 
 				expect(result).toEqual(expectedTargets);
 			});
 
-		test('returns non negative lives', () => {
-			const damage = randomTarget.lives + 1;
+		test('returns non negative health', () => {
+			const damage = randomTarget.health + 1;
 			const editedTarget = {
 				...randomTarget,
-				lives: 0,
+				health: 0,
 			};
 
 			const expectedTargets = replace(
 				targets, randomTarget, editedTarget
 			);
 
-			const result = decreaseTargetLives(
+			const result = decreaseTargetHealth(
 				targets, impactedTargets, damage
 			);
 
@@ -336,10 +336,10 @@ describe('TargetManager', () => {
 	describe('getExpiredTargets', () => {
 		const data = getRandomTargets();
 		const state = { targets: data };
-		const { livesTill } = data[0];
+		const { healthTill } = data[0];
 
 		test('getExpiredTargets remove the expired target'
-			+ 'when targets livesTill is less than currentTime', () => {
+			+ 'when targets healthTill is less than currentTime', () => {
 			const expectedResult = data;
 
 			jest.spyOn(HelperService, 'isFuture').mockReturnValue(false);
@@ -347,12 +347,12 @@ describe('TargetManager', () => {
 			const result = TargetManager.getExpiredTargets({ state });
 
 			expect(HelperService.isFuture)
-				.toHaveBeenCalledWith(livesTill);
+				.toHaveBeenCalledWith(healthTill);
 			expect(result).toEqual(expectedResult);
 		});
 
 		test('getExpiredTargets cannot remove the expired target'
-				+ 'when targets livesTill is greater than currentTime', () => {
+				+ 'when targets healthTill is greater than currentTime', () => {
 			const expectedResult = [];
 
 			jest.spyOn(HelperService, 'isFuture').mockReturnValue(true);
@@ -360,7 +360,7 @@ describe('TargetManager', () => {
 			const result = TargetManager.getExpiredTargets({ state });
 
 			expect(HelperService.isFuture)
-				.toHaveBeenCalledWith(livesTill);
+				.toHaveBeenCalledWith(healthTill);
 			expect(result).toEqual(expectedResult);
 		});
 	});
@@ -377,12 +377,12 @@ describe('TargetManager', () => {
 			const damage = 0;
 
 			jest.spyOn(random, 'rndBetween').mockReturnValue(0);
-			jest.spyOn(PlayerManager, 'decreaseLives')
+			jest.spyOn(PlayerManager, 'decreaseHealth')
 				.mockReturnValue(decreasedHealth);
 
 			const result = TargetManager.attackPlayer(context);
 
-			expect(PlayerManager.decreaseLives)
+			expect(PlayerManager.decreaseHealth)
 				.toHaveBeenCalledWith({ ...context, data: damage });
 			expect(result).toEqual(decreasedHealth);
 		});
@@ -391,12 +391,12 @@ describe('TargetManager', () => {
 			const damage = 3;
 
 			jest.spyOn(random, 'rndBetween').mockReturnValue(1);
-			jest.spyOn(PlayerManager, 'decreaseLives')
+			jest.spyOn(PlayerManager, 'decreaseHealth')
 				.mockReturnValue(decreasedHealth);
 
 			const result = TargetManager.attackPlayer(context);
 
-			expect(PlayerManager.decreaseLives)
+			expect(PlayerManager.decreaseHealth)
 				.toHaveBeenCalledWith({ ...context, data: damage });
 			expect(result).toEqual(decreasedHealth);
 		});

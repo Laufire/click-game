@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-jest.mock('../core/context', () => ({ state: { lives: 2 }}));
+jest.mock('../core/context', () => ({ state: { health: 2 }}));
 
 import { render } from '@testing-library/react';
 import context from '../core/context';
@@ -22,7 +22,7 @@ describe('HealthBar', () => {
 			.toHaveBeenCalledWith(context);
 		expect(PlayerManager.getHealthColor)
 			.toHaveBeenCalledWith(healthRatio);
-		expect(component).toHaveTextContent(context.state.lives);
+		expect(component).toHaveTextContent(context.state.health);
 		expect(component).toBeInTheDocument();
 	});
 });

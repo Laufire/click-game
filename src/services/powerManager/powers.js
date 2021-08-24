@@ -13,7 +13,7 @@ const Powers = {
 		const impactedTargets = rndValues(state.targets, count);
 
 		return {
-			targets: TargetManager.decreaseTargetLives(
+			targets: TargetManager.decreaseTargetHealth(
 				state.targets, impactedTargets,
 				rndBetween(damage.min, damage.max)
 			),
@@ -28,19 +28,19 @@ const Powers = {
 	},
 
 	gift: (state) => {
-		const { score, lives } = config.powers.gift.effect;
+		const { score, health } = config.powers.gift.effect;
 
 		return rndBetween(0, 1)
 			? { score: PlayerManager.adjustScore(state,
 				rndBetween(score.min, score.max)) }
-			: { lives: PlayerManager.increaseLives(state, lives) };
+			: { health: PlayerManager.increaseHealth(state, health) };
 	},
 
 	nuke: (state) => {
 		const { damage } = config.powers.nuke.effect;
 
 		return {
-			targets: TargetManager.decreaseTargetLives(
+			targets: TargetManager.decreaseTargetHealth(
 				state.targets, state.targets, damage
 			),
 			powers: [],

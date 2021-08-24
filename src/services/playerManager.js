@@ -9,38 +9,38 @@ const adjustScore = (state, score) => Math.max(state.score
 			? score * config.powers.double.effect.multiplier
 			: score), 0);
 
-const decreaseLives = ({ state, data: damage }) =>
-	Math.max(state.lives - damage, 0);
+const decreaseHealth = ({ state, data: damage }) =>
+	Math.max(state.health - damage, 0);
 
-const increaseLives = (state, lives) =>
-	Math.min(state.lives + lives, config.maxLives);
+const increaseHealth = (state, health) =>
+	Math.min(state.health + health, config.maxHealth);
 
 const getHealthRatio = ({ state }) =>
-	state.lives / config.maxLives;
+	state.health / config.maxHealth;
 
 const getHealthColor = (healthRatio) =>
 	config.healthBar.colors[
 		Math.floor((healthRatio * hundred) / config.healthBar.interval)
 		* config.healthBar.interval];
 
-const isAlive = (context) => context.state.lives !== 0;
+const isAlive = (context) => context.state.health !== 0;
 
 const penalize = (context) => (
 	PowerManager.isActive(context.state, 'shield')
-		? context.state.lives
-		: decreaseLives({ ...context, data: context.config.penalDamage })
+		? context.state.health
+		: decreaseHealth({ ...context, data: context.config.penalDamage })
 );
 
 const getAttacked = (context) => (
 	PowerManager.isActive(context.state, 'repellent')
-		? context.state.lives
+		? context.state.health
 		: TargetManager.attackPlayer(context)
 );
 
 const PlayerManager = {
 	adjustScore,
-	decreaseLives,
-	increaseLives,
+	decreaseHealth,
+	increaseHealth,
 	getHealthRatio,
 	getHealthColor,
 	isAlive,

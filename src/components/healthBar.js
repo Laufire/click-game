@@ -17,7 +17,7 @@ const healthBar = () => {
 			} }
 		/>
 		<span className="life-indicator">
-			{context.state.lives}%
+			{context.state.health}%
 		</span>
 	</div>;
 };

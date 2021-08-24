@@ -19,8 +19,7 @@ const delay = 2;
 const config = {
 	tickerDelay: ms * delay,
 	idLength: 8,
-	//	TODO: Rename it as health.
-	maxLives: 100,
+	maxHealth: 100,
 	maxTargets: 5,
 	swatDamage: 1,
 	penalDamage: 1,
@@ -45,7 +44,7 @@ const config = {
 			width: 20,
 			variance: 0.2,
 			lifespan: 10,
-			lives: 1,
+			health: 1,
 			damage: 1,
 			prob: {
 				add: 0.2,
@@ -60,7 +59,7 @@ const config = {
 			width: 10,
 			variance: 0.5,
 			lifespan: 5,
-			lives: 1,
+			health: 1,
 			damage: 1,
 			prob: {
 				attack: 0.5,
@@ -76,7 +75,7 @@ const config = {
 			variance: 0.2,
 			lifespan: 5,
 			damage: 1,
-			lives: 3,
+			health: 3,
 			prob: {
 				attack: 0.5,
 				add: 1,
@@ -91,7 +90,7 @@ const config = {
 			variance: 0.3,
 			lifespan: 3,
 			damage: 1,
-			lives: 1,
+			health: 1,
 			prob: {
 				attack: 0.5,
 				add: 0.1,
@@ -105,7 +104,7 @@ const config = {
 			variance: 0.3,
 			lifespan: 5,
 			damage: 1,
-			lives: 1,
+			health: 1,
 			score: 0,
 			prob: {
 				add: 0.5,
@@ -173,7 +172,7 @@ const config = {
 				remove: 1,
 			},
 			effect: {
-				lives: 1,
+				health: 1,
 				score: {
 					min: 5,
 					max: 10,

@@ -15,7 +15,7 @@ const seed = {
 	],
 	powers: [],
 	score: 0,
-	lives: config.maxLives,
+	health: config.maxHealth,
 	duration: { ...map(getTransientPowers(), () => timeZero) },
 };
 

@@ -25,7 +25,7 @@ const getTarget = ({ x, y, type } = {}) => {
 		y: y !== undefined ? y : getRandomY(size),
 		...typeConfig,
 		...size,
-		livesTill: adjustTime(
+		healthTill: adjustTime(
 			currentTime, lifespan, 'seconds'
 		),
 	};
@@ -54,7 +54,7 @@ const removeTargets = ({ state: { targets }, data: targetsToRemove }) =>
 const getTargetsScore = ({ data: targets }) =>
 	targets.reduce((acc, target) => acc + target.score, 0);
 
-const decreaseTargetLives = (
+const decreaseTargetHealth = (
 	targets, impactedTargets, damage
 ) => {
 	const dataId = impactedTargets.map((impactedTarget) => impactedTarget.id);
@@ -63,18 +63,18 @@ const decreaseTargetLives = (
 		(dataId.includes(target.id)
 			? {
 				...target,
-				lives: Math.max(target.lives - damage, 0),
+				health: Math.max(target.health - damage, 0),
 			}
 			: target));
 };
 
 const getKilledTargets = ({ state: { targets }}) =>
-	targets.filter((target) => target.lives <= 0);
+	targets.filter((target) => target.health <= 0);
 
 // TODO: Extract this into a separate module.
 const swatEffects = {
 	butterfly: (state) => ({
-		lives: state.lives - 1,
+		health: state.health - 1,
 	}),
 	spoiler: (state, data) => ({
 		score: PlayerManager.adjustScore(state,
@@ -85,15 +85,15 @@ const swatEffects = {
 const swatTarget = ({ state, data }) => ({
 	...swatEffects[data.type] && swatEffects[data.type](state, data),
 	// eslint-disable-next-line no-use-before-define
-	targets: TargetManager.decreaseTargetLives(
+	targets: TargetManager.decreaseTargetHealth(
 		state.targets, [data], PowerManager.getDamage(state)
 	),
 });
 
 const getExpiredTargets = ({ state }) =>
-	state.targets.filter((target) => !isFuture(target.livesTill));
+	state.targets.filter((target) => !isFuture(target.healthTill));
 
-const attackPlayer = (context) => PlayerManager.decreaseLives({
+const attackPlayer = (context) => PlayerManager.decreaseHealth({
 	...context,
 	data: context.state.targets.filter((target) =>
 		rndBetween(1, 1 / target.prob.attack) === 1)
@@ -106,7 +106,7 @@ const TargetManager = {
 	getTarget,
 	removeTargets,
 	getTargetsScore,
-	decreaseTargetLives,
+	decreaseTargetHealth,
 	getKilledTargets,
 	swatTarget,
 	getExpiredTargets,

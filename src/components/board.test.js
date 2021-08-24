@@ -13,7 +13,7 @@ describe('Board', () => {
 		expect(component).toHaveClass('board');
 	});
 
-	test('when clicked triggers the action, decreaseLives', () => {
+	test('when clicked triggers the action, decreaseHealth', () => {
 		jest.spyOn(actions, 'swatBoard').mockImplementation();
 
 		const component = render(Board()).getByRole('board');
