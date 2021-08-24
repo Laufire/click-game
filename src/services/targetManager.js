@@ -41,7 +41,7 @@ const moveTargets = ({ state }) =>
 		})));
 
 const getTargets = () => targetTypeKeys.map((type) =>
-	rndBetween(1, 1 / config.targets[type].prob.add) === 1
+	rndBetween(1, 1 / config.targets[type].prob.spawn) === 1
 	&& getTarget({ type })).filter((val) => val);
 
 const addTargets = ({ state: { targets }}) => (targets.length < maxTargets

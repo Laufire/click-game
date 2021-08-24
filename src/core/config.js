@@ -47,7 +47,7 @@ const config = {
 			health: 1,
 			damage: 1,
 			prob: {
-				add: 0.2,
+				spawn: 0.2,
 				attack: 0.5,
 			},
 		},
@@ -63,7 +63,7 @@ const config = {
 			damage: 1,
 			prob: {
 				attack: 0.5,
-				add: 1,
+				spawn: 1,
 			},
 		},
 		spider: {
@@ -93,7 +93,7 @@ const config = {
 			health: 1,
 			prob: {
 				attack: 0.5,
-				add: 0.1,
+				spawn: 0.1,
 			},
 		},
 		spoiler: {
@@ -107,7 +107,7 @@ const config = {
 			health: 1,
 			score: 0,
 			prob: {
-				add: 0.5,
+				spawn: 0.5,
 				attack: 0.5,
 			},
 			effect: {
