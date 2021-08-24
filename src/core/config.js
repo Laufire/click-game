@@ -11,6 +11,7 @@ import flyswatter from '../image/flyswatter.png';
 import shield from '../image/shield.png';
 import nuke from '../image/nuke.png';
 import twox from '../image/double.png';
+import repellent from '../image/repellent.png';
 
 const ms = 1000;
 const delay = 2;
@@ -233,6 +234,18 @@ const config = {
 			},
 			effect: {
 				multiplier: 2,
+			},
+		},
+		repellent: {
+			type: 'repellent',
+			image: repellent,
+			height: 7,
+			width: 10,
+			variance: 0.3,
+			duration: 15,
+			prob: {
+				add: 1,
+				remove: 1,
 			},
 		},
 	},

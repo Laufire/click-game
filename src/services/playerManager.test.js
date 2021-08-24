@@ -5,10 +5,11 @@ import { secure } from '@laufire/utils/collection';
 import config from '../core/config';
 import PlayerManager from './playerManager';
 import PowerManager from './powerManager';
+import TargetManager from './targetManager';
 
 describe('PlayerManager', () => {
 	const { adjustScore, decreaseLives, isAlive, increaseLives,
-		getHealthRatio, getHealthColor, penalize } = PlayerManager;
+		getHealthRatio, getHealthColor, penalize, isRepellent } = PlayerManager;
 
 	const state = secure({
 		lives: 3,
@@ -141,6 +142,38 @@ describe('PlayerManager', () => {
 			const result = penalize(context);
 
 			expect(result).toEqual(expectedResult);
+		});
+	});
+
+	describe('isRepellent', () => {
+		const context = {
+			state,
+		};
+
+		test('isRepellent returns unchanged '
+			+ 'lives when the repellent is active', () => {
+			const returned = state.lives;
+
+			jest.spyOn(PowerManager, 'isActive').mockReturnValue(true);
+
+			const result = isRepellent(context);
+
+			expect(PowerManager.isActive)
+				.toHaveBeenCalledWith(state, 'repellent');
+			expect(result).toEqual(returned);
+		});
+
+		test('isRepellent call attackPlayer'
+		+ 'when the repellent is inactive', () => {
+			const returned = Symbol('returned');
+
+			jest.spyOn(PowerManager, 'isActive').mockReturnValue(false);
+			jest.spyOn(TargetManager, 'attackPlayer').mockReturnValue(returned);
+
+			const result = isRepellent(context);
+
+			expect(TargetManager.attackPlayer).toHaveBeenCalledWith(context);
+			expect(result).toEqual(returned);
 		});
 	});
 });

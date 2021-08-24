@@ -1,5 +1,6 @@
 import config from '../core/config';
 import PowerManager from './powerManager';
+import TargetManager from './targetManager';
 
 const hundred = 100;
 
@@ -30,6 +31,12 @@ const penalize = (context) => (
 		: decreaseLives({ ...context, data: context.config.penalDamage })
 );
 
+const isRepellent = (context) => (
+	PowerManager.isActive(context.state, 'repellent')
+		? context.state.lives
+		: TargetManager.attackPlayer(context)
+);
+
 const PlayerManager = {
 	adjustScore,
 	decreaseLives,
@@ -38,6 +45,7 @@ const PlayerManager = {
 	getHealthColor,
 	isAlive,
 	penalize,
+	isRepellent,
 };
 
 export default PlayerManager;

@@ -73,8 +73,8 @@ describe('Proxies', () => {
 		},
 		attackPlayer: {
 			mock: {
-				library: TargetManager,
-				func: 'attackPlayer',
+				library: PlayerManager,
+				func: 'isRepellent',
 			},
 			impactedKey: 'lives',
 		},
