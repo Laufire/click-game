@@ -77,7 +77,7 @@ describe('actions', () => {
 			attackPlayer: {
 				mock: {
 					library: PlayerManager,
-					func: 'isRepellent',
+					func: 'getAttacked',
 				},
 				impactedKey: 'lives',
 			},

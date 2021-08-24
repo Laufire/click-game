@@ -31,7 +31,7 @@ const penalize = (context) => (
 		: decreaseLives({ ...context, data: context.config.penalDamage })
 );
 
-const isRepellent = (context) => (
+const getAttacked = (context) => (
 	PowerManager.isActive(context.state, 'repellent')
 		? context.state.lives
 		: TargetManager.attackPlayer(context)
@@ -45,7 +45,7 @@ const PlayerManager = {
 	getHealthColor,
 	isAlive,
 	penalize,
-	isRepellent,
+	getAttacked,
 };
 
 export default PlayerManager;

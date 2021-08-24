@@ -9,7 +9,7 @@ import TargetManager from './targetManager';
 
 describe('PlayerManager', () => {
 	const { adjustScore, decreaseLives, isAlive, increaseLives,
-		getHealthRatio, getHealthColor, penalize, isRepellent } = PlayerManager;
+		getHealthRatio, getHealthColor, penalize, getAttacked } = PlayerManager;
 
 	const state = secure({
 		lives: 3,
@@ -145,32 +145,32 @@ describe('PlayerManager', () => {
 		});
 	});
 
-	describe('isRepellent', () => {
+	describe('getAttacked', () => {
 		const context = {
 			state,
 		};
 
-		test('isRepellent returns unchanged '
+		test('getAttacked returns unchanged '
 			+ 'lives when the repellent is active', () => {
 			const returned = state.lives;
 
 			jest.spyOn(PowerManager, 'isActive').mockReturnValue(true);
 
-			const result = isRepellent(context);
+			const result = getAttacked(context);
 
 			expect(PowerManager.isActive)
 				.toHaveBeenCalledWith(state, 'repellent');
 			expect(result).toEqual(returned);
 		});
 
-		test('isRepellent call attackPlayer'
+		test('getAttacked call attackPlayer'
 		+ 'when the repellent is inactive', () => {
 			const returned = Symbol('returned');
 
 			jest.spyOn(PowerManager, 'isActive').mockReturnValue(false);
 			jest.spyOn(TargetManager, 'attackPlayer').mockReturnValue(returned);
 
-			const result = isRepellent(context);
+			const result = getAttacked(context);
 
 			expect(TargetManager.attackPlayer).toHaveBeenCalledWith(context);
 			expect(result).toEqual(returned);

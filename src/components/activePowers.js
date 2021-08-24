@@ -3,7 +3,7 @@ import config from '../core/config';
 import PowerManager from '../services/powerManager';
 import context from '../core/context';
 
-const getPower = (powerType) =>
+const activePower = (powerType) =>
 	<img
 		key={ powerType }
 		className="active-power"
@@ -11,6 +11,7 @@ const getPower = (powerType) =>
 		src={ config.powers[powerType].image }
 	/> ;
 
-const ActivePowers = () => PowerManager.getActivePowers(context).map(getPower);
+const ActivePowers = () =>
+	PowerManager.getActivePowers(context).map(activePower);
 
 export default ActivePowers;

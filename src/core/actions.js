@@ -59,7 +59,7 @@ const swatTarget = (context) =>
 	TargetManager.swatTarget(context);
 
 const attackPlayer = (context) => ({
-	lives: PlayerManager.isRepellent(context),
+	lives: PlayerManager.getAttacked(context),
 });
 
 const actions = {
