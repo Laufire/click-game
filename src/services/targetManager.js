@@ -25,11 +25,11 @@ const getTarget = ({ x, y, type } = {}) => {
 		id: getId(),
 		x: x !== undefined ? x : getRandomX(size),
 		y: y !== undefined ? y : getRandomY(size),
-		...typeConfig,
-		...size,
-		healthTill: adjustTime(
+		livesTill: adjustTime(
 			currentTime, lifespan, 'seconds'
 		),
+		...typeConfig,
+		...size,
 	};
 };
 
@@ -104,7 +104,7 @@ const swatTarget = ({ state, data }) => ({
 });
 
 const getExpiredTargets = ({ state }) =>
-	state.targets.filter((target) => !isFuture(target.healthTill));
+	state.targets.filter((target) => !isFuture(target.livesTill));
 
 const attackPlayer = (context) => PlayerManager.decreaseHealth({
 	...context,

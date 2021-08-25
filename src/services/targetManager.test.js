@@ -62,7 +62,7 @@ describe('TargetManager', () => {
 
 	describe('getTarget returns target', () => {
 		const adjustedTime = Symbol('adjustedTime');
-		const healthTill = adjustedTime;
+		const livesTill = adjustedTime;
 		const currentTime = Symbol('currentTime');
 		const { getTarget } = TargetManager;
 		const type = 'ant';
@@ -91,7 +91,7 @@ describe('TargetManager', () => {
 				type,
 				...typeConfig,
 				...size,
-				healthTill,
+				livesTill,
 			};
 
 			const result = getTarget({ x, y, type });
@@ -350,10 +350,10 @@ describe('TargetManager', () => {
 	describe('getExpiredTargets', () => {
 		const data = getRandomTargets();
 		const state = { targets: data };
-		const { healthTill } = data[0];
+		const { livesTill } = data[0];
 
 		test('getExpiredTargets remove the expired target'
-			+ 'when targets healthTill is less than currentTime', () => {
+			+ 'when targets livesTill is less than currentTime', () => {
 			const expectedResult = data;
 
 			jest.spyOn(HelperService, 'isFuture').mockReturnValue(false);
@@ -361,12 +361,12 @@ describe('TargetManager', () => {
 			const result = TargetManager.getExpiredTargets({ state });
 
 			expect(HelperService.isFuture)
-				.toHaveBeenCalledWith(healthTill);
+				.toHaveBeenCalledWith(livesTill);
 			expect(result).toEqual(expectedResult);
 		});
 
 		test('getExpiredTargets cannot remove the expired target'
-				+ 'when targets healthTill is greater than currentTime', () => {
+				+ 'when targets livesTill is greater than currentTime', () => {
 			const expectedResult = [];
 
 			jest.spyOn(HelperService, 'isFuture').mockReturnValue(true);
@@ -374,7 +374,7 @@ describe('TargetManager', () => {
 			const result = TargetManager.getExpiredTargets({ state });
 
 			expect(HelperService.isFuture)
-				.toHaveBeenCalledWith(healthTill);
+				.toHaveBeenCalledWith(livesTill);
 			expect(result).toEqual(expectedResult);
 		});
 	});

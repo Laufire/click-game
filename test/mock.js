@@ -2,14 +2,14 @@
 import { secure } from '@laufire/utils/collection';
 import { rndValues } from '@laufire/utils/random';
 
-const healthTill = Date.now();
+const livesTill = Date.now();
 
 const ant = secure({
 	type: 'ant',
 	id: '1234',
 	health: 1,
 	score: 10,
-	healthTill: healthTill,
+	livesTill: livesTill,
 	damage: 1,
 	prob: {
 		attack: 1,
@@ -20,7 +20,7 @@ const mosquito = secure({
 	id: '9876',
 	health: 1,
 	score: 5,
-	healthTill: healthTill,
+	livesTill: livesTill,
 	damage: 1,
 	prob: {
 		attack: 1,
@@ -31,7 +31,7 @@ const butterfly = secure({
 	id: '2468',
 	health: 1,
 	score: 0,
-	healthTill: healthTill,
+	livesTill: livesTill,
 	damage: 1,
 	prob: {
 		attack: 1,
