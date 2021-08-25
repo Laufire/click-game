@@ -376,7 +376,7 @@ describe('TargetManager', () => {
 		test('returns 0 damage when rndBetween is 0 ', () => {
 			const damage = 0;
 
-			jest.spyOn(random, 'rndBetween').mockReturnValue(0);
+			jest.spyOn(HelperService, 'isProbable').mockReturnValue(0);
 			jest.spyOn(PlayerManager, 'decreaseHealth')
 				.mockReturnValue(decreasedHealth);
 

@@ -53,7 +53,7 @@ describe('PowerManager', () => {
 		const powers = [bomb, ice];
 
 		test('test the removeExpiredPower with rndBetween', () => {
-			jest.spyOn(random, 'rndBetween')
+			jest.spyOn(helper, 'isProbable')
 				.mockImplementation(() => 0);
 
 			const result = PowerManager
@@ -174,7 +174,7 @@ describe('PowerManager', () => {
 		const powers = [bomb, ice];
 
 		test('No powers added with 0 prob', () => {
-			jest.spyOn(random, 'rndBetween')
+			jest.spyOn(helper, 'isProbable')
 				.mockImplementation(() => 0);
 
 			const result = PowerManager.addPowers({ state: { powers }});
