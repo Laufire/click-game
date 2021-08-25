@@ -29,13 +29,27 @@ describe('TargetManager', () => {
 		const { addTargets } = TargetManager;
 
 		test('returns targets with new targets added', () => {
+			const spawnTargets = [Symbol('spawnTargets')];
+			const reproduceTargets = [Symbol('reproduceTargets')];
+
 			jest.spyOn(HelperService, 'isProbable')
 				.mockImplementation(() => 1);
+			jest.spyOn(TargetManager, 'spawnTargets')
+				.mockReturnValue(spawnTargets);
+			jest.spyOn(TargetManager, 'reproduceTargets')
+				.mockReturnValue(reproduceTargets);
 
-			const result = addTargets({ state: { targets: [] }});
-			const resultKeys = result.map((item) => item.type);
+			const result = addTargets({ state: { targets }});
+			const expectedResult = [
+				...targets,
+				...spawnTargets,
+				...reproduceTargets,
+			];
 
-			expect(resultKeys).toEqual(keys(config.targets));
+			expect(TargetManager.spawnTargets).toHaveBeenCalledWith();
+			expect(TargetManager.reproduceTargets)
+				.toHaveBeenCalledWith(targets);
+			expect(result).toEqual(expectedResult);
 		});
 
 		test('returns the targets without any new targets', () => {
@@ -399,6 +413,63 @@ describe('TargetManager', () => {
 			expect(PlayerManager.decreaseHealth)
 				.toHaveBeenCalledWith({ ...context, data: damage });
 			expect(result).toEqual(decreasedHealth);
+		});
+	});
+
+	describe('spawnTargets', () => {
+		const { spawnTargets } = TargetManager;
+		const targetTypes = keys(config.targets);
+
+		test('spawnTargets returns all target when isProb is true', () => {
+			jest.spyOn(HelperService, 'isProbable').mockReturnValue(true);
+
+			const result = spawnTargets();
+			const resultType = result.map((item) => item.type);
+
+			targetTypes.map((type) =>
+				expect(HelperService.isProbable)
+					.toHaveBeenCalledWith(config.targets[type].prob.spawn));
+			expect(resultType).toEqual(targetTypes);
+		});
+
+		test('spawnTargets returns no target when isProb is false', () => {
+			jest.spyOn(HelperService, 'isProbable').mockReturnValue(false);
+
+			const result = spawnTargets();
+
+			targetTypes.map((type) =>
+				expect(HelperService.isProbable)
+					.toHaveBeenCalledWith(config.targets[type].prob.spawn));
+			expect(result).toEqual([]);
+		});
+	});
+	describe('reproduceTargets', () => {
+		const { reproduceTargets } = TargetManager;
+		const targetTypes = targets.map((target) => target.type);
+
+		test('reproduceTargets returns child target when isProb is true',
+			() => {
+				jest.spyOn(HelperService, 'isProbable').mockReturnValue(true);
+
+				const result = reproduceTargets(targets);
+				const resultType = result.map((item) => item.type);
+
+				targetTypes.map((type) =>
+					expect(HelperService.isProbable)
+						.toHaveBeenCalledWith(config.targets[type]
+							.prob.fertility));
+				expect(resultType).toEqual(targetTypes);
+			});
+
+		test('reproduceTargets returns no target when isProb is false', () => {
+			jest.spyOn(HelperService, 'isProbable').mockReturnValue(false);
+
+			const result = reproduceTargets(targets);
+
+			targetTypes.map((type) =>
+				expect(HelperService.isProbable)
+					.toHaveBeenCalledWith(config.targets[type].prob.spawn));
+			expect(result).toEqual([]);
 		});
 	});
 });

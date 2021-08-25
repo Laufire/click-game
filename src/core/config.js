@@ -47,7 +47,8 @@ const config = {
 			health: 1,
 			damage: 1,
 			prob: {
-				spawn: 0.2,
+				spawn: 1,
+				fertility: 1,
 				attack: 0.5,
 			},
 		},
@@ -62,8 +63,9 @@ const config = {
 			health: 1,
 			damage: 1,
 			prob: {
-				attack: 0.5,
 				spawn: 1,
+				fertility: 1,
+				attack: 0.5,
 			},
 		},
 		spider: {
@@ -77,8 +79,9 @@ const config = {
 			damage: 1,
 			health: 3,
 			prob: {
+				spawn: 1,
+				fertility: 1,
 				attack: 0.5,
-				add: 1,
 			},
 		},
 		butterfly: {
@@ -92,8 +95,9 @@ const config = {
 			damage: 1,
 			health: 1,
 			prob: {
+				spawn: 1,
+				fertility: 1,
 				attack: 0.5,
-				spawn: 0.1,
 			},
 		},
 		spoiler: {
@@ -107,7 +111,8 @@ const config = {
 			health: 1,
 			score: 0,
 			prob: {
-				spawn: 0.5,
+				spawn: 1,
+				fertility: 1,
 				attack: 0.5,
 			},
 			effect: {

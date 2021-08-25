@@ -1,6 +1,7 @@
 import config from '../core/config';
 import { rndBetween, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
+import { truthy } from '@laufire/utils/predicates';
 import { getRandomX, getRandomY } from './positionService';
 import { adjustTime,	getId, getVariance,
 	isFuture, isProbable } from './helperService';
@@ -41,12 +42,23 @@ const moveTargets = ({ state }) =>
 			y: getRandomY(target),
 		})));
 
-const getTargets = () => targetTypeKeys.map((type) =>
+const spawnTargets = () => targetTypeKeys.map((type) =>
 	isProbable(config.targets[type].prob.spawn)
-	&& getTarget({ type })).filter((val) => val);
+	&& getTarget({ type })).filter(truthy);
+
+const reproduceTargets = (targets) => targets.map((target) =>
+	isProbable(config.targets[target.type].prob.fertility)
+	&& getTarget({ type: target.type }))
+	.filter(truthy);
 
 const addTargets = ({ state: { targets }}) => (targets.length < maxTargets
-	? targets.concat(getTargets())
+	? [
+		...targets,
+		// eslint-disable-next-line no-use-before-define
+		...TargetManager.spawnTargets(),
+		// eslint-disable-next-line no-use-before-define
+		...TargetManager.reproduceTargets(targets),
+	]
 	: targets);
 
 const removeTargets = ({ state: { targets }, data: targetsToRemove }) =>
@@ -112,6 +124,8 @@ const TargetManager = {
 	swatTarget,
 	getExpiredTargets,
 	attackPlayer,
+	spawnTargets,
+	reproduceTargets,
 };
 
 export default TargetManager;
