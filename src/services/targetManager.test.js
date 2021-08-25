@@ -29,7 +29,7 @@ describe('TargetManager', () => {
 		const { addTargets } = TargetManager;
 
 		test('returns targets with new targets added', () => {
-			jest.spyOn(random, 'rndBetween')
+			jest.spyOn(HelperService, 'isProbable')
 				.mockImplementation(() => 1);
 
 			const result = addTargets({ state: { targets: [] }});

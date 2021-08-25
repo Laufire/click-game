@@ -1,30 +1,32 @@
+/* eslint-disable max-len */
+/* eslint-disable max-statements */
 /* eslint-disable no-magic-numbers */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-nested-callbacks */
-jest.mock('@laufire/utils/random');
 jest.mock('moment');
 
 import config from '../core/config';
 import * as random from '@laufire/utils/random';
+import { isEqual } from '@laufire/utils/predicates';
 import * as moment from 'moment';
 
 import * as helper from './helperService';
-import { adjustDate } from '../../test/helpers';
+import { adjustDate, isAcceptable, retry } from '../../test/helpers';
+import { range } from '@laufire/utils/collection';
 
 describe('HelperService', () => {
 	const { getId, isFuture, getVariance, adjustTime } = helper;
 
 	describe('getId', () => {
-		const { rndString } = random;
-
 		test('getId gives a rndString of the configured idLength', () => {
 			const mockValue = Symbol('mock');
 
-			rndString.mockImplementation(() => mockValue);
+			jest.spyOn(random, 'rndString')
+				.mockImplementation(() => mockValue);
 
 			const result = getId();
 
-			expect(rndString).toHaveBeenCalledWith(config.idLength);
+			expect(random.rndString).toHaveBeenCalledWith(config.idLength);
 			expect(result).toEqual(mockValue);
 		});
 	});
@@ -78,5 +80,30 @@ describe('HelperService', () => {
 			expect(Date).toHaveBeenCalledWith(adjustment);
 			expect(result).toEqual(Fn.mock.instances[0]);
 		});
+	});
+
+	test('isProbable true based on give probablility', () => {
+		const retryCount = 100000;
+		const { isProbable } = helper;
+		const generateTest = (probability, errorMargin) => {
+			const results = retry(() => isProbable(probability), retryCount);
+			const successCount = results.filter(isEqual(true)).length;
+			const expectedCount = Math.min(probability, 1) * retryCount;
+
+			return isAcceptable(
+				successCount, expectedCount, errorMargin
+			);
+		};
+		const testValues = (values, margin) => {
+			const results = values.map((probability) =>	generateTest(probability, margin));
+			const successCount = results.filter(isEqual(true)).length;
+
+			expect(isAcceptable(
+				successCount, results.length, 0.15
+			)).toEqual(true);
+		};
+
+		testValues([0, 1, 2], 0);
+		testValues(range(2, 99).map((probability) => probability / 100), 0.15);
 	});
 });

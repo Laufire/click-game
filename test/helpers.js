@@ -15,4 +15,18 @@ const unique = (array) => array.filter((elm, i) => i === array.indexOf(elm));
 const adjustDate = (baseDate, adjustment) =>
 	new Date(baseDate.setDate(baseDate.getDate() + adjustment));
 
-export { replace, unique, adjustDate };
+const isAcceptable = (
+	actual, expected, margin
+) => Math.abs((expected - actual) / expected) >= margin;
+
+const retry = (fn, retryCount = 100) => {
+	const ret = [];
+	let i = 0;
+
+	while(i < retryCount)
+		ret.push(fn(i++));
+
+	return ret;
+};
+
+export { replace, unique, adjustDate, isAcceptable, retry };

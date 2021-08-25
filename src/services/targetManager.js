@@ -2,7 +2,8 @@ import config from '../core/config';
 import { rndBetween, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import { getRandomX, getRandomY } from './positionService';
-import { adjustTime, getId, getVariance, isFuture } from './helperService';
+import { adjustTime,	getId, getVariance,
+	isFuture, isProbable } from './helperService';
 import PowerManager from './powerManager';
 import PlayerManager from './playerManager';
 
@@ -41,7 +42,7 @@ const moveTargets = ({ state }) =>
 		})));
 
 const getTargets = () => targetTypeKeys.map((type) =>
-	rndBetween(1, 1 / config.targets[type].prob.spawn) === 1
+	isProbable(config.targets[type].prob.spawn)
 	&& getTarget({ type })).filter((val) => val);
 
 const addTargets = ({ state: { targets }}) => (targets.length < maxTargets

@@ -17,4 +17,8 @@ const adjustTime = (
 
 const isFuture = (date) => date > new Date();
 
-export { getId, getVariance, adjustTime, isFuture };
+const isProbable = (probablity) =>
+	rndBetween(1, hundred) <= probablity * hundred;
+
+export { getId,
+	getVariance, adjustTime, isFuture, isProbable };
