@@ -6,17 +6,13 @@
 
 ### Powers
 
-* *none, yet.*
+* *None, yet.*
 
 ### Features
 
 * Drops - Stop auto-spawning powers. Create them after targets are swatted.
 
 * Probabilities
-
-	* Fertility - Controls, how probable a target could spawn child.
-
-	* Spawn - Controls, how often a target could spawn without a parent.
 
 	* Drop - Controls, how probable a target could drop a power, when swatted.
 
