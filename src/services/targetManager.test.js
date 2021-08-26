@@ -386,11 +386,14 @@ describe('TargetManager', () => {
 			},
 		};
 		const decreasedHealth = Symbol('decreasedHealth');
+		const target = ant;
 
 		test('returns 0 damage when rndBetween is 0 ', () => {
 			const damage = 0;
 
 			jest.spyOn(HelperService, 'isProbable').mockReturnValue(0);
+			jest.spyOn(HelperService, 'getVariance')
+				.mockReturnValue(target.variance);
 			jest.spyOn(PlayerManager, 'decreaseHealth')
 				.mockReturnValue(decreasedHealth);
 
@@ -398,6 +401,8 @@ describe('TargetManager', () => {
 
 			expect(PlayerManager.decreaseHealth)
 				.toHaveBeenCalledWith({ ...context, data: damage });
+			expect(HelperService.getVariance)
+				.toHaveBeenCalledWith(target.variance);
 			expect(result).toEqual(decreasedHealth);
 		});
 
@@ -405,6 +410,8 @@ describe('TargetManager', () => {
 			const damage = 3;
 
 			jest.spyOn(random, 'rndBetween').mockReturnValue(1);
+			jest.spyOn(HelperService, 'getVariance')
+				.mockReturnValue(target.variance);
 			jest.spyOn(PlayerManager, 'decreaseHealth')
 				.mockReturnValue(decreasedHealth);
 
@@ -412,6 +419,8 @@ describe('TargetManager', () => {
 
 			expect(PlayerManager.decreaseHealth)
 				.toHaveBeenCalledWith({ ...context, data: damage });
+			expect(HelperService.getVariance)
+				.toHaveBeenCalledWith(target.variance);
 			expect(result).toEqual(decreasedHealth);
 		});
 	});

@@ -108,9 +108,12 @@ const getExpiredTargets = ({ state }) =>
 
 const attackPlayer = (context) => PlayerManager.decreaseHealth({
 	...context,
-	data: context.state.targets.filter((target) =>
-		isProbable(target.prob.attack))
-		.reduce((acc, target) => acc + target.damage, 0),
+	data: context.state.targets.filter((target) => {
+		const variance = getVariance(target.variance);
+		const attackProb = target.prob.attack * variance;
+
+		return isProbable(attackProb);
+	}).reduce((acc, target) => acc + target.damage, 0),
 });
 
 const TargetManager = {

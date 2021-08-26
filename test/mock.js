@@ -11,6 +11,7 @@ const ant = secure({
 	score: 10,
 	livesTill: livesTill,
 	damage: 1,
+	variance: 0.2,
 	prob: {
 		attack: 1,
 	},
@@ -22,6 +23,7 @@ const mosquito = secure({
 	score: 5,
 	livesTill: livesTill,
 	damage: 1,
+	variance: 0.2,
 	prob: {
 		attack: 1,
 	},
@@ -33,6 +35,7 @@ const butterfly = secure({
 	score: 0,
 	livesTill: livesTill,
 	damage: 1,
+	variance: 0.2,
 	prob: {
 		attack: 1,
 	},
