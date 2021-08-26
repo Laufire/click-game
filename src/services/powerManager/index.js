@@ -1,10 +1,13 @@
-
+/* eslint-disable no-use-before-define */
+import { rndValues } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import config from '../../core/config';
 import { getRandomX, getRandomY } from '../positionService';
 import { getId, isFuture, isProbable } from '../helperService';
 import Powers from './powers';
 import { damage } from './data';
+import TargetManager from '../targetManager';
+import { truthy } from '@laufire/utils/predicates';
 
 const powerKeys = keys(config.powers);
 
@@ -21,9 +24,14 @@ const getPower = ({ type }) => {
 
 const getPowers = () => powerKeys.map((type) =>
 	isProbable(config.powers[type].prob.add)
-		&& getPower({ type })).filter((value) => value);
+		&& PowerManager.getPower({ type })).filter(truthy);
 
-const addPowers = ({ state: { powers }}) => powers.concat(getPowers());
+const getDropCount = (context) => TargetManager.getKilledTargets(context)
+	.filter((target) => isProbable(target.prob.drop)).length;
+
+const addPowers = (context) =>
+	rndValues([...context.state.powers, ...PowerManager.getPowers()],
+		PowerManager.getDropCount(context));
 
 const hasPowerExpired = (data) =>
 	isProbable(data.prob.remove);
@@ -57,6 +65,8 @@ const PowerManager = {
 	getDamage,
 	getActivePowers,
 	isActive,
+	getDropCount,
+	getPowers,
 };
 
 export default PowerManager;

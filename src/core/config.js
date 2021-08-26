@@ -50,6 +50,7 @@ const config = {
 				spawn: 1,
 				fertility: 1,
 				attack: 0.5,
+				drop: 1,
 			},
 		},
 		ant: {
@@ -66,6 +67,7 @@ const config = {
 				spawn: 1,
 				fertility: 1,
 				attack: 0.5,
+				drop: 0.5,
 			},
 		},
 		spider: {
@@ -82,6 +84,8 @@ const config = {
 				spawn: 1,
 				fertility: 1,
 				attack: 0.5,
+				add: 1,
+				drop: 0.5,
 			},
 		},
 		butterfly: {
@@ -98,6 +102,7 @@ const config = {
 				spawn: 1,
 				fertility: 1,
 				attack: 0.5,
+				drop: 0.5,
 			},
 		},
 		spoiler: {
@@ -114,6 +119,7 @@ const config = {
 				spawn: 1,
 				fertility: 1,
 				attack: 0.5,
+				drop: 0.5,
 			},
 			effect: {
 				score: {

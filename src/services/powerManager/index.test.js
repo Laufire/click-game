@@ -10,11 +10,14 @@ import PowerManager from '../powerManager';
 import { damage } from './data';
 import Powers from './powers';
 import * as helper from '../helperService';
-import { keys, map, secure, shuffle } from '@laufire/utils/collection';
-import context from '../../core/context';
+import * as collection from '@laufire/utils/collection';
+import TargetManager from '../targetManager';
+import Mocks from '../../../test/mock';
+import { getTransientPowers } from '../../core/helpers';
 
 describe('PowerManager', () => {
 	const { adjustTime } = helper;
+	const { map, secure, shuffle } = collection;
 
 	describe('getPower', () => {
 		const { getPower } = PowerManager;
@@ -156,48 +159,93 @@ describe('PowerManager', () => {
 			});
 	});
 
-	describe('addPowers adds powers based on prob', () => {
-		const bomb = {
-			id: 'abcd',
-			type: 'bomb',
-			prob: {
-				remove: 0,
-			},
-		};
-		const ice = {
-			id: 'efgh',
-			type: 'ice',
-			prob: {
-				remove: 0,
-			},
-		};
-		const powers = [bomb, ice];
+	describe('addPowers', () => {
+		// eslint-disable-next-line no-shadow
+		const context = { state: { powers: [], targets: [] }};
+		const expectedPowers = [Symbol('power')];
+		const expectedDropCounts = 1;
+		const expectedResult = Symbol('rndValues');
 
-		test('No powers added with 0 prob', () => {
+		test('adds powers based on drop prob', () => {
+			jest.spyOn(random, 'rndValues')
+				.mockImplementation(() => expectedResult);
+			jest.spyOn(PowerManager, 'getPowers')
+				.mockImplementation(() => expectedPowers);
+			jest.spyOn(PowerManager, 'getDropCount')
+				.mockImplementation(() => expectedDropCounts);
+
+			const result = PowerManager.addPowers(context);
+
+			expect(random.rndValues).toHaveBeenCalledWith([
+				...context.state.powers,
+				...expectedPowers,
+			], expectedDropCounts,);
+			expect(result).toEqual(expectedResult);
+		});
+	});
+
+	test('getDropCount returns killed targets count based on drop prob', () => {
+		const rndTargets = Mocks.getRandomTargets(2);
+		// eslint-disable-next-line no-shadow
+		const context = Symbol('context');
+
+		const targetWithDrop = { ...rndTargets[0], prob: { drop: 1 }};
+		const targetWithoutDrop = { ...rndTargets[1], prob: { drop: 1 }};
+		const targets = [targetWithDrop, targetWithoutDrop];
+
+		jest.spyOn(TargetManager, 'getKilledTargets')
+			.mockImplementation(() => targets);
+		jest.spyOn(helper, 'isProbable')
+			.mockImplementation(() => true);
+
+		const result = PowerManager.getDropCount(context);
+
+		expect(TargetManager.getKilledTargets).toHaveBeenCalledWith(context);
+		targets.map((target) => expect(helper.isProbable)
+			.toHaveBeenCalledWith(target.prob.drop));
+		expect(result).toEqual(2);
+	});
+
+	describe('getPowers', () => {
+		test('getPowers returns powers based on add prob', () => {
+			const power = Symbol('power');
+			const expectedResult = collection.range(0, 9).map(() => power);
+
 			jest.spyOn(helper, 'isProbable')
-				.mockImplementation(() => 0);
+				.mockImplementation(() => true);
+			jest.spyOn(PowerManager, 'getPower')
+				.mockImplementation(() => power);
 
-			const result = PowerManager.addPowers({ state: { powers }});
+			const result = PowerManager.getPowers();
 
-			expect(result).toEqual(powers);
+			collection.keys(config.powers).map((type) => {
+				expect(helper.isProbable)
+					.toHaveBeenCalledWith(config.powers[type].prob.add);
+				expect(PowerManager.getPower)
+					.toHaveBeenCalledWith({ type });
+			});
+			expect(result).toEqual(expectedResult);
 		});
 
-		test('Added powers with prob 1', () => {
-			jest.spyOn(random, 'rndBetween')
-				.mockImplementation(() => 1);
+		test('getPowers returns no powers while prob is 0', () => {
+			const expectedResult = [];
 
-			const result = PowerManager
-				.addPowers({ state: { powers: [] }});
-			const resultKeys = result.map((item) => item.type);
+			jest.spyOn(helper, 'isProbable')
+				.mockImplementation(() => false);
 
-			expect(resultKeys).toEqual(keys(config.powers));
+			const result = PowerManager.getPowers();
+
+			collection.keys(config.powers).map((type) =>
+				expect(helper.isProbable)
+					.toHaveBeenCalledWith(config.powers[type].prob.add));
+			expect(result).toEqual(expectedResult);
 		});
 	});
 
 	describe('getActivePowers', () => {
 		const date = new Date();
 		const [activePower, inactivePower]
-			= shuffle(keys(context.seed.duration));
+			= shuffle(collection.keys(getTransientPowers()));
 		const adjustments = {
 			[activePower]: 5,
 			[inactivePower]: -5,

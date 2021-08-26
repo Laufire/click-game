@@ -10,12 +10,6 @@
 
 ### Features
 
-* Drops - Stop auto-spawning powers. Create them after targets are swatted.
-
-* Probabilities
-
-	* Drop - Controls, how probable a target could drop a power, when swatted.
-
 * Grant bonus score, when the same type of targets are swatted consecutively.
 
 ### Misc
