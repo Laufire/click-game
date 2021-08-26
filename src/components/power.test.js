@@ -23,7 +23,7 @@ describe('Power', () => {
 		const { x, y, width, height } = projectedPower;
 
 		jest.spyOn(PositionService, 'project')
-			.mockImplementation(() => projectedPower);
+			.mockReturnValue(projectedPower);
 
 		const { getByRole } = render(Power(power));
 		const component = getByRole('power');

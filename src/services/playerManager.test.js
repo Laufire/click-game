@@ -23,7 +23,7 @@ describe('PlayerManager', () => {
 			const expectedResult = state.score + score;
 
 			jest.spyOn(PowerManager, 'isActive')
-				.mockImplementation(() => false);
+				.mockReturnValue(false);
 
 			const result = adjustScore(state, score);
 
@@ -36,7 +36,7 @@ describe('PlayerManager', () => {
 			+ (score * config.powers.double.effect.multiplier);
 
 			jest.spyOn(PowerManager, 'isActive')
-				.mockImplementation(() => true);
+				.mockReturnValue(true);
 
 			const result = PlayerManager.adjustScore(state, score);
 

@@ -33,7 +33,7 @@ describe('TargetManager', () => {
 			const reproduceTargets = [Symbol('reproduceTargets')];
 
 			jest.spyOn(HelperService, 'isProbable')
-				.mockImplementation(() => 1);
+				.mockReturnValue(1);
 			jest.spyOn(TargetManager, 'spawnTargets')
 				.mockReturnValue(spawnTargets);
 			jest.spyOn(TargetManager, 'reproduceTargets')
@@ -77,12 +77,12 @@ describe('TargetManager', () => {
 
 		test('returns a target while params are passed', () => {
 			jest.spyOn(HelperService, 'getId')
-				.mockImplementation(() => id);
+				.mockReturnValue(id);
 			jest.spyOn(HelperService, 'getVariance')
-				.mockImplementation(() => variance);
+				.mockReturnValue(variance);
 			jest.spyOn(HelperService, 'adjustTime')
-				.mockImplementation(() => adjustedTime);
-			jest.spyOn(Date, 'now').mockImplementation(() => currentTime);
+				.mockReturnValue(adjustedTime);
+			jest.spyOn(Date, 'now').mockReturnValue(currentTime);
 
 			const expectedResult = {
 				id,
@@ -106,15 +106,15 @@ describe('TargetManager', () => {
 
 		test('getTarget params are optional', () => {
 			jest.spyOn(HelperService,	'getId')
-				.mockImplementation(() => id);
+				.mockReturnValue(id);
 			jest.spyOn(random, 'rndValue')
-				.mockImplementation(() => 'ant');
+				.mockReturnValue('ant');
 			jest.spyOn(HelperService, 'getVariance')
-				.mockImplementation(() => variance);
+				.mockReturnValue(variance);
 			jest.spyOn(PositionService,	'getRandomX')
-				.mockImplementation(() => x);
+				.mockReturnValue(x);
 			jest.spyOn(PositionService,	'getRandomY')
-				.mockImplementation(() => y);
+				.mockReturnValue(y);
 
 			const expectedResult = {
 				id,
@@ -151,9 +151,9 @@ describe('TargetManager', () => {
 
 		const spyOn = () => {
 			jest.spyOn(TargetManager, 'decreaseTargetHealth')
-				.mockImplementation(() => decreasedTargetLive);
+				.mockReturnValue(decreasedTargetLive);
 			jest.spyOn(PowerManager, 'getDamage')
-				.mockImplementation(() => damage);
+				.mockReturnValue(damage);
 		};
 
 		test('returns reduced life of the swatted target', () => {
@@ -193,9 +193,9 @@ describe('TargetManager', () => {
 
 				spyOn();
 				jest.spyOn(random, 'rndBetween')
-					.mockImplementation(() => adjustment);
+					.mockReturnValue(adjustment);
 				jest.spyOn(PlayerManager, 'adjustScore')
-					.mockImplementation(() => adjustedScore);
+					.mockReturnValue(adjustedScore);
 
 				const { min, max } = config.targets.spoiler.effect.score;
 
@@ -320,11 +320,11 @@ describe('TargetManager', () => {
 			]);
 
 			jest.spyOn(PositionService, 'getRandomX')
-				.mockImplementation(() => x);
+				.mockReturnValue(x);
 			jest.spyOn(PositionService, 'getRandomY')
-				.mockImplementation(() => y);
+				.mockReturnValue(y);
 			jest.spyOn(PowerManager, 'isActive')
-				.mockImplementation(() => false);
+				.mockReturnValue(false);
 
 			const result = moveTargets({ state });
 
@@ -337,7 +337,7 @@ describe('TargetManager', () => {
 				const expectedResult = targets;
 
 				jest.spyOn(PowerManager, 'isActive')
-					.mockImplementation(() => true);
+					.mockReturnValue(true);
 
 				const result = moveTargets({ state });
 

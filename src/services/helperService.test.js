@@ -22,7 +22,7 @@ describe('HelperService', () => {
 			const mockValue = Symbol('mock');
 
 			jest.spyOn(random, 'rndString')
-				.mockImplementation(() => mockValue);
+				.mockReturnValue(mockValue);
 
 			const result = getId();
 
@@ -52,7 +52,7 @@ describe('HelperService', () => {
 
 		test('returns a random number between variance range', () => {
 			jest.spyOn(random, 'rndBetween')
-				.mockImplementation(() => input);
+				.mockReturnValue(input);
 			const { rndBetween } = random;
 			const result = getVariance(0.2);
 
@@ -70,7 +70,7 @@ describe('HelperService', () => {
 			jest.spyOn(global, 'Date')
 				.mockImplementation(Fn);
 			const momentSpy = jest.spyOn(moment, 'default')
-				.mockImplementation(() => ({ add: () => adjustment }));
+				.mockReturnValue({ add: () => adjustment });
 
 			const result = adjustTime(
 				baseDate, 4, 'hours'

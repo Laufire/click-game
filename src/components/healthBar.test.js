@@ -11,9 +11,9 @@ describe('HealthBar', () => {
 
 	test('renders the component with appropriate styling', () => {
 		jest.spyOn(PlayerManager, 'getHealthRatio')
-			.mockImplementation(() => healthRatio);
+			.mockReturnValue(healthRatio);
 		jest.spyOn(PlayerManager, 'getHealthColor')
-			.mockImplementation(() => 'yellow');
+			.mockReturnValue('yellow');
 
 		const { getByRole } = render(healthBar());
 		const component = getByRole('healthBar');

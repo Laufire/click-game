@@ -20,7 +20,7 @@ describe('Target', () => {
 		const { x, y, width, height } = projectedTarget;
 
 		jest.spyOn(PositionService, 'project')
-			.mockImplementation(() => projectedTarget);
+			.mockReturnValue(projectedTarget);
 		const { getByRole } = render(Target(target));
 
 		const component = getByRole('target');

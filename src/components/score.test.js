@@ -17,7 +17,7 @@ describe('Score', () => {
 		const getActivePowers = Symbol('getActivePowers');
 
 		const containerSpy = jest.spyOn(Container, 'default')
-			.mockImplementation(() => <div role="active-power"/>);
+			.mockReturnValue(<div role="active-power"/>);
 
 		jest.spyOn(PowerManager, 'getActivePowers')
 			.mockReturnValue(getActivePowers);

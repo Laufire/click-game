@@ -25,12 +25,12 @@ describe('Powers', () => {
 
 		test('bomb', () => {
 			jest.spyOn(Math,
-				'min').mockImplementation(() => count);
+				'min').mockReturnValue(count);
 			jest.spyOn(random,
 				'rndValues').mockImplementation(() =>
 				randomTargets);
 			jest.spyOn(random,
-				'rndBetween').mockImplementation(() => damage);
+				'rndBetween').mockReturnValue(damage);
 			jest.spyOn(TargetManager,
 				'decreaseTargetHealth').mockImplementation(() =>
 				targets);
@@ -67,10 +67,10 @@ describe('Powers', () => {
 			const { min, max } = config.powers.gift.effect.score;
 
 			jest.spyOn(random, 'rndBetween')
-				.mockImplementationOnce(() => 1)
-				.mockImplementationOnce(() => addScore);
+				.mockReturnValueOnce(1)
+				.mockReturnValueOnce(addScore);
 			jest.spyOn(PlayerManager, 'adjustScore')
-				.mockImplementation(() => addScore);
+				.mockReturnValue(addScore);
 
 			const result = gift(state);
 
@@ -85,7 +85,7 @@ describe('Powers', () => {
 
 		test('gift sometimes increase the health', () => {
 			jest.spyOn(random, 'rndBetween')
-				.mockImplementation(() => 0);
+				.mockReturnValue(0);
 			jest.spyOn(PlayerManager, 'increaseHealth');
 
 			const result = gift(state);
@@ -108,8 +108,8 @@ describe('Powers', () => {
 			const power = random.rndValue(filteredPowerKeys);
 
 			jest.spyOn(collection, 'keys');
-			jest.spyOn(random, 'rndValue').mockImplementation(() => power);
-			jest.spyOn(Powers, power).mockImplementation(() => returnValue);
+			jest.spyOn(random, 'rndValue').mockReturnValue(power);
+			jest.spyOn(Powers, power).mockReturnValue(returnValue);
 
 			const result = surprise(state);
 
@@ -158,10 +158,10 @@ describe('Powers', () => {
 
 			test(power, () => {
 				jest.spyOn(helper, 'adjustTime')
-					.mockImplementation(() => newTime);
+					.mockReturnValue(newTime);
 
 				jest.spyOn(helper, 'getVariance')
-					.mockImplementation(() => variance);
+					.mockReturnValue(variance);
 
 				const result = Powers[power](state);
 

@@ -57,7 +57,7 @@ describe('PowerManager', () => {
 
 		test('test the removeExpiredPower with rndBetween', () => {
 			jest.spyOn(helper, 'isProbable')
-				.mockImplementation(() => 0);
+				.mockReturnValue(0);
 
 			const result = PowerManager
 				.removeExpiredPowers({ state: { powers }});
@@ -87,7 +87,7 @@ describe('PowerManager', () => {
 			const data = { type };
 
 			jest.spyOn(Powers, type)
-				.mockImplementation(() => returnValue);
+				.mockReturnValue(returnValue);
 
 			const powerHandler = Powers[type];
 
@@ -105,7 +105,7 @@ describe('PowerManager', () => {
 			const expectedDamage = damage.super;
 
 			jest.spyOn(helper, 'isFuture')
-				.mockImplementation(() => true);
+				.mockReturnValue(true);
 
 			const result = PowerManager
 				.getDamage({
@@ -119,7 +119,7 @@ describe('PowerManager', () => {
 			const expectedDamage = damage.normal;
 
 			jest.spyOn(helper, 'isFuture')
-				.mockImplementation(() => false);
+				.mockReturnValue(false);
 
 			const result = PowerManager.getDamage({
 				duration: { superBat },
@@ -135,7 +135,7 @@ describe('PowerManager', () => {
 		test('getBatType returns normal when superBat is inactive',
 			() => {
 				jest.spyOn(helper, 'isFuture')
-					.mockImplementation(() => false);
+					.mockReturnValue(false);
 
 				const result = PowerManager.getBatType({
 					duration: { superBat },
@@ -148,7 +148,7 @@ describe('PowerManager', () => {
 		test('getBatType returns super when superBat is active',
 			() => {
 				jest.spyOn(helper, 'isFuture')
-					.mockImplementation(() => true);
+					.mockReturnValue(true);
 
 				const result = PowerManager.getBatType({
 					duration: { superBat },
@@ -168,11 +168,11 @@ describe('PowerManager', () => {
 
 		test('adds powers based on drop prob', () => {
 			jest.spyOn(random, 'rndValues')
-				.mockImplementation(() => expectedResult);
+				.mockReturnValue(expectedResult);
 			jest.spyOn(PowerManager, 'getPowers')
-				.mockImplementation(() => expectedPowers);
+				.mockReturnValue(expectedPowers);
 			jest.spyOn(PowerManager, 'getDropCount')
-				.mockImplementation(() => expectedDropCounts);
+				.mockReturnValue(expectedDropCounts);
 
 			const result = PowerManager.addPowers(context);
 
@@ -194,9 +194,9 @@ describe('PowerManager', () => {
 		const targets = [targetWithDrop, targetWithoutDrop];
 
 		jest.spyOn(TargetManager, 'getKilledTargets')
-			.mockImplementation(() => targets);
+			.mockReturnValue(targets);
 		jest.spyOn(helper, 'isProbable')
-			.mockImplementation(() => true);
+			.mockReturnValue(true);
 
 		const result = PowerManager.getDropCount(context);
 
@@ -212,9 +212,9 @@ describe('PowerManager', () => {
 			const expectedResult = collection.range(0, 9).map(() => power);
 
 			jest.spyOn(helper, 'isProbable')
-				.mockImplementation(() => true);
+				.mockReturnValue(true);
 			jest.spyOn(PowerManager, 'getPower')
-				.mockImplementation(() => power);
+				.mockReturnValue(power);
 
 			const result = PowerManager.getPowers();
 
@@ -231,7 +231,7 @@ describe('PowerManager', () => {
 			const expectedResult = [];
 
 			jest.spyOn(helper, 'isProbable')
-				.mockImplementation(() => false);
+				.mockReturnValue(false);
 
 			const result = PowerManager.getPowers();
 

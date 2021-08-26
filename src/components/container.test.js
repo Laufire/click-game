@@ -5,7 +5,7 @@ test('returns a component while parameters are passed', () => {
 	const returnValue = Symbol('returnValue');
 	const data = [];
 
-	jest.spyOn(data, 'map').mockImplementation(() => returnValue);
+	jest.spyOn(data, 'map').mockReturnValue(returnValue);
 
 	const result = Container(data, component);
 

@@ -14,7 +14,7 @@ describe('PositionService', () => {
 		const max = 75;
 		const mockValue = Symbol('mock');
 
-		jest.spyOn(random, 'rndBetween').mockImplementation(() => mockValue);
+		jest.spyOn(random, 'rndBetween').mockReturnValue(mockValue);
 
 		const result = getRandomX({ width: widthRange });
 
@@ -28,7 +28,7 @@ describe('PositionService', () => {
 		const max = 75;
 		const mockValue = Symbol('mock');
 
-		jest.spyOn(random, 'rndBetween').mockImplementation(() => mockValue);
+		jest.spyOn(random, 'rndBetween').mockReturnValue(mockValue);
 
 		const result = getRandomY({ height: heightRange });
 

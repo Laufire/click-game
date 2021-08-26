@@ -16,11 +16,11 @@ import Power from './power';
 describe('gameScreen', () => {
 	test('gameScreen renders the board,targets,powers', () => {
 		const containerSpy = jest.spyOn(Container, 'default')
-			.mockImplementationOnce(() => <div role="targets"/>)
-			.mockImplementationOnce(() => <div role="powers"/>);
+			.mockReturnValueOnce(<div role="targets"/>)
+			.mockReturnValueOnce(<div role="powers"/>);
 
 		jest.spyOn(Board, 'default')
-			.mockImplementationOnce(() => <div role="board"/>);
+			.mockReturnValueOnce(<div role="board"/>);
 
 		const { getByRole } = render(GameScreen());
 
