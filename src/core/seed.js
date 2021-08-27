@@ -2,7 +2,7 @@ import config from './config';
 import { map } from '@laufire/utils/collection';
 import { getTransientPowers } from './helpers';
 
-const timeZero = new Date();
+const timeZero = Date.now();
 
 const seed = {
 	targets: [],

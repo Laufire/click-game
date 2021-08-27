@@ -18,8 +18,6 @@
 
 * Make the config configurable through URL query params.
 
-* Change all new Date() to Date.now().
-
 ### Refactoring
 
 * Write an abstract component to render targets & powers.

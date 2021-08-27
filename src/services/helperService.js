@@ -11,11 +11,12 @@ const getVariance = (variance) =>
 		hundred + (variance * hundred)) / hundred;
 
 const adjustTime = (
-	date, adjustment, unit
+	dateValue, adjustment, unit
 ) =>
-	new Date(moment(date).add(adjustment, unit));
+	moment(dateValue).add(adjustment, unit)
+		.valueOf();
 
-const isFuture = (date) => date > new Date();
+const isFuture = (dateValue) => dateValue > Date.now();
 
 const isProbable = (probablity) =>
 	rndBetween(1, hundred) <= probablity * hundred;

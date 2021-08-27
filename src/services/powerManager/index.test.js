@@ -99,7 +99,7 @@ describe('PowerManager', () => {
 	});
 
 	describe('getDamage', () => {
-		const superBat = new Date();
+		const superBat = Date.now();
 
 		test('geDamage returns superbat when power is active', () => {
 			const expectedDamage = damage.super;
@@ -130,7 +130,7 @@ describe('PowerManager', () => {
 		});
 	});
 	describe('getBatType', () => {
-		const superBat = new Date();
+		const superBat = Date.now();
 
 		test('getBatType returns normal when superBat is inactive',
 			() => {
@@ -243,7 +243,6 @@ describe('PowerManager', () => {
 	});
 
 	describe('getActivePowers', () => {
-		const date = new Date();
 		const [activePower, inactivePower]
 			= shuffle(collection.keys(getTransientPowers()));
 		const adjustments = {
@@ -252,7 +251,7 @@ describe('PowerManager', () => {
 		};
 		const state = {
 			duration: secure(map(adjustments, (adjustment) => adjustTime(
-				date, adjustment, 'hours'
+				Date.now(), adjustment, 'hours'
 			))),
 		};
 

@@ -11,7 +11,7 @@ import { isEqual } from '@laufire/utils/predicates';
 import * as moment from 'moment';
 
 import * as helper from './helperService';
-import { adjustDate, isAcceptable, retry } from '../../test/helpers';
+import { isAcceptable, retry } from '../../test/helpers';
 import { range } from '@laufire/utils/collection';
 
 describe('HelperService', () => {
@@ -32,16 +32,18 @@ describe('HelperService', () => {
 	});
 
 	describe('isFuture', () => {
+		const msPerDay = 86400000;
+
 		test('isFuture returns false when input date is less than new date',
 			() => {
-				const result = isFuture(adjustDate(new Date(), -1));
+				const result = isFuture(Date.now() - msPerDay);
 
 				expect(result).toEqual(false);
 			});
 
 		test('isFuture returns true when input date is greater than new date',
 			() => {
-				const result = isFuture(adjustDate(new Date(), 1));
+				const result = isFuture(Date.now() + msPerDay);
 
 				expect(result).toEqual(true);
 			});
@@ -63,22 +65,18 @@ describe('HelperService', () => {
 
 	describe('adjustTime', () => {
 		test('returns adjustedTime', () => {
-			const adjustment = Symbol('adjustment');
-			const baseDate = new Date();
-			const Fn = jest.fn();
+			const adjustedTime = Symbol('adjustment');
+			const baseDate = Date.now();
 
-			jest.spyOn(global, 'Date')
-				.mockImplementation(Fn);
 			const momentSpy = jest.spyOn(moment, 'default')
-				.mockReturnValue({ add: () => adjustment });
+				.mockReturnValue({ add: () => adjustedTime });
 
 			const result = adjustTime(
 				baseDate, 4, 'hours'
 			);
 
 			expect(momentSpy).toHaveBeenCalledWith(baseDate);
-			expect(Date).toHaveBeenCalledWith(adjustment);
-			expect(result).toEqual(Fn.mock.instances[0]);
+			expect(result).toEqual(adjustedTime);
 		});
 	});
 
