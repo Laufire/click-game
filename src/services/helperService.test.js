@@ -8,14 +8,12 @@ jest.mock('moment');
 import config from '../core/config';
 import * as random from '@laufire/utils/random';
 import { isEqual } from '@laufire/utils/predicates';
-import * as moment from 'moment';
-
 import * as helper from './helperService';
 import { isAcceptable, retry } from '../../test/helpers';
 import { range } from '@laufire/utils/collection';
 
 describe('HelperService', () => {
-	const { getId, isFuture, getVariance, adjustTime } = helper;
+	const { getId, isFuture, getVariance } = helper;
 
 	describe('getId', () => {
 		test('getId gives a rndString of the configured idLength', () => {
@@ -60,23 +58,6 @@ describe('HelperService', () => {
 
 			expect(result).toEqual(input / 100);
 			expect(rndBetween).toHaveBeenCalledWith(80, 120);
-		});
-	});
-
-	describe('adjustTime', () => {
-		test('returns adjustedTime', () => {
-			const adjustedTime = Symbol('adjustment');
-			const baseDate = Date.now();
-
-			const momentSpy = jest.spyOn(moment, 'default')
-				.mockReturnValue({ add: () => adjustedTime });
-
-			const result = adjustTime(
-				baseDate, 4, 'hours'
-			);
-
-			expect(momentSpy).toHaveBeenCalledWith(baseDate);
-			expect(result).toEqual(adjustedTime);
 		});
 	});
 

@@ -14,9 +14,10 @@ import * as collection from '@laufire/utils/collection';
 import TargetManager from '../targetManager';
 import Mocks from '../../../test/mock';
 import { getTransientPowers } from '../../core/helpers';
+import * as timeService from '../timeService';
 
 describe('PowerManager', () => {
-	const { adjustTime } = helper;
+	const { adjustTime } = timeService;
 	const { map, secure, shuffle } = collection;
 
 	describe('getPower', () => {

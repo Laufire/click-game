@@ -11,6 +11,7 @@ import TargetManager from '../targetManager';
 import PlayerManager from '../playerManager';
 import { getTransientPowers } from '../../core/helpers';
 import { map } from '@laufire/utils/collection';
+import * as timeService from '../timeService';
 
 describe('Powers', () => {
 	const { bomb, gift, surprise, nuke } = Powers;
@@ -157,7 +158,7 @@ describe('Powers', () => {
 			const second = 'seconds';
 
 			test(power, () => {
-				jest.spyOn(helper, 'adjustTime')
+				jest.spyOn(timeService, 'adjustTime')
 					.mockReturnValue(newTime);
 
 				jest.spyOn(helper, 'getVariance')
@@ -167,7 +168,7 @@ describe('Powers', () => {
 
 				expect(helper.getVariance)
 					.toHaveBeenCalledWith(variance);
-				expect(helper.adjustTime)
+				expect(timeService.adjustTime)
 					.toHaveBeenCalledWith(
 						state.duration[power], adjustment, second
 					);

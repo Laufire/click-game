@@ -3,10 +3,11 @@ import { rndBetween, rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import { truthy } from '@laufire/utils/predicates';
 import { getRandomX, getRandomY } from './positionService';
-import { adjustTime,	getId, getVariance,
+import {	getId, getVariance,
 	isFuture, isProbable } from './helperService';
 import PowerManager from './powerManager';
 import PlayerManager from './playerManager';
+import { adjustTime } from './timeService';
 
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);

@@ -13,6 +13,7 @@ import * as HelperService from './helperService';
 import Mocks from '../../test/mock';
 import PowerManager from './powerManager';
 import PlayerManager from './playerManager';
+import * as timeService from './timeService';
 
 // TODO: Remove restoreAllMocks //
 beforeEach(() => {
@@ -80,7 +81,7 @@ describe('TargetManager', () => {
 				.mockReturnValue(id);
 			jest.spyOn(HelperService, 'getVariance')
 				.mockReturnValue(variance);
-			jest.spyOn(HelperService, 'adjustTime')
+			jest.spyOn(timeService, 'adjustTime')
 				.mockReturnValue(adjustedTime);
 			jest.spyOn(Date, 'now').mockReturnValue(currentTime);
 
@@ -98,7 +99,7 @@ describe('TargetManager', () => {
 
 			expect(HelperService.getId).toHaveBeenCalled();
 			expect(HelperService.getVariance).toHaveBeenCalledWith(variance);
-			expect(HelperService.adjustTime).toHaveBeenCalledWith(
+			expect(timeService.adjustTime).toHaveBeenCalledWith(
 				currentTime, lifespan, 'seconds'
 			);
 			expect(result).toMatchObject(expectedResult);
