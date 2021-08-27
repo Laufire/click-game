@@ -306,8 +306,7 @@ describe('TargetManager', () => {
 	describe('moveTargets returns moved targets', () => {
 		const { moveTargets } = TargetManager;
 		const state = secure({
-			targets: targets,
-			frozenTill: new Date(),
+			targets,
 		});
 
 		const position = secure({ x, y });

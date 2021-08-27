@@ -19,9 +19,9 @@ describe('config', () => {
 				const merged = Symbol('merged');
 
 				jest.spyOn(global, 'URLSearchParams')
-					.mockImplementation(() => ({ get }));
+					.mockReturnValue({ get });
 				jest.spyOn(collection, 'merge')
-					.mockImplementation(() => merged);
+					.mockReturnValue(merged);
 
 				const config = require('./index').default;
 
