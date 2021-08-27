@@ -1,36 +1,35 @@
+/* eslint-disable max-statements */
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines-per-function */
 import * as collection from '@laufire/utils/collection';
 import base from './base';
 import dev from './dev';
 import prod from './prod';
+import * as UrlService from '../../services/urlService';
+import { keys } from '@laufire/utils/lib';
 
-describe('config', () => {
-	const expectations = [
-		['prod', prod],
-		['dev', dev],
-		[null, prod],
-	];
+describe('devConfig', () => {
+	const configs = {
+		dev,
+		prod,
+	};
+	const expectations = keys(configs);
 
-	test.each(expectations)('query param env impacts the config',
-		(env, envConfig) => {
-			jest.isolateModules(() => {
-				const get = jest.fn().mockReturnValue(env);
-				const merged = Symbol('merged');
+	test.each(expectations)('dev return merged config', (config) => {
+		jest.isolateModules(() => {
+			const merged = Symbol('merged');
 
-				jest.spyOn(global, 'URLSearchParams')
-					.mockReturnValue({ get });
-				jest.spyOn(collection, 'merge')
-					.mockReturnValue(merged);
+			jest.spyOn(UrlService, 'getURLParam')
+				.mockReturnValue(config);
+			jest.spyOn(collection, 'merge')
+				.mockReturnValue(merged);
 
-				const config = require('./index').default;
+			const result = require('.').default;
 
-				expect(get).toHaveBeenCalledWith('env');
-				expect(collection.merge).toHaveBeenCalledWith(base, envConfig);
-				expect(global.URLSearchParams)
-					// eslint-disable-next-line no-undef
-					.toHaveBeenCalledWith(window.location.search);
-				expect(config).toEqual(merged);
-			});
+			expect(collection.merge)
+				.toHaveBeenCalledWith(base, configs[config]);
+			expect(UrlService.getURLParam).toHaveBeenCalledWith('env');
+			expect(result).toEqual(merged);
 		});
+	});
 });
