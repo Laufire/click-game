@@ -1,5 +1,5 @@
 const prod = {
-	tickerDelay: 10000,
+	tickerDelay: 2000,
 };
 
 export default prod;

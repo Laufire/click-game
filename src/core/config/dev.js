@@ -1,5 +1,5 @@
 const dev = {
-	tickerDelay: 2000,
+	tickerDelay: 10000,
 };
 
 export default dev;
