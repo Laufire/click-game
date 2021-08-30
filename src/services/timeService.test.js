@@ -1,21 +1,32 @@
-jest.mock('moment');
-import * as moment from 'moment';
+/* eslint-disable max-len */
+/* eslint-disable max-lines-per-function */
 import { adjustTime } from './timeService';
 
 describe('adjustTime', () => {
 	test('returns adjustedTime', () => {
-		const adjustedTime = Symbol('adjustment');
+		const sixty = 60;
+		const twentyFour = 24;
+		const seconds = 1000;
+		const minutes = sixty * seconds;
+		const hours = sixty * minutes;
+		const days = twentyFour * hours;
+
 		const adjustment = 4;
 		const baseDate = Date.now();
 
-		const momentSpy = jest.spyOn(moment, 'default')
-			.mockReturnValue({ add: () => adjustedTime });
+		const cases = [
+			[baseDate, adjustment, 'days', baseDate + (adjustment * days)],
+			[baseDate, adjustment, 'hours', baseDate + (adjustment * hours)],
+			[baseDate, adjustment, 'minutes', baseDate + (adjustment * minutes)],
+			[baseDate, adjustment, 'seconds', baseDate + (adjustment * seconds)],
+		];
 
-		const result = adjustTime(
-			baseDate, adjustment, 'hours'
-		);
+		cases.forEach(([dateValue, adjustValue, unit, expected]) => {
+			const result = adjustTime(
+				dateValue, adjustValue, unit
+			);
 
-		expect(momentSpy).toHaveBeenCalledWith(baseDate);
-		expect(result).toEqual(adjustedTime);
+			expect(result).toEqual(expected);
+		});
 	});
 });
