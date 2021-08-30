@@ -1,13 +1,14 @@
-import config from '../core/config';
-import { rndBetween, rndValue } from '@laufire/utils/random';
+import config from '../../core/config';
+import { rndValue } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import { truthy } from '@laufire/utils/predicates';
-import { getRandomX, getRandomY } from './positionService';
-import {	getId, getVariance,
-	isFuture, isProbable } from './helperService';
-import PowerManager from './powerManager';
-import PlayerManager from './playerManager';
-import { adjustTime } from './timeService';
+import { getRandomX, getRandomY } from '../positionService';
+import { getId, getVariance,
+	isFuture, isProbable } from '../helperService';
+import PowerManager from '../powerManager';
+import PlayerManager from '../playerManager';
+import { adjustTime } from '../timeService';
+import swatEffects from './swatEffects';
 
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
@@ -73,7 +74,7 @@ const decreaseTargetHealth = (
 ) => {
 	const dataId = impactedTargets.map((impactedTarget) => impactedTarget.id);
 
-	return 	targets.map((target) =>
+	return targets.map((target) =>
 		(dataId.includes(target.id)
 			? {
 				...target,
@@ -84,17 +85,6 @@ const decreaseTargetHealth = (
 
 const getKilledTargets = ({ state: { targets }}) =>
 	targets.filter((target) => target.health <= 0);
-
-// TODO: Extract this into a separate module.
-const swatEffects = {
-	butterfly: (state) => ({
-		health: state.health - 1,
-	}),
-	spoiler: (state, data) => ({
-		score: PlayerManager.adjustScore(state,
-			-rndBetween(data.effect.score.min, data.effect.score.max)),
-	}),
-};
 
 const swatTarget = ({ state, data }) => ({
 	...swatEffects[data.type] && swatEffects[data.type](state, data),

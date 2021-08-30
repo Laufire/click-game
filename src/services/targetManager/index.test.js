@@ -4,21 +4,16 @@
 /* eslint-disable max-lines-per-function */
 
 import * as random from '@laufire/utils/random';
-import TargetManager from './targetManager';
-import config from '../core/config';
+import TargetManager from '../targetManager';
+import config from '../../core/config';
 import { keys, range, secure } from '@laufire/utils/collection';
-import { replace } from '../../test/helpers';
-import * as PositionService from './positionService';
-import * as HelperService from './helperService';
-import Mocks from '../../test/mock';
-import PowerManager from './powerManager';
-import PlayerManager from './playerManager';
-import * as timeService from './timeService';
-
-// TODO: Remove restoreAllMocks //
-beforeEach(() => {
-	jest.restoreAllMocks();
-});
+import { replace } from '../../../test/helpers';
+import * as PositionService from '../positionService';
+import * as HelperService from '../helperService';
+import Mocks from '../../../test/mock';
+import PowerManager from '../powerManager';
+import PlayerManager from '../playerManager';
+import * as timeService from '../timeService';
 
 describe('TargetManager', () => {
 	const { targets, ant, mosquito, butterfly, getRandomTargets } = Mocks;
