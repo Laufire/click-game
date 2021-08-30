@@ -1,22 +1,17 @@
 import context from '../../core/context';
 import MasterLoop from './masterLoop';
 
-// TODO: Simplify the implementation.
-const Ticker = () => {
-	const start = () => {
-		const { config } = context;
-		const { tickerDelay } = config;
+const start = () => {
+	const { config } = context;
+	const { tickerDelay } = config;
 
-		MasterLoop.runMasterLoop();
+	MasterLoop.runMasterLoop();
 
-		setInterval(MasterLoop.runMasterLoop, tickerDelay);
-	};
-
-	return {
-		start,
-	};
+	setInterval(MasterLoop.runMasterLoop, tickerDelay);
 };
 
-const ticker = Ticker();
+const Ticker = {
+	start,
+};
 
-export default ticker;
+export default Ticker;
