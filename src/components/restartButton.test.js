@@ -14,7 +14,7 @@ describe('Restart', () => {
 	});
 
 	test('when clicked triggers the action, restart', () => {
-		jest.spyOn(actions, 'restart').mockImplementation();
+		jest.spyOn(actions, 'restart').mockReturnValue();
 		const component = render(Restart()).getByRole('restart');
 
 		fireEvent.click(component);

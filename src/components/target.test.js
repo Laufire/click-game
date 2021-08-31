@@ -36,7 +36,7 @@ describe('Target', () => {
 	});
 
 	test('when clicked triggers the action, swatTarget', () => {
-		jest.spyOn(actions, 'swatTarget').mockImplementation();
+		jest.spyOn(actions, 'swatTarget').mockReturnValue();
 
 		const component = render(Target(target)).getByRole('target');
 

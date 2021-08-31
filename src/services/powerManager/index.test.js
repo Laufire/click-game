@@ -63,6 +63,8 @@ describe('PowerManager', () => {
 			const result = PowerManager
 				.removeExpiredPowers({ state: { powers }});
 
+			powers.map((power) => expect(helper.isProbable)
+				.toHaveBeenCalledWith(power.prob.remove));
 			expect(result).toEqual(powers);
 		});
 
@@ -161,7 +163,6 @@ describe('PowerManager', () => {
 	});
 
 	describe('addPowers', () => {
-		// eslint-disable-next-line no-shadow
 		const context = { state: { powers: [], targets: [] }};
 		const expectedPowers = [Symbol('power')];
 		const expectedDropCounts = 1;
@@ -187,7 +188,6 @@ describe('PowerManager', () => {
 
 	test('getDropCount returns killed targets count based on drop prob', () => {
 		const rndTargets = Mocks.getRandomTargets(2);
-		// eslint-disable-next-line no-shadow
 		const context = Symbol('context');
 
 		const targetWithDrop = { ...rndTargets[0], prob: { drop: 1 }};
@@ -273,7 +273,7 @@ describe('PowerManager', () => {
 
 		test('whether isFuture is called', () => {
 			jest.spyOn(helper, 'isFuture')
-				.mockImplementation(jest.fn(() => input));
+				.mockReturnValue(input);
 			const result
 				= PowerManager.isActive(state, power);
 

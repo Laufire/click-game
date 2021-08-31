@@ -9,7 +9,7 @@ import App from './App';
 
 test('App renders the game', () => {
 	jest.spyOn(React, 'useEffect');
-	jest.spyOn(ticker, 'start').mockImplementation();
+	jest.spyOn(ticker, 'start').mockReturnValue();
 
 	const { getByRole } = render(<App/>);
 

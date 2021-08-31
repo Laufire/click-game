@@ -28,13 +28,11 @@ describe('Powers', () => {
 			jest.spyOn(Math,
 				'min').mockReturnValue(count);
 			jest.spyOn(random,
-				'rndValues').mockImplementation(() =>
-				randomTargets);
+				'rndValues').mockReturnValue(randomTargets);
 			jest.spyOn(random,
 				'rndBetween').mockReturnValue(damage);
 			jest.spyOn(TargetManager,
-				'decreaseTargetHealth').mockImplementation(() =>
-				targets);
+				'decreaseTargetHealth').mockReturnValue(targets);
 
 			const result = bomb({ targets });
 
@@ -136,8 +134,7 @@ describe('Powers', () => {
 
 		test('Returns modified targets and powers', () => {
 			jest.spyOn(TargetManager,
-				'decreaseTargetHealth').mockImplementation(() =>
-				targets);
+				'decreaseTargetHealth').mockReturnValue(targets);
 
 			const result = nuke(state);
 

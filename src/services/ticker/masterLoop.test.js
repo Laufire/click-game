@@ -7,7 +7,7 @@ describe('masterLoop', () => {
 	test('masterLoop', () => {
 		MasterLoop.masterLoop.forEach((item) => {
 			jest.spyOn(Actions, item)
-				.mockImplementation();
+				.mockReturnValue();
 		});
 		MasterLoop.runMasterLoop();
 

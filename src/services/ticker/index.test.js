@@ -5,9 +5,9 @@ import context from '../../core/context';
 describe('Ticker', () => {
 	test('ticker', () => {
 		jest.spyOn(MasterLoop, 'runMasterLoop')
-			.mockImplementation();
+			.mockReturnValue();
 		jest.spyOn(global, 'setInterval')
-			.mockImplementation();
+			.mockReturnValue();
 
 		Ticker.start();
 

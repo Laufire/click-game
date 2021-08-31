@@ -14,7 +14,7 @@ describe('Board', () => {
 	});
 
 	test('when clicked triggers the action, decreaseHealth', () => {
-		jest.spyOn(actions, 'swatBoard').mockImplementation();
+		jest.spyOn(actions, 'swatBoard').mockReturnValue();
 
 		const component = render(Board()).getByRole('board');
 

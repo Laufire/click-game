@@ -16,7 +16,7 @@ describe('actions', () => {
 			const { library, func } = mock;
 
 			jest.spyOn(library,	func)
-				.mockImplementation(jest.fn(() => returned));
+				.mockReturnValue(returned);
 
 			const result = Actions[action](context);
 
@@ -104,7 +104,7 @@ describe('actions', () => {
 
 	test('removeTarget', () => {
 		jest.spyOn(TargetManager, 'removeTargets')
-			.mockImplementation(jest.fn(() => returned));
+			.mockReturnValue(returned);
 
 		const context = {
 			data: Symbol('data'),

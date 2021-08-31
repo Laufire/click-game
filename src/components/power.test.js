@@ -41,8 +41,8 @@ describe('Power', () => {
 
 	test('when clicked triggers the action, activePower & removeActivatedPower'
 		, () => {
-			jest.spyOn(actions, 'activatePower').mockImplementation();
-			jest.spyOn(actions, 'removeActivatedPower').mockImplementation();
+			jest.spyOn(actions, 'activatePower').mockReturnValue();
+			jest.spyOn(actions, 'removeActivatedPower').mockReturnValue();
 
 			const component = render(Power(power)).getByRole('power');
 
