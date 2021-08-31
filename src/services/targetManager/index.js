@@ -68,17 +68,22 @@ const TargetManager = {
 	getTargetsScore: ({ data: targets }) =>
 		targets.reduce((acc, target) => acc + target.score, 0),
 
+	isDead: (target) => target.health <= 0 || !isFuture(target.livesTill),
+
 	decreaseTargetHealth: (
 		targets, impactedTargets, damage
 	) => {
-		const dataId
-			= impactedTargets.map((impactedTarget) => impactedTarget.id);
+		const impactedTargetIDs = impactedTargets
+			.map((impactedTarget) => impactedTarget.id);
+		const attackedAt = Date.now();
 
-		return targets.map((target) =>
-			(dataId.includes(target.id)
+		return 	targets.map((target) =>
+			(impactedTargetIDs.includes(target.id)
+				&& !TargetManager.isDead(target)
 				? {
 					...target,
 					health: Math.max(target.health - damage, 0),
+					attackedAt: attackedAt,
 				}
 				: target));
 	},

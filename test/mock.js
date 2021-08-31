@@ -15,6 +15,7 @@ const ant = secure({
 	prob: {
 		attack: 1,
 	},
+	attackedAt: null,
 });
 const mosquito = secure({
 	type: 'mosquito',
@@ -27,6 +28,7 @@ const mosquito = secure({
 	prob: {
 		attack: 1,
 	},
+	attackedAt: null,
 });
 const butterfly = secure({
 	type: 'butterfly',
@@ -39,6 +41,7 @@ const butterfly = secure({
 	prob: {
 		attack: 1,
 	},
+	attackedAt: null,
 });
 const targets = secure([
 	ant,

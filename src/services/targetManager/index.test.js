@@ -6,7 +6,7 @@
 import * as random from '@laufire/utils/random';
 import TargetManager from '../targetManager';
 import config from '../../core/config';
-import { keys, range, secure } from '@laufire/utils/collection';
+import { keys, map, range, secure } from '@laufire/utils/collection';
 import { replace } from '../../../test/helpers';
 import * as PositionService from '../positionService';
 import * as HelperService from '../helperService';
@@ -244,13 +244,20 @@ describe('TargetManager', () => {
 		const { decreaseTargetHealth } = TargetManager;
 		const impactedTargets = getRandomTargets();
 		const [randomTarget] = impactedTargets;
+		const attackedAt = Symbol('attackedAt');
+		const resultingHealth = Symbol('resultingHealth');
 
 		test('returns targets with life decreased',
 			() => {
+				jest.spyOn(Date, 'now')
+					.mockReturnValue(attackedAt);
+				jest.spyOn(TargetManager, 'isDead').mockReturnValue(false);
+				jest.spyOn(Math, 'max').mockReturnValue(resultingHealth);
 				const damage = 1;
 				const editedTarget = {
 					...randomTarget,
-					health: randomTarget.health - damage,
+					health: resultingHealth,
+					attackedAt: attackedAt,
 				};
 
 				const expectedTargets = replace(
@@ -261,25 +268,23 @@ describe('TargetManager', () => {
 					targets, impactedTargets, damage
 				);
 
+				expect(Date.now).toHaveBeenCalled();
+				expect(Math.max)
+					.toHaveBeenCalledWith(randomTarget.health - damage, 0);
+				impactedTargets.forEach((target) =>
+					expect(TargetManager.isDead).toHaveBeenCalledWith(target));
 				expect(result).toEqual(expectedTargets);
 			});
 
-		test('returns non negative health', () => {
-			const damage = randomTarget.health + 1;
-			const editedTarget = {
-				...randomTarget,
-				health: 0,
-			};
-
-			const expectedTargets = replace(
-				targets, randomTarget, editedTarget
-			);
+		test('attacked a dead target', () => {
+			jest.spyOn(TargetManager, 'isDead').mockReturnValue(true);
+			const damage = 1;
 
 			const result = decreaseTargetHealth(
 				targets, impactedTargets, damage
 			);
 
-			expect(result).toEqual(expectedTargets);
+			expect(result).toEqual(targets);
 		});
 	});
 
@@ -475,5 +480,41 @@ describe('TargetManager', () => {
 					.toHaveBeenCalledWith(config.targets[type].prob.spawn));
 			expect(result).toEqual([]);
 		});
+	});
+
+	describe('isDead', () => {
+		const generateTest = ({ isFuture, health, expectation }, action) => {
+			jest.spyOn(HelperService, 'isFuture')
+				.mockReturnValue(isFuture);
+
+			const target = { health: health, livesTill: Symbol('livesTill') };
+			const { isDead } = TargetManager;
+
+			const result = isDead(target);
+
+			action !== 'killed' && expect(HelperService.isFuture)
+				.toHaveBeenCalledWith(target.livesTill);
+			expect(result).toEqual(expectation);
+		};
+		const combinations = {
+			killed: {
+				isFuture: false,
+				health: 0,
+				expectation: true,
+			},
+			expired: {
+				isFuture: false,
+				health: 1,
+				expectation: true,
+			},
+			alive: {
+				isFuture: true,
+				health: 1,
+				expectation: false,
+			},
+		};
+
+		map(combinations, (params, action) =>
+			test(action, () => generateTest(params, action)));
 	});
 });
