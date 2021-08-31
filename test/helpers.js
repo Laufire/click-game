@@ -14,7 +14,7 @@ const unique = (array) => array.filter((elm, i) => i === array.indexOf(elm));
 
 const isAcceptable = (
 	actual, expected, margin
-) => Math.abs((expected - actual) / expected) >= margin;
+) => Math.abs((expected - actual) / (expected || 1)) <= margin;
 
 const retry = (fn, retryCount = 100) => {
 	const ret = [];

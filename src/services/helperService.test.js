@@ -77,12 +77,10 @@ describe('HelperService', () => {
 			const results = values.map((probability) =>	generateTest(probability, margin));
 			const successCount = results.filter(isEqual(true)).length;
 
-			expect(isAcceptable(
-				successCount, results.length, 0.15
-			)).toEqual(true);
+			expect(successCount).toEqual(results.length);
 		};
 
 		testValues([0, 1, 2], 0);
-		testValues(range(2, 99).map((probability) => probability / 100), 0.15);
+		testValues(range(2, 99).map((probability) => probability / 100), 0.05);
 	});
 });
