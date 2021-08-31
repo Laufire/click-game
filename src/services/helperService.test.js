@@ -30,20 +30,16 @@ describe('HelperService', () => {
 
 	describe('isFuture', () => {
 		const msPerDay = 86400000;
+		const expectations = [
+			['past', false, Date.now() - msPerDay],
+			['future', true, Date.now() + msPerDay],
+		];
 
-		test('isFuture returns false when input date is less than new date',
-			() => {
-				const result = isFuture(Date.now() - msPerDay);
-
-				expect(result).toEqual(false);
-			});
-
-		test('isFuture returns true when input date is greater than new date',
-			() => {
-				const result = isFuture(Date.now() + msPerDay);
-
-				expect(result).toEqual(true);
-			});
+		test.each(expectations)('when input date is in the %p than new date isFuture returns %p ',
+			(
+				dummy, expectation, value
+			) =>
+				expect(isFuture(value)).toEqual(expectation));
 	});
 
 	describe('getVariance', () => {
