@@ -3,7 +3,6 @@
 /* eslint-disable no-magic-numbers */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-nested-callbacks */
-jest.mock('moment');
 
 import config from '../core/config';
 import * as random from '@laufire/utils/random';
@@ -48,16 +47,20 @@ describe('HelperService', () => {
 	});
 
 	describe('getVariance', () => {
-		const input = 100;
+		const hundred = 100;
+		const returnValue = random.rndBetween(1, hundred);
+		const variance = random.rndBetween(0, 10) / 10;
+		const minimum = hundred - (variance * hundred);
+		const maximum = hundred + (variance * hundred);
 
 		test('returns a random number between variance range', () => {
 			jest.spyOn(random, 'rndBetween')
-				.mockReturnValue(input);
+				.mockReturnValue(returnValue);
 			const { rndBetween } = random;
-			const result = getVariance(0.2);
+			const result = getVariance(variance);
 
-			expect(result).toEqual(input / 100);
-			expect(rndBetween).toHaveBeenCalledWith(80, 120);
+			expect(result).toEqual(returnValue / hundred);
+			expect(rndBetween).toHaveBeenCalledWith(minimum, maximum);
 		});
 	});
 

@@ -8,10 +8,14 @@ import PowerManager from './powerManager';
 import TargetManager from './targetManager';
 
 describe('PositionService', () => {
+	const twentyFive = 25;
+	const hundred = 100;
+	const two = 2;
+
 	test('getRandomX delegates positioning to rndBetween', () => {
-		const widthRange = 50;
-		const min = 25;
-		const max = 75;
+		const widthRange = random.rndBetween(twentyFive, hundred);
+		const min = widthRange / two;
+		const max = hundred - min;
 		const mockValue = Symbol('mock');
 
 		jest.spyOn(random, 'rndBetween').mockReturnValue(mockValue);
@@ -23,9 +27,9 @@ describe('PositionService', () => {
 	});
 
 	test('getRandomY delegates positioning to rndBetween', () => {
-		const heightRange = 50;
-		const min = 25;
-		const max = 75;
+		const heightRange = random.rndBetween(twentyFive, hundred);
+		const min = heightRange / two;
+		const max = hundred - min;
 		const mockValue = Symbol('mock');
 
 		jest.spyOn(random, 'rndBetween').mockReturnValue(mockValue);
@@ -42,7 +46,6 @@ describe('PositionService', () => {
 		const target = TargetManager.getTarget();
 		const position = random.rndValue([power, target]);
 		const { x, y, width, height } = position;
-		const two = 2;
 
 		const result = project(position);
 

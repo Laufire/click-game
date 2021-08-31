@@ -2,6 +2,7 @@
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines-per-function */
 import { secure } from '@laufire/utils/collection';
+import { rndBetween } from '@laufire/utils/lib';
 import config from '../core/config';
 import PlayerManager from './playerManager';
 import PowerManager from './powerManager';
@@ -27,6 +28,7 @@ describe('PlayerManager', () => {
 
 			const result = adjustScore(state, score);
 
+			expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'double');
 			expect(result).toEqual(expectedResult);
 		});
 
@@ -46,12 +48,9 @@ describe('PlayerManager', () => {
 	});
 
 	test('decreaseHealth returns decreased health', () => {
-		const context = {
-			state,
-		};
 		const expectedResult = state.health - config.penalDamage;
 
-		const result = decreaseHealth({ ...context,
+		const result = decreaseHealth({ state: state,
 			data: config.penalDamage });
 
 		expect(result).toEqual(expectedResult);
@@ -94,20 +93,21 @@ describe('PlayerManager', () => {
 	});
 	test('getHealthRatio returns the ratio between state health & max health',
 		() => {
-			const context = {
-				state: { health: 73 },
-			};
+			const health = rndBetween(0, 100);
+			const expectedResult = health / config.maxHealth;
 
-			const expectedResult = 0.73;
-
-			const result = getHealthRatio(context);
+			const result = getHealthRatio({ state: { health }});
 
 			expect(result).toEqual(expectedResult);
 		});
 
 	test('getHealthColor returns the color according to health percentage',
 		() => {
-			const healthRatio = [0.93, 0.73, 0.23];
+			const healthRatio = [
+				rndBetween(75, 100) / 100,
+				rndBetween(25, 75) / 100,
+				rndBetween(0, 25) / 100,
+			];
 
 			const expectedResult = ['lightgreen', 'yellow', 'orangered'];
 
