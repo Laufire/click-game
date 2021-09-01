@@ -17,30 +17,32 @@ import * as timeService from '../timeService';
 import swatEffects from './swatEffects';
 
 describe('TargetManager', () => {
+	const { addTargets, getTarget, swatTarget, decreaseTargetHealth,
+		moveTargets, getExpiredTargets, attackPlayer, spawnTargets, isDead,
+		reproduceTargets, getKilledTargets,
+		getTargetsScore, removeTargets } = TargetManager;
 	const { targets, ant, mosquito, butterfly, getRandomTargets } = Mocks;
 	const x = Symbol('x');
 	const y = Symbol('y');
 	const id = Symbol('id');
 
 	describe('addTargets adds target', () => {
-		const { addTargets } = TargetManager;
-
 		test('returns targets with new targets added', () => {
-			const spawnTargets = [Symbol('spawnTargets')];
-			const reproduceTargets = [Symbol('reproduceTargets')];
+			const returnSpawnTargets = [Symbol('spawnTargets')];
+			const returnReproduceTargets = [Symbol('reproduceTargets')];
 
 			jest.spyOn(HelperService, 'isProbable')
 				.mockReturnValue(1);
 			jest.spyOn(TargetManager, 'spawnTargets')
-				.mockReturnValue(spawnTargets);
+				.mockReturnValue(returnSpawnTargets);
 			jest.spyOn(TargetManager, 'reproduceTargets')
-				.mockReturnValue(reproduceTargets);
+				.mockReturnValue(returnReproduceTargets);
 
 			const result = addTargets({ state: { targets }});
 			const expectedResult = [
 				...targets,
-				...spawnTargets,
-				...reproduceTargets,
+				...returnSpawnTargets,
+				...returnReproduceTargets,
 			];
 
 			expect(TargetManager.spawnTargets).toHaveBeenCalledWith();
@@ -61,7 +63,6 @@ describe('TargetManager', () => {
 		const adjustedTime = Symbol('adjustedTime');
 		const livesTill = adjustedTime;
 		const currentTime = Symbol('currentTime');
-		const { getTarget } = TargetManager;
 		const type = 'ant';
 		const typeConfig = config.targets[type];
 		const { variance } = typeConfig;
@@ -134,7 +135,6 @@ describe('TargetManager', () => {
 	});
 
 	describe('swatTarget reduces life', () => {
-		const { swatTarget } = TargetManager;
 		const health = 3;
 		const score = 10;
 		const spoiler = TargetManager.getTarget({ type: 'spoiler' });
@@ -152,24 +152,14 @@ describe('TargetManager', () => {
 			jest.spyOn(PowerManager, 'getDamage')
 				.mockReturnValue(damage);
 		};
-		const butterflyResult = {
-			targets: decreasedTargetLive,
-			health: returnValue,
-		};
-		const spoilerflyResult = {
-			targets: decreasedTargetLive,
-			score: returnValue,
-		};
 		const expectations = [
-			[ant, '', { targets: decreasedTargetLive }],
-			[butterfly, { health: returnValue }, butterflyResult],
-			[spoiler, { score: returnValue }, spoilerflyResult],
+			[ant, ''],
+			[butterfly, { health: returnValue }],
+			[spoiler, { score: returnValue }],
 		];
 
 		test.each(expectations)('swatted target returns ',
-			(
-				data, value, expectedResult
-			) => {
+			(data, value) => {
 				spyOn();
 				data !== ant
 				&& jest.spyOn(swatEffects, data.type)
@@ -182,13 +172,15 @@ describe('TargetManager', () => {
 						state.targets, [data], damage
 					);
 				expect(PowerManager.getDamage).toHaveBeenCalledWith(state);
-				expect(result).toMatchObject(expectedResult);
+				expect(result).toMatchObject({
+					targets: decreasedTargetLive,
+					...value,
+				});
 			});
 	});
 
 	test('getKilledTargets returns all dead targets from the given targets',
 		() => {
-			const { getKilledTargets } = TargetManager;
 			const deadTarget = secure({
 				...mosquito,
 				health: 0,
@@ -207,7 +199,6 @@ describe('TargetManager', () => {
 	test('getTargetsScore returns the bonus score',
 		() => {
 			const two = 2;
-			const { getTargetsScore } = TargetManager;
 			const [targetOne, targetTwo] = getRandomTargets(two);
 
 			const allTargets = secure([
@@ -225,7 +216,6 @@ describe('TargetManager', () => {
 		});
 
 	describe('decreaseTargetHealth returns targets', () => {
-		const { decreaseTargetHealth } = TargetManager;
 		const impactedTargets = getRandomTargets();
 		const [randomTarget] = impactedTargets;
 		const attackedAt = Symbol('attackedAt');
@@ -273,7 +263,6 @@ describe('TargetManager', () => {
 	});
 
 	test('removeTargets remove targets to be removed', () => {
-		const { removeTargets } = TargetManager;
 		const targetToRetain = random.rndValue(targets);
 		const targetsToRemove = removeTargets({ state: { targets },
 			data: [targetToRetain] });
@@ -289,7 +278,6 @@ describe('TargetManager', () => {
 	});
 
 	describe('moveTargets returns moved targets', () => {
-		const { moveTargets } = TargetManager;
 		const state = secure({
 			targets,
 		});
@@ -342,7 +330,7 @@ describe('TargetManager', () => {
 
 			jest.spyOn(HelperService, 'isFuture').mockReturnValue(false);
 
-			const result = TargetManager.getExpiredTargets({ state });
+			const result = getExpiredTargets({ state });
 
 			expect(HelperService.isFuture)
 				.toHaveBeenCalledWith(livesTill);
@@ -355,7 +343,7 @@ describe('TargetManager', () => {
 
 			jest.spyOn(HelperService, 'isFuture').mockReturnValue(true);
 
-			const result = TargetManager.getExpiredTargets({ state });
+			const result = getExpiredTargets({ state });
 
 			expect(HelperService.isFuture)
 				.toHaveBeenCalledWith(livesTill);
@@ -381,7 +369,7 @@ describe('TargetManager', () => {
 			jest.spyOn(PlayerManager, 'decreaseHealth')
 				.mockReturnValue(decreasedHealth);
 
-			const result = TargetManager.attackPlayer(context);
+			const result = attackPlayer(context);
 
 			expect(PlayerManager.decreaseHealth)
 				.toHaveBeenCalledWith({ ...context, data: damage });
@@ -399,7 +387,7 @@ describe('TargetManager', () => {
 			jest.spyOn(PlayerManager, 'decreaseHealth')
 				.mockReturnValue(decreasedHealth);
 
-			const result = TargetManager.attackPlayer(context);
+			const result = attackPlayer(context);
 
 			expect(PlayerManager.decreaseHealth)
 				.toHaveBeenCalledWith({ ...context, data: damage });
@@ -410,7 +398,6 @@ describe('TargetManager', () => {
 	});
 
 	describe('spawnTargets', () => {
-		const { spawnTargets } = TargetManager;
 		const targetTypes = keys(config.targets);
 
 		test('spawnTargets returns all target when isProb is true', () => {
@@ -437,7 +424,6 @@ describe('TargetManager', () => {
 		});
 	});
 	describe('reproduceTargets', () => {
-		const { reproduceTargets } = TargetManager;
 		const targetTypes = targets.map((target) => target.type);
 
 		test('reproduceTargets returns child target when isProb is true',
@@ -472,7 +458,6 @@ describe('TargetManager', () => {
 				.mockReturnValue(isFuture);
 
 			const target = { health: health, livesTill: Symbol('livesTill') };
-			const { isDead } = TargetManager;
 
 			const result = isDead(target);
 
