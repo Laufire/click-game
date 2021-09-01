@@ -16,15 +16,15 @@ describe('HelperService', () => {
 
 	describe('getId', () => {
 		test('getId gives a rndString of the configured idLength', () => {
-			const mockValue = Symbol('mock');
+			const returnValue = Symbol('mock');
 
 			jest.spyOn(random, 'rndString')
-				.mockReturnValue(mockValue);
+				.mockReturnValue(returnValue);
 
 			const result = getId();
 
 			expect(random.rndString).toHaveBeenCalledWith(config.idLength);
-			expect(result).toEqual(mockValue);
+			expect(result).toEqual(returnValue);
 		});
 	});
 
@@ -55,8 +55,8 @@ describe('HelperService', () => {
 			const { rndBetween } = random;
 			const result = getVariance(variance);
 
-			expect(result).toEqual(returnValue / hundred);
 			expect(rndBetween).toHaveBeenCalledWith(minimum, maximum);
+			expect(result).toEqual(returnValue / hundred);
 		});
 	});
 

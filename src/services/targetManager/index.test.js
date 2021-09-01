@@ -14,6 +14,7 @@ import Mocks from '../../../test/mock';
 import PowerManager from '../powerManager';
 import PlayerManager from '../playerManager';
 import * as timeService from '../timeService';
+import swatEffects from './swatEffects';
 
 describe('TargetManager', () => {
 	const { targets, ant, mosquito, butterfly, getRandomTargets } = Mocks;
@@ -85,9 +86,9 @@ describe('TargetManager', () => {
 				x,
 				y,
 				type,
+				livesTill,
 				...typeConfig,
 				...size,
-				livesTill,
 			};
 
 			const result = getTarget({ x, y, type });
@@ -101,15 +102,15 @@ describe('TargetManager', () => {
 		});
 
 		test('getTarget params are optional', () => {
-			jest.spyOn(HelperService,	'getId')
+			jest.spyOn(HelperService, 'getId')
 				.mockReturnValue(id);
 			jest.spyOn(random, 'rndValue')
 				.mockReturnValue('ant');
 			jest.spyOn(HelperService, 'getVariance')
 				.mockReturnValue(variance);
-			jest.spyOn(PositionService,	'getRandomX')
+			jest.spyOn(PositionService, 'getRandomX')
 				.mockReturnValue(x);
-			jest.spyOn(PositionService,	'getRandomY')
+			jest.spyOn(PositionService, 'getRandomY')
 				.mockReturnValue(y);
 
 			const expectedResult = {
@@ -137,6 +138,7 @@ describe('TargetManager', () => {
 		const health = 3;
 		const score = 10;
 		const spoiler = TargetManager.getTarget({ type: 'spoiler' });
+		const returnValue = Symbol('returnValue');
 		const decreasedTargetLive = Symbol('decreasedTargetLive');
 		const damage = Symbol('damage');
 		const state = secure({
@@ -144,66 +146,43 @@ describe('TargetManager', () => {
 			health,
 			score,
 		});
-
 		const spyOn = () => {
 			jest.spyOn(TargetManager, 'decreaseTargetHealth')
 				.mockReturnValue(decreasedTargetLive);
 			jest.spyOn(PowerManager, 'getDamage')
 				.mockReturnValue(damage);
 		};
+		const butterflyResult = {
+			targets: decreasedTargetLive,
+			health: returnValue,
+		};
+		const spoilerflyResult = {
+			targets: decreasedTargetLive,
+			score: returnValue,
+		};
+		const expectations = [
+			[ant, '', { targets: decreasedTargetLive }],
+			[butterfly, { health: returnValue }, butterflyResult],
+			[spoiler, { score: returnValue }, spoilerflyResult],
+		];
 
-		test('returns reduced life of the swatted target', () => {
-			spyOn();
-
-			const targetToSwat = random.rndValue(targets);
-
-			const result = swatTarget({ state: state, data: targetToSwat });
-
-			expect(result).toMatchObject({ targets: decreasedTargetLive });
-			expect(TargetManager.decreaseTargetHealth)
-				.toHaveBeenCalledWith(
-					state.targets, [targetToSwat], damage
-				);
-			expect(PowerManager.getDamage)
-				.toHaveBeenCalledWith(state);
-		});
-
-		test('returns reduced player life when a butterfly is swatted',
-			() => {
+		test.each(expectations)('swatted target returns ',
+			(
+				data, value, expectedResult
+			) => {
 				spyOn();
+				data !== ant
+				&& jest.spyOn(swatEffects, data.type)
+					.mockReturnValue(value);
 
-				const targetToSwat = TargetManager
-					.getTarget({ type: 'butterfly' });
+				const result = swatTarget({ state, data });
 
-				const result = swatTarget({ state: state, data: targetToSwat });
-
-				expect(result).toMatchObject({
-					health: state.health - config.penalDamage,
-				});
-			});
-
-		test('returns reduced player score when a spoiler is swatted',
-			() => {
-				const adjustedScore = Symbol('adjustment');
-				const adjustment = 5;
-
-				spyOn();
-				jest.spyOn(random, 'rndBetween')
-					.mockReturnValue(adjustment);
-				jest.spyOn(PlayerManager, 'adjustScore')
-					.mockReturnValue(adjustedScore);
-
-				const { min, max } = config.targets.spoiler.effect.score;
-
-				const result = swatTarget({ state: state, data: spoiler });
-
-				expect(random.rndBetween)
-					.toHaveBeenCalledWith(min, max);
-				expect(PlayerManager.adjustScore)
-					.toHaveBeenCalledWith(state, -adjustment);
-				expect(result).toMatchObject({
-					score: adjustedScore,
-				});
+				expect(TargetManager.decreaseTargetHealth)
+					.toHaveBeenCalledWith(
+						state.targets, [data], damage
+					);
+				expect(PowerManager.getDamage).toHaveBeenCalledWith(state);
+				expect(result).toMatchObject(expectedResult);
 			});
 	});
 

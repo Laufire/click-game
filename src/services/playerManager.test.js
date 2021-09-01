@@ -130,34 +130,6 @@ describe('PlayerManager', () => {
 			state,
 		};
 
-		test('getAttacked returns unchanged '
-			+ 'health when the repellent is active', () => {
-			const returned = state.health;
-
-			jest.spyOn(PowerManager, 'isActive').mockReturnValue(true);
-			jest.spyOn(TargetManager, 'attackPlayer').mockReturnValue(returned);
-
-			const result = getAttacked(context);
-
-			expect(TargetManager.attackPlayer)
-				.not.toHaveBeenCalledWith(context);
-			expect(PowerManager.isActive)
-				.toHaveBeenCalledWith(state, 'repellent');
-			expect(result).toEqual(returned);
-		});
-
-		test('getAttacked call attackPlayer'
-		+ 'when the repellent is inactive', () => {
-			const returned = Symbol('returned');
-
-			jest.spyOn(PowerManager, 'isActive').mockReturnValue(false);
-			jest.spyOn(TargetManager, 'attackPlayer').mockReturnValue(returned);
-
-			const result = getAttacked(context);
-
-			expect(TargetManager.attackPlayer).toHaveBeenCalledWith(context);
-			expect(result).toEqual(returned);
-		});
 		const returnedValue = Symbol('returned');
 		const expectations = [
 			['returns unchanged health', 'active', true, state.health],
