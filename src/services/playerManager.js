@@ -23,7 +23,7 @@ const PlayerManager = {
 			Math.floor((healthRatio * hundred) / config.healthBar.interval)
 			* config.healthBar.interval],
 
-	isAlive: (context) => context.state.health !== 0,
+	isAlive: (context) => context.state.health > 0,
 
 	penalize: (context) => (
 		PowerManager.isActive(context.state, 'shield')
