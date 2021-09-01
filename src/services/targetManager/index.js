@@ -14,6 +14,7 @@ const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
 
 const TargetManager = {
+	// eslint-disable-next-line max-lines-per-function
 	getTarget: ({ x, y, type } = {}) => {
 		const typeConfig = config.targets[type || rndValue(targetTypeKeys)];
 		const variance = getVariance(typeConfig.variance);
@@ -31,6 +32,7 @@ const TargetManager = {
 			livesTill: adjustTime(
 				currentTime, lifespan, 'seconds'
 			),
+			attackedAt: null,
 			...typeConfig,
 			...size,
 		};
