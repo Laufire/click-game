@@ -1,6 +1,6 @@
 import config from '../../core/config';
 import { rndValue } from '@laufire/utils/random';
-import { keys } from '@laufire/utils/collection';
+import { keys, sort } from '@laufire/utils/collection';
 import { truthy } from '@laufire/utils/predicates';
 import { getRandomX, getRandomY } from '../positionService';
 import { getId, getVariance,
@@ -9,6 +9,7 @@ import PowerManager from '../powerManager';
 import PlayerManager from '../playerManager';
 import { adjustTime } from '../timeService';
 import swatEffects from './swatEffects';
+import { onProp, ascending } from '@laufire/utils/sorters';
 
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
@@ -67,8 +68,18 @@ const TargetManager = {
 	removeTargets: ({ state: { targets }, data: targetsToRemove }) =>
 		targets.filter((target) => !targetsToRemove.includes(target)),
 
-	getTargetsScore: ({ data: targets }) =>
-		targets.reduce((acc, target) => acc + target.score, 0),
+	getTargetsScore: ({ data: targets }) => {
+		const sortedTargets = sort(targets, onProp('attackedAt', ascending));
+		let multiplier = 1;
+		let previousTarget = '';
+
+		return sortedTargets.reduce((acc, { score, type }) => {
+			multiplier = type === previousTarget ? multiplier + 1 : 1;
+			previousTarget = type;
+
+			return acc + (score * multiplier);
+		}, 0);
+	},
 
 	isDead: (target) => target.health <= 0 || !isFuture(target.livesTill),
 
@@ -112,7 +123,6 @@ const TargetManager = {
 			return isProbable(attackProb);
 		}).reduce((acc, target) => acc + target.damage, 0),
 	}),
-
 };
 
 export default TargetManager;

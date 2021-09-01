@@ -225,19 +225,24 @@ describe('TargetManager', () => {
 			expect(result).toEqual([deadTarget]);
 		});
 
-	test('getTargetsScore returns the total score of all given targets',
+	test('getTargetsScore returns the bonus score',
 		() => {
+			const two = 2;
 			const { getTargetsScore } = TargetManager;
+			const [targetOne, targetTwo] = getRandomTargets(two);
+
 			const allTargets = secure([
-				ant,
-				mosquito,
+				{ ...targetOne, attackedAt: 1, score: 5 },
+				{ ...targetOne, attackedAt: 2, score: 5 },
+				{ ...targetTwo, attackedAt: 3, score: 1 },
+				{ ...targetOne, attackedAt: 4, score: 5 },
 			]);
-			const score = ant.score + mosquito.score;
+			const expected = 21;
 
 			const result = getTargetsScore({ data: allTargets });
 
 			expect(result)
-				.toEqual(score);
+				.toEqual(expected);
 		});
 
 	describe('decreaseTargetHealth returns targets', () => {
