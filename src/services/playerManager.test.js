@@ -18,33 +18,25 @@ describe('PlayerManager', () => {
 	});
 
 	describe('adjustScore', () => {
-		test('adjusts score while double is inactive', () => {
-			const score = -5;
+		const { multiplier } = config.powers.double.effect;
+		const expectations = [
+			['2x', 'active', true, 5, state.score + (5 * multiplier)],
+			['1x', 'inactive', false, -5, state.score - 5],
+		];
 
-			const expectedResult = state.score + score;
+		test.each(expectations)('adjusts score as %p while double is %p',
+			(
+				dummy, dummyOne, isActive, adjustment, expectation
+			) => {
+				jest.spyOn(PowerManager, 'isActive')
+					.mockReturnValue(isActive);
 
-			jest.spyOn(PowerManager, 'isActive')
-				.mockReturnValue(false);
+				const result = adjustScore(state, adjustment);
 
-			const result = adjustScore(state, score);
-
-			expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'double');
-			expect(result).toEqual(expectedResult);
-		});
-
-		test('adjusts score as 2X while double is active', () => {
-			const score = 5;
-			const expectedResult = state.score
-			+ (score * config.powers.double.effect.multiplier);
-
-			jest.spyOn(PowerManager, 'isActive')
-				.mockReturnValue(true);
-
-			const result = PlayerManager.adjustScore(state, score);
-
-			expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'double');
-			expect(result).toEqual(expectedResult);
-		});
+				expect(PowerManager.isActive)
+					.toHaveBeenCalledWith(state, 'double');
+				expect(result).toEqual(expectation);
+			});
 	});
 
 	test('decreaseHealth returns decreased health', () => {
@@ -57,40 +49,34 @@ describe('PlayerManager', () => {
 	});
 
 	describe('isAlive', () => {
-		test('returns false if health is equal to zero', () => {
-			const context = {
-				state: { health: 0 },
-			};
+		const expectations = [
+			[false, 'equal to', { state: { health: 0 }}],
+			[true, 'greater than', { state: { health: 3 }}],
+		];
 
-			const result = isAlive(context);
-
-			expect(result).toEqual(false);
-		});
-		test('returns true if health is greater than zero', () => {
-			const context = {
-				state: { health: 3 },
-			};
-
-			const result = isAlive(context);
-
-			expect(result).toEqual(true);
-		});
+		test.each(expectations)('returns %p if health is %p zero',
+			(
+				expectation, dummy, context
+			) =>
+				expect(isAlive(context)).toEqual(expectation));
 	});
+
 	describe('increaseHealth', () => {
-		test('returns increased health while health is less than max limit',
-			() => {
-				const result = increaseHealth({ health: config.maxHealth - 1 },
-					1);
+		const expectations = [
+			['increased', 'less', { health: config.maxHealth - 1 }],
+			['same', 'greater', { health: config.maxHealth }],
+		];
 
-				expect(result).toEqual(config.maxHealth);
-			});
-		test('returns the same health while health is greater than max limit',
-			() => {
-				const result = increaseHealth({ health: config.maxHealth }, 1);
+		test.each(expectations)('returns the %p health while health'
+		+ ' is %p than max limit', (
+			dummy, dummyOne, expectation
+		) => {
+			const result = increaseHealth(expectation, 1);
 
-				expect(result).toEqual(config.maxHealth);
-			});
+			expect(result).toEqual(config.maxHealth);
+		});
 	});
+
 	test('getHealthRatio returns the ratio between state health & max health',
 		() => {
 			const health = rndBetween(0, 100);
@@ -121,28 +107,21 @@ describe('PlayerManager', () => {
 			state,
 			config,
 		};
+		const { health } = context.state;
+		const expectations = [
+			['unchanged', 'active', true, health],
+			['decreased', 'inactive', false, health - config.penalDamage],
+		];
 
-		test('penalize returns unchanged '
-			+ 'health when the shield is active', () => {
-			const returned = state.health;
-
-			jest.spyOn(PowerManager, 'isActive').mockReturnValue(true);
-
-			const result = penalize(context);
-
-			expect(PowerManager.isActive).toHaveBeenCalledWith(state, 'shield');
-			expect(result).toEqual(returned);
-		});
-
-		test('penalize returns decreased health'
-		+ 'when the shield is inactive', () => {
-			const expectedResult = context.state.health - config.penalDamage;
-
-			jest.spyOn(PowerManager, 'isActive').mockReturnValue(false);
+		test.each(expectations)('penalize returns %p health'
+		+ ' when the shield is %p', (
+			dummy, dummyOne, isActive, expectation
+		) => {
+			jest.spyOn(PowerManager, 'isActive').mockReturnValue(isActive);
 
 			const result = penalize(context);
 
-			expect(result).toEqual(expectedResult);
+			expect(result).toEqual(expectation);
 		});
 	});
 
@@ -156,9 +135,12 @@ describe('PlayerManager', () => {
 			const returned = state.health;
 
 			jest.spyOn(PowerManager, 'isActive').mockReturnValue(true);
+			jest.spyOn(TargetManager, 'attackPlayer').mockReturnValue(returned);
 
 			const result = getAttacked(context);
 
+			expect(TargetManager.attackPlayer)
+				.not.toHaveBeenCalledWith(context);
 			expect(PowerManager.isActive)
 				.toHaveBeenCalledWith(state, 'repellent');
 			expect(result).toEqual(returned);
@@ -174,6 +156,27 @@ describe('PlayerManager', () => {
 			const result = getAttacked(context);
 
 			expect(TargetManager.attackPlayer).toHaveBeenCalledWith(context);
+			expect(result).toEqual(returned);
+		});
+		const returnedValue = Symbol('returned');
+		const expectations = [
+			['returns unchanged health', 'active', true, state.health],
+			['call attackPlayer', 'inactive', false, returnedValue],
+		];
+
+		test.each(expectations)('getAttacked %p'
+		+ ' when the repellent is %p', (
+			dummy, dummyOne, isActive, returned
+		) => {
+			jest.spyOn(PowerManager, 'isActive').mockReturnValue(isActive);
+			jest.spyOn(TargetManager, 'attackPlayer').mockReturnValue(returned);
+
+			const result = getAttacked(context);
+
+			isActive
+				? expect(TargetManager.attackPlayer).not.toHaveBeenCalled()
+				: expect(TargetManager.attackPlayer)
+					.toHaveBeenCalledWith(context);
 			expect(result).toEqual(returned);
 		});
 	});

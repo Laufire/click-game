@@ -6,39 +6,32 @@ import config from '../core/config';
 import { getRandomX, getRandomY, project } from './positionService';
 import PowerManager from './powerManager';
 import TargetManager from './targetManager';
+import { values } from '@laufire/utils/collection';
 
 describe('PositionService', () => {
 	const twentyFive = 25;
 	const hundred = 100;
 	const two = 2;
 
-	test('getRandomX delegates positioning to rndBetween', () => {
-		const widthRange = random.rndBetween(twentyFive, hundred);
-		const min = widthRange / two;
-		const max = hundred - min;
-		const mockValue = Symbol('mock');
+	const range = random.rndBetween(twentyFive, hundred);
+	const expectations = [
+		[getRandomX, { width: range }],
+		[getRandomY, { height: range }],
+	];
 
-		jest.spyOn(random, 'rndBetween').mockReturnValue(mockValue);
+	test.each(expectations)('%p delegates positioning to rndBetween',
+		(func, expectation) => {
+			const min = values(expectation)[0] / two;
+			const max = hundred - min;
+			const expectedValue = Symbol('mock');
 
-		const result = getRandomX({ width: widthRange });
+			jest.spyOn(random, 'rndBetween').mockReturnValue(expectedValue);
 
-		expect(random.rndBetween).toHaveBeenCalledWith(min, max);
-		expect(result).toEqual(mockValue);
-	});
+			const result = func(expectation);
 
-	test('getRandomY delegates positioning to rndBetween', () => {
-		const heightRange = random.rndBetween(twentyFive, hundred);
-		const min = heightRange / two;
-		const max = hundred - min;
-		const mockValue = Symbol('mock');
-
-		jest.spyOn(random, 'rndBetween').mockReturnValue(mockValue);
-
-		const result = getRandomY({ height: heightRange });
-
-		expect(random.rndBetween).toHaveBeenCalledWith(min, max);
-		expect(result).toEqual(mockValue);
-	});
+			expect(random.rndBetween).toHaveBeenCalledWith(min, max);
+			expect(result).toEqual(expectedValue);
+		});
 
 	test('project returns the adjusted position', () => {
 		const type = random.rndValue(keys(config.powers));
