@@ -1,6 +1,6 @@
 import config from '../../core/config';
 import { rndValue } from '@laufire/utils/random';
-import { keys, sort } from '@laufire/utils/collection';
+import { keys, sort, values } from '@laufire/utils/collection';
 import { truthy } from '@laufire/utils/predicates';
 import { getRandomX, getRandomY } from '../positionService';
 import { getId, getVariance,
@@ -70,6 +70,17 @@ const TargetManager = {
 
 	getTargetsScore: ({ data: targets }) => {
 		const sortedTargets = sort(targets, onProp('attackedAt', ascending));
+		const index = {
+
+		};
+
+		sortedTargets.forEach((target) => (index[target.attackedAt] = [
+			...index[target.attackedAt] || [],
+			target,
+		]));
+
+		// eslint-disable-next-line no-console
+		console.log(values(index));
 		let multiplier = 1;
 		let previousTarget = '';
 

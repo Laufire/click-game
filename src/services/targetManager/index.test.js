@@ -233,7 +233,7 @@ describe('TargetManager', () => {
 
 			const allTargets = secure([
 				{ ...targetOne, attackedAt: 1, score: 5 },
-				{ ...targetOne, attackedAt: 2, score: 5 },
+				{ ...targetOne, attackedAt: 1, score: 5 },
 				{ ...targetTwo, attackedAt: 3, score: 1 },
 				{ ...targetOne, attackedAt: 4, score: 5 },
 			]);
