@@ -232,12 +232,13 @@ describe('TargetManager', () => {
 			const [targetOne, targetTwo] = getRandomTargets(two);
 
 			const allTargets = secure([
-				{ ...targetOne, attackedAt: 1, score: 5 },
-				{ ...targetOne, attackedAt: 1, score: 5 },
+				{ ...targetOne, attackedAt: 1, score: 1 },
+				{ ...targetTwo, attackedAt: 1, score: 1 },
+				{ ...targetOne, attackedAt: 1, score: 1 },
+				{ ...targetOne, attackedAt: 2, score: 1 },
 				{ ...targetTwo, attackedAt: 3, score: 1 },
-				{ ...targetOne, attackedAt: 4, score: 5 },
 			]);
-			const expected = 21;
+			const expected = 8;
 
 			const result = getTargetsScore({ data: allTargets });
 

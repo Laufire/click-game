@@ -68,28 +68,36 @@ const TargetManager = {
 	removeTargets: ({ state: { targets }, data: targetsToRemove }) =>
 		targets.filter((target) => !targetsToRemove.includes(target)),
 
+	// eslint-disable-next-line max-lines-per-function
 	getTargetsScore: ({ data: targets }) => {
 		const sortedTargets = sort(targets, onProp('attackedAt', ascending));
-		const index = {
-
-		};
+		const index = {};
 
 		sortedTargets.forEach((target) => (index[target.attackedAt] = [
 			...index[target.attackedAt] || [],
 			target,
 		]));
 
-		// eslint-disable-next-line no-console
-		console.log(values(index));
-		let multiplier = 1;
-		let previousTarget = '';
+		const events = values(index);
+		let score = 0;
+		const two = 2;
 
-		return sortedTargets.reduce((acc, { score, type }) => {
-			multiplier = type === previousTarget ? multiplier + 1 : 1;
-			previousTarget = type;
+		targetTypeKeys.forEach((type) => {
+			let multiplier = 0;
 
-			return acc + (score * multiplier);
-		}, 0);
+			events.forEach((event) => {
+				const targetCount = event.filter((target) =>
+					target.type === type).length;
+				const termial = (n) => n * (n + 1) / two;
+				const targetScore = event.find((target) =>
+					target.type === type)?.score || 0;
+
+				score += targetScore * ((multiplier * targetCount)
+					+ termial(targetCount));
+				multiplier = targetCount ? multiplier + targetCount : 0;
+			});
+		});
+		return score;
 	},
 
 	isDead: (target) => target.health <= 0 || !isFuture(target.livesTill),
