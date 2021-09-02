@@ -349,20 +349,19 @@ describe('TargetManager', () => {
 			},
 		};
 		const decreasedHealth = Symbol('decreasedHealth');
-		const [target] = getRandomTargets();
-		// eslint-disable-next-line no-magic-numbers
-		const num = 3;
+		const [rndTarget] = getRandomTargets();
+		const num = targets.reduce((acc, target) => acc + target.damage, 0);
 		const expectations = [
-			[0, 0],
-			[num, 1],
+			[num, true],
+			[0, false],
 		];
 
-		test.each(expectations)('returns %p damage when rndBetween is %p ',
+		test.each(expectations)('returns %p damage when isProb is %p ',
 			(damage, mockValue) => {
 				jest.spyOn(HelperService, 'isProbable')
 					.mockReturnValue(mockValue);
 				jest.spyOn(HelperService, 'getVariance')
-					.mockReturnValue(target.variance);
+					.mockReturnValue(rndTarget.variance);
 				jest.spyOn(PlayerManager, 'decreaseHealth')
 					.mockReturnValue(decreasedHealth);
 
@@ -371,7 +370,7 @@ describe('TargetManager', () => {
 				expect(PlayerManager.decreaseHealth)
 					.toHaveBeenCalledWith({ ...context, data: damage });
 				expect(HelperService.getVariance)
-					.toHaveBeenCalledWith(target.variance);
+					.toHaveBeenCalledWith(rndTarget.variance);
 				expect(result).toEqual(decreasedHealth);
 			});
 	});
@@ -379,48 +378,55 @@ describe('TargetManager', () => {
 	describe('spawnTargets', () => {
 		const targetTypes = keys(config.targets);
 		const expectations = [
-			['all', true, targetTypes],
-			['no', false, []],
+			['all', true, targetTypes.length],
+			['no', false, 0],
 		];
+		const target = Symbol('target');
 
 		test.each(expectations)('spawnTargets returns %p target'
 		+ ' when isProb is %p', (
 			dummy, isActive, expectedResult
 		) => {
 			jest.spyOn(HelperService, 'isProbable').mockReturnValue(isActive);
+			jest.spyOn(TargetManager, 'getTarget').mockReturnValue(target);
 
 			const result = spawnTargets();
 
-			const output = isActive ? result.map((item) => item.type) : result;
-
-			targetTypes.map((type) =>
+			targetTypes.map((type) => {
 				expect(HelperService.isProbable)
-					.toHaveBeenCalledWith(config.targets[type].prob.spawn));
-			expect(output).toEqual(expectedResult);
+					.toHaveBeenCalledWith(config.targets[type].prob.spawn);
+				isActive && expect(TargetManager.getTarget)
+					.toHaveBeenCalledWith({ type });
+			});
+			expect(result.length).toEqual(expectedResult);
 		});
 	});
 
 	describe('reproduceTargets', () => {
 		const targetTypes = targets.map((target) => target.type);
 		const expectations = [
-			['child', true, targetTypes],
-			['no', false, []],
+			['child', true, targetTypes.length],
+			['no', false, 0],
 		];
+		const target = Symbol('target');
 
 		test.each(expectations)('reproduceTargets returns %p target'
 		+ ' when isProb is %p', (
 			dummy, isActive, expectation
 		) => {
 			jest.spyOn(HelperService, 'isProbable').mockReturnValue(isActive);
+			jest.spyOn(TargetManager, 'getTarget').mockReturnValue(target);
 
 			const result = reproduceTargets(targets);
-			const output = isActive ? result.map((item) => item.type) : result;
 
-			targetTypes.map((type) =>
+			targetTypes.map((type) => {
 				expect(HelperService.isProbable)
 					.toHaveBeenCalledWith(config.targets[type]
-						.prob.fertility));
-			expect(output).toEqual(expectation);
+						.prob.fertility);
+				isActive && expect(TargetManager.getTarget)
+					.toHaveBeenCalledWith({ type });
+			});
+			expect(result.length).toEqual(expectation);
 		});
 	});
 
