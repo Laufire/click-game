@@ -91,8 +91,8 @@ describe('PlayerManager', () => {
 		() => {
 			const healthRatio = [
 				rndBetween(75, 100) / 100,
-				rndBetween(25, 75) / 100,
-				rndBetween(0, 25) / 100,
+				rndBetween(25, 74) / 100,
+				rndBetween(0, 24) / 100,
 			];
 
 			const expectedResult = ['lightgreen', 'yellow', 'orangered'];
