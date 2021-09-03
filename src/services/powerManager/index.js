@@ -3,7 +3,7 @@ import { rndValues } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import config from '../../core/config';
 import { getRandomX, getRandomY } from '../positionService';
-import { getId, isFuture, isProbable } from '../helperService';
+import { getId, isFuture, isProbable } from '../helpers';
 import Powers from './powers';
 import { damage } from './data';
 import TargetManager from '../targetManager';
