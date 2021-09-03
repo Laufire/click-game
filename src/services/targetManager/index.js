@@ -4,7 +4,7 @@ import { keys, sort } from '@laufire/utils/collection';
 import { truthy } from '@laufire/utils/predicates';
 import { getRandomX, getRandomY } from '../positionService';
 import { getId, getVariance,
-	isFuture, isProbable } from '../helperService';
+	isFuture, isProbable } from '../helpers';
 import PowerManager from '../powerManager';
 import PlayerManager from '../playerManager';
 import { adjustTime } from '../timeService';

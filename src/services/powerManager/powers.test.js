@@ -6,7 +6,7 @@ import config from '../../core/config';
 import Mock from '../../../test/mock';
 import * as random from '@laufire/utils/random';
 import * as collection from '@laufire/utils/collection';
-import * as helper from '../helperService';
+import * as helper from '../helpers';
 import TargetManager from '../targetManager';
 import PlayerManager from '../playerManager';
 import { getTransientPowers } from '../../core/helpers';

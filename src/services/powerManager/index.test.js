@@ -9,7 +9,7 @@ import config from '../../core/config';
 import PowerManager from '../powerManager';
 import { damage } from './data';
 import Powers from './powers';
-import * as helper from '../helperService';
+import * as helper from '../helpers';
 import * as collection from '@laufire/utils/collection';
 import TargetManager from '../targetManager';
 import Mocks from '../../../test/mock';

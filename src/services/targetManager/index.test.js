@@ -9,7 +9,7 @@ import config from '../../core/config';
 import { keys, map, range, secure } from '@laufire/utils/collection';
 import { replace } from '../../../test/helpers';
 import * as PositionService from '../positionService';
-import * as HelperService from '../helperService';
+import * as helpers from '../helpers';
 import Mocks from '../../../test/mock';
 import PowerManager from '../powerManager';
 import PlayerManager from '../playerManager';
@@ -31,7 +31,7 @@ describe('TargetManager', () => {
 			const returnSpawnTargets = [Symbol('spawnTargets')];
 			const returnReproduceTargets = [Symbol('reproduceTargets')];
 
-			jest.spyOn(HelperService, 'isProbable')
+			jest.spyOn(helpers, 'isProbable')
 				.mockReturnValue(1);
 			jest.spyOn(TargetManager, 'spawnTargets')
 				.mockReturnValue(returnSpawnTargets);
@@ -74,9 +74,9 @@ describe('TargetManager', () => {
 		};
 
 		test('returns a target while params are passed', () => {
-			jest.spyOn(HelperService, 'getId')
+			jest.spyOn(helpers, 'getId')
 				.mockReturnValue(id);
-			jest.spyOn(HelperService, 'getVariance')
+			jest.spyOn(helpers, 'getVariance')
 				.mockReturnValue(variance);
 			jest.spyOn(timeService, 'adjustTime')
 				.mockReturnValue(adjustedTime);
@@ -94,8 +94,8 @@ describe('TargetManager', () => {
 
 			const result = getTarget({ x, y, type });
 
-			expect(HelperService.getId).toHaveBeenCalled();
-			expect(HelperService.getVariance).toHaveBeenCalledWith(variance);
+			expect(helpers.getId).toHaveBeenCalled();
+			expect(helpers.getVariance).toHaveBeenCalledWith(variance);
 			expect(timeService.adjustTime).toHaveBeenCalledWith(
 				currentTime, lifespan, 'seconds'
 			);
@@ -103,11 +103,11 @@ describe('TargetManager', () => {
 		});
 
 		test('getTarget params are optional', () => {
-			jest.spyOn(HelperService, 'getId')
+			jest.spyOn(helpers, 'getId')
 				.mockReturnValue(id);
 			jest.spyOn(random, 'rndValue')
 				.mockReturnValue('ant');
-			jest.spyOn(HelperService, 'getVariance')
+			jest.spyOn(helpers, 'getVariance')
 				.mockReturnValue(variance);
 			jest.spyOn(PositionService, 'getRandomX')
 				.mockReturnValue(x);
@@ -124,8 +124,8 @@ describe('TargetManager', () => {
 			};
 			const result = getTarget();
 
-			expect(HelperService.getId).toHaveBeenCalled();
-			expect(HelperService.getVariance).toHaveBeenCalledWith(variance);
+			expect(helpers.getId).toHaveBeenCalled();
+			expect(helpers.getVariance).toHaveBeenCalledWith(variance);
 			expect(PositionService.getRandomX)
 				.toHaveBeenCalledWith(size);
 			expect(PositionService.getRandomY)
@@ -332,11 +332,11 @@ describe('TargetManager', () => {
 			+ 'when targets livesTill is %p than currentTime', (
 			dummy, dummyOne, isActive, expectation
 		) => {
-			jest.spyOn(HelperService, 'isFuture').mockReturnValue(isActive);
+			jest.spyOn(helpers, 'isFuture').mockReturnValue(isActive);
 
 			const result = getExpiredTargets({ state });
 
-			expect(HelperService.isFuture)
+			expect(helpers.isFuture)
 				.toHaveBeenCalledWith(livesTill);
 			expect(result).toEqual(expectation);
 		});
@@ -358,9 +358,9 @@ describe('TargetManager', () => {
 
 		test.each(expectations)('returns %p damage when isProb is %p ',
 			(damage, mockValue) => {
-				jest.spyOn(HelperService, 'isProbable')
+				jest.spyOn(helpers, 'isProbable')
 					.mockReturnValue(mockValue);
-				jest.spyOn(HelperService, 'getVariance')
+				jest.spyOn(helpers, 'getVariance')
 					.mockReturnValue(rndTarget.variance);
 				jest.spyOn(PlayerManager, 'decreaseHealth')
 					.mockReturnValue(decreasedHealth);
@@ -369,7 +369,7 @@ describe('TargetManager', () => {
 
 				expect(PlayerManager.decreaseHealth)
 					.toHaveBeenCalledWith({ ...context, data: damage });
-				expect(HelperService.getVariance)
+				expect(helpers.getVariance)
 					.toHaveBeenCalledWith(rndTarget.variance);
 				expect(result).toEqual(decreasedHealth);
 			});
@@ -387,13 +387,13 @@ describe('TargetManager', () => {
 		+ ' when isProb is %p', (
 			dummy, isActive, expectedResult
 		) => {
-			jest.spyOn(HelperService, 'isProbable').mockReturnValue(isActive);
+			jest.spyOn(helpers, 'isProbable').mockReturnValue(isActive);
 			jest.spyOn(TargetManager, 'getTarget').mockReturnValue(target);
 
 			const result = spawnTargets();
 
 			targetTypes.map((type) => {
-				expect(HelperService.isProbable)
+				expect(helpers.isProbable)
 					.toHaveBeenCalledWith(config.targets[type].prob.spawn);
 				isActive && expect(TargetManager.getTarget)
 					.toHaveBeenCalledWith({ type });
@@ -414,13 +414,13 @@ describe('TargetManager', () => {
 		+ ' when isProb is %p', (
 			dummy, isActive, expectation
 		) => {
-			jest.spyOn(HelperService, 'isProbable').mockReturnValue(isActive);
+			jest.spyOn(helpers, 'isProbable').mockReturnValue(isActive);
 			jest.spyOn(TargetManager, 'getTarget').mockReturnValue(target);
 
 			const result = reproduceTargets(targets);
 
 			targetTypes.map((type) => {
-				expect(HelperService.isProbable)
+				expect(helpers.isProbable)
 					.toHaveBeenCalledWith(config.targets[type]
 						.prob.fertility);
 				isActive && expect(TargetManager.getTarget)
@@ -432,14 +432,14 @@ describe('TargetManager', () => {
 
 	describe('isDead', () => {
 		const generateTest = ({ isFuture, health, expectation }, action) => {
-			jest.spyOn(HelperService, 'isFuture')
+			jest.spyOn(helpers, 'isFuture')
 				.mockReturnValue(isFuture);
 
 			const target = { health: health, livesTill: Symbol('livesTill') };
 
 			const result = isDead(target);
 
-			action !== 'killed' && expect(HelperService.isFuture)
+			action !== 'killed' && expect(helpers.isFuture)
 				.toHaveBeenCalledWith(target.livesTill);
 			expect(result).toEqual(expectation);
 		};
