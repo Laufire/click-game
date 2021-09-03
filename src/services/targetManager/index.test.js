@@ -21,15 +21,19 @@ describe('TargetManager', () => {
 		moveTargets, getExpiredTargets, attackPlayer, spawnTargets, isDead,
 		reproduceTargets, getKilledTargets,
 		getTargetsScore, removeTargets } = TargetManager;
-	const { targets, ant, mosquito, butterfly, getRandomTargets } = Mocks;
+	const { allTargets, targets,
+		withEffect, withoutEffect, getRandomTargets } = Mocks;
 	const x = Symbol('x');
 	const y = Symbol('y');
 	const id = Symbol('id');
+	const [target] = getRandomTargets();
+	const { type } = target;
 
 	describe('addTargets adds target', () => {
 		test('returns targets with new targets added', () => {
 			const returnSpawnTargets = [Symbol('spawnTargets')];
 			const returnReproduceTargets = [Symbol('reproduceTargets')];
+			const currentTargets = getRandomTargets(config.maxTargets - 1);
 
 			jest.spyOn(helpers, 'isProbable')
 				.mockReturnValue(1);
@@ -38,21 +42,21 @@ describe('TargetManager', () => {
 			jest.spyOn(TargetManager, 'reproduceTargets')
 				.mockReturnValue(returnReproduceTargets);
 
-			const result = addTargets({ state: { targets }});
+			const result = addTargets({ state: { targets: currentTargets }});
 			const expectedResult = [
-				...targets,
+				...currentTargets,
 				...returnSpawnTargets,
 				...returnReproduceTargets,
 			];
 
 			expect(TargetManager.spawnTargets).toHaveBeenCalledWith();
 			expect(TargetManager.reproduceTargets)
-				.toHaveBeenCalledWith(targets);
+				.toHaveBeenCalledWith(currentTargets);
 			expect(result).toEqual(expectedResult);
 		});
 
 		test('returns the targets without any new targets', () => {
-			const maxTargets = range(0, config.maxTargets).map(() => ant);
+			const maxTargets = range(0, config.maxTargets).map(() => target);
 			const result = addTargets({ state: { targets: maxTargets }});
 
 			expect(result).toEqual(maxTargets);
@@ -63,7 +67,6 @@ describe('TargetManager', () => {
 		const adjustedTime = Symbol('adjustedTime');
 		const livesTill = adjustedTime;
 		const currentTime = Symbol('currentTime');
-		const type = 'ant';
 		const typeConfig = config.targets[type];
 		const { variance } = typeConfig;
 		const { height, width } = typeConfig;
@@ -106,7 +109,7 @@ describe('TargetManager', () => {
 			jest.spyOn(helpers, 'getId')
 				.mockReturnValue(id);
 			jest.spyOn(random, 'rndValue')
-				.mockReturnValue('ant');
+				.mockReturnValue(type);
 			jest.spyOn(helpers, 'getVariance')
 				.mockReturnValue(variance);
 			jest.spyOn(PositionService, 'getRandomX')
@@ -134,66 +137,78 @@ describe('TargetManager', () => {
 		});
 	});
 
-	describe('swatTarget reduces life', () => {
-		const health = 3;
-		const score = 10;
-		const spoiler = TargetManager.getTarget({ type: 'spoiler' });
-		const returnValue = Symbol('returnValue');
-		const decreasedTargetLive = Symbol('decreasedTargetLive');
+	describe('swatTarget reduces health', () => {
+		const decreasedTargetHealth = Symbol('decreasedTargetHealth');
 		const damage = Symbol('damage');
+		const mockData = { mockValue: Symbol('mockValue') };
 		const state = secure({
 			targets,
-			health,
-			score,
 		});
-		const spyOn = () => {
+
+		test('', () => {
+			const data = Symbol('data');
+
 			jest.spyOn(TargetManager, 'decreaseTargetHealth')
-				.mockReturnValue(decreasedTargetLive);
+				.mockReturnValue(decreasedTargetHealth);
 			jest.spyOn(PowerManager, 'getDamage')
 				.mockReturnValue(damage);
-		};
-		const [rndtarget] = getRandomTargets();
-		const expectations = [
-			['target life', rndtarget.type, rndtarget, ''],
-			['player health', 'butterfly', butterfly, { health: returnValue }],
-			['score', 'spoiler', spoiler, { score: returnValue }],
-		];
-
-		test.each(expectations)('returns decreased %p while %p is swatted', (
-			dummy, dummyOne, data, value
-		) => {
-			spyOn();
-			keys(swatEffects).includes(data.type)
-				&& jest.spyOn(swatEffects, data.type)
-					.mockReturnValue(value);
+			jest.spyOn(TargetManager, 'actuateEffect')
+				.mockReturnValue(mockData);
 
 			const result = swatTarget({ state, data });
 
-			expect(TargetManager.decreaseTargetHealth)
-				.toHaveBeenCalledWith(
-					state.targets, [data], damage
-				);
+			expect(TargetManager.decreaseTargetHealth).toHaveBeenCalledWith(
+				state.targets, [data], damage
+			);
 			expect(PowerManager.getDamage).toHaveBeenCalledWith(state);
-			expect(result).toMatchObject({
-				targets: decreasedTargetLive,
-				...value,
-			});
+			expect(TargetManager.actuateEffect)
+				.toHaveBeenCalledWith({ state, data });
+			expect(result).toEqual({ ...mockData,
+				targets: decreasedTargetHealth });
 		});
+	});
+
+	describe('actuateEffect', () => {
+		const { actuateEffect } = TargetManager;
+		const state = {
+			targets,
+		};
+
+		test('actuateEffect can handle target without effect', () => {
+			const data = allTargets[random.rndValue(withoutEffect)];
+
+			const result = actuateEffect({ state, data });
+
+			expect(result).toEqual({});
+		});
+
+		test('actuateEffect delegates to the effect of the given target',
+			() => {
+				const data = allTargets[random.rndValue(withEffect)];
+				const effect = Symbol('effect');
+
+				jest.spyOn(swatEffects, data.type)
+					.mockReturnValue(effect);
+
+				const result = actuateEffect({ state, data });
+
+				expect(result).toEqual(effect);
+			});
 	});
 
 	test('getKilledTargets returns all dead targets from the given targets',
 		() => {
 			const deadTarget = secure({
-				...mosquito,
+				...target,
 				health: 0,
 			});
-			const allTargets = secure([
+			const currentTargets = secure([
 				...targets,
 				deadTarget,
 			]);
 
 			const result = getKilledTargets({ state:
-				{ targets: allTargets }});
+				{ targets: currentTargets }});
 
 			expect(result).toEqual([deadTarget]);
 		});
@@ -203,7 +218,7 @@ describe('TargetManager', () => {
 			const two = 2;
 			const [targetOne, targetTwo] = getRandomTargets(two);
 
-			const allTargets = secure([
+			const data = secure([
 				{ ...targetOne, attackedAt: 1, score: 5 },
 				{ ...targetOne, attackedAt: 2, score: 5 },
 				{ ...targetTwo, attackedAt: 3, score: 1 },
@@ -211,10 +226,9 @@ describe('TargetManager', () => {
 			]);
 			const expected = 21;
 
-			const result = getTargetsScore({ data: allTargets });
+			const result = getTargetsScore({ data });
 
-			expect(result)
-				.toEqual(expected);
+			expect(result).toEqual(expected);
 		});
 
 	describe('decreaseTargetHealth returns targets', () => {
@@ -247,8 +261,8 @@ describe('TargetManager', () => {
 				expect(Date.now).toHaveBeenCalled();
 				expect(Math.max)
 					.toHaveBeenCalledWith(randomTarget.health - damage, 0);
-				impactedTargets.forEach((target) =>
-					expect(TargetManager.isDead).toHaveBeenCalledWith(target));
+				impactedTargets.forEach((item) =>
+					expect(TargetManager.isDead).toHaveBeenCalledWith(item));
 				expect(result).toEqual(expectedTargets);
 			});
 
@@ -284,11 +298,8 @@ describe('TargetManager', () => {
 		const position = secure({ x, y });
 
 		test('returns the moved targets while ice is inactive', () => {
-			const expectedResult = secure([
-				{ ...ant, ...position },
-				{ ...mosquito, ...position },
-				{ ...butterfly, ...position },
-			]);
+			const expectedResult = secure(targets.map((item) =>
+				({ ...item, ...position })));
 
 			jest.spyOn(PositionService, 'getRandomX')
 				.mockReturnValue(x);
@@ -350,7 +361,7 @@ describe('TargetManager', () => {
 		};
 		const decreasedHealth = Symbol('decreasedHealth');
 		const [rndTarget] = getRandomTargets();
-		const num = targets.reduce((acc, target) => acc + target.damage, 0);
+		const num = targets.reduce((acc, item) => acc + item.damage, 0);
 		const expectations = [
 			[num, true],
 			[0, false],
@@ -381,50 +392,53 @@ describe('TargetManager', () => {
 			['all', true, targetTypes.length],
 			['no', false, 0],
 		];
-		const target = Symbol('target');
+		const currentTarget = Symbol('target');
 
 		test.each(expectations)('spawnTargets returns %p target'
 		+ ' when isProb is %p', (
 			dummy, isActive, expectedResult
 		) => {
 			jest.spyOn(helpers, 'isProbable').mockReturnValue(isActive);
-			jest.spyOn(TargetManager, 'getTarget').mockReturnValue(target);
+			jest.spyOn(TargetManager, 'getTarget')
+				.mockReturnValue(currentTarget);
 
 			const result = spawnTargets();
 
-			targetTypes.map((type) => {
+			targetTypes.map((targetType) => {
 				expect(helpers.isProbable)
-					.toHaveBeenCalledWith(config.targets[type].prob.spawn);
+					.toHaveBeenCalledWith(config
+						.targets[targetType].prob.spawn);
 				isActive && expect(TargetManager.getTarget)
-					.toHaveBeenCalledWith({ type });
+					.toHaveBeenCalledWith({ type: targetType });
 			});
 			expect(result.length).toEqual(expectedResult);
 		});
 	});
 
 	describe('reproduceTargets', () => {
-		const targetTypes = targets.map((target) => target.type);
+		const targetTypes = targets.map((item) => item.type);
 		const expectations = [
 			['child', true, targetTypes.length],
 			['no', false, 0],
 		];
-		const target = Symbol('target');
+		const currentTarget = Symbol('target');
 
 		test.each(expectations)('reproduceTargets returns %p target'
 		+ ' when isProb is %p', (
 			dummy, isActive, expectation
 		) => {
 			jest.spyOn(helpers, 'isProbable').mockReturnValue(isActive);
-			jest.spyOn(TargetManager, 'getTarget').mockReturnValue(target);
+			jest.spyOn(TargetManager, 'getTarget')
+				.mockReturnValue(currentTarget);
 
 			const result = reproduceTargets(targets);
 
-			targetTypes.map((type) => {
+			targetTypes.map((targetType) => {
 				expect(helpers.isProbable)
 					.toHaveBeenCalledWith(config.targets[type]
 						.prob.fertility);
 				isActive && expect(TargetManager.getTarget)
-					.toHaveBeenCalledWith({ type });
+					.toHaveBeenCalledWith({ type: targetType });
 			});
 			expect(result.length).toEqual(expectation);
 		});
@@ -435,12 +449,13 @@ describe('TargetManager', () => {
 			jest.spyOn(helpers, 'isFuture')
 				.mockReturnValue(isFuture);
 
-			const target = { health: health, livesTill: Symbol('livesTill') };
+			const currentTarget = { health: health,
+				livesTill: Symbol('livesTill') };
 
-			const result = isDead(target);
+			const result = isDead(currentTarget);
 
 			action !== 'killed' && expect(helpers.isFuture)
-				.toHaveBeenCalledWith(target.livesTill);
+				.toHaveBeenCalledWith(currentTarget.livesTill);
 			expect(result).toEqual(expectation);
 		};
 		const combinations = {

@@ -104,8 +104,11 @@ const TargetManager = {
 	getKilledTargets: ({ state: { targets }}) =>
 		targets.filter((target) => target.health <= 0),
 
+	actuateEffect: ({ state, data }) =>
+		(swatEffects[data.type] ? swatEffects[data.type](state, data) : {}),
+
 	swatTarget: ({ state, data }) => ({
-		...swatEffects[data.type] && swatEffects[data.type](state, data),
+		...TargetManager.actuateEffect({ state, data }),
 		targets: TargetManager.decreaseTargetHealth(
 			state.targets, [data], PowerManager.getDamage(state)
 		),
