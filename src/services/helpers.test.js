@@ -80,6 +80,6 @@ describe('helpers', () => {
 		};
 
 		testValues([0, 1, 2], 0);
-		testValues(range(2, 99).map((probability) => probability / 100), 0.05);
+		testValues(range(2, 99).map((probability) => probability / 100), 0.08);
 	});
 });
