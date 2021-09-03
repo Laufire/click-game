@@ -2,7 +2,7 @@ import { rndBetween, rndValue, rndValues } from '@laufire/utils/random';
 import { keys, map } from '@laufire/utils/collection';
 import config from '../../core/config';
 import TargetManager from '../targetManager';
-import { getVariance } from '../helperService';
+import { getVariance } from '../helpers';
 import PlayerManager from '../playerManager';
 import { getTransientPowers } from '../../core/helpers';
 import { adjustTime } from '../timeService';

@@ -9,156 +9,138 @@ import config from '../../core/config';
 import PowerManager from '../powerManager';
 import { damage } from './data';
 import Powers from './powers';
-import * as helper from '../helperService';
+import * as helper from '../helpers';
 import * as collection from '@laufire/utils/collection';
 import TargetManager from '../targetManager';
 import Mocks from '../../../test/mock';
 import { getTransientPowers } from '../../core/helpers';
 import * as timeService from '../timeService';
+import * as PositionService from '../positionService';
 
 describe('PowerManager', () => {
 	const { adjustTime } = timeService;
-	const { map, secure, shuffle } = collection;
+	const { map, secure, shuffle, keys } = collection;
+	const powers = keys(config.powers)
+		.map((type) => PowerManager.getPower({ type }));
 
 	describe('getPower', () => {
 		const { getPower } = PowerManager;
-		const [type] = ['bomb'];
+		const type = random.rndValue(keys(config.powers));
 		const typeConfig = config.powers[type];
-		const length = config.idLength;
+		const id = Symbol('id');
+		const x = Symbol('x');
+		const y = Symbol('y');
 
-		test('getPower bomb power', () => {
-			const power = getPower({ type });
+		test('getPower returns random power', () => {
+			const expectedResult = { id, x, y, ...typeConfig };
 
-			expect(power).toMatchObject({
-				id: expect.any(String),
-				x: expect.any(Number),
-				y: expect.any(Number),
-				...typeConfig,
-			});
-			expect(power.id.length).toEqual(length);
+			jest.spyOn(helper, 'getId').mockReturnValue(id);
+			jest.spyOn(PositionService, 'getRandomX').mockReturnValue(x);
+			jest.spyOn(PositionService, 'getRandomY').mockReturnValue(y);
+
+			const result = getPower({ type });
+
+			expect(helper.getId).toHaveBeenCalled();
+			expect(PositionService.getRandomX).toHaveBeenCalledWith(typeConfig);
+			expect(PositionService.getRandomY).toHaveBeenCalledWith(typeConfig);
+			expect(result).toEqual(expectedResult);
 		});
 	});
 
-	describe('test the removePowers', () => {
-		const bomb = {
-			id: 'abcd',
-			type: 'bomb',
-			prob: {
-				remove: 0,
-			},
-		};
-		const ice = {
-			id: 'efgh',
-			type: 'ice',
-			prob: {
-				remove: 0,
-			},
-		};
-		const powers = [bomb, ice];
+	describe('removeExpired powers', () => {
+		const expectations = [
+			['does not removes', false, powers],
+			['removes', true, []],
+		];
 
-		test('test the removeExpiredPower with rndBetween', () => {
-			jest.spyOn(helper, 'isProbable')
-				.mockReturnValue(0);
+		test.each(expectations)('%p powers while isProb is %p',
+			(
+				dummy, isActive, expectation
+			) => {
+				jest.spyOn(helper, 'isProbable')
+					.mockReturnValue(isActive);
 
-			const result = PowerManager
-				.removeExpiredPowers({ state: { powers }});
+				const result = PowerManager
+					.removeExpiredPowers({ state: { powers }});
 
-			powers.map((power) => expect(helper.isProbable)
-				.toHaveBeenCalledWith(power.prob.remove));
-			expect(result).toEqual(powers);
-		});
+				powers.map((power) => expect(helper.isProbable)
+					.toHaveBeenCalledWith(power.prob.remove));
+				expect(result).toEqual(expectation);
+			});
+	});
 
-		test('removeExpiredPowers remove the powers', () => {
-			const result = PowerManager
-				.removeExpiredPowers({ state: { powers }});
+	test('removePower remove the given power', () => {
+		const data = random.rndValue(powers);
+		const expectdResult
+			= powers.filter((power) => power.type !== data.type);
 
-			expect(result).toEqual(powers);
-		});
+		const result = PowerManager
+			.removePower({ state: { powers }, data: data });
 
-		test('removePower remove the given power', () => {
-			const data = ice;
-			const result = PowerManager
-				.removePower({ state: { powers }, data: data });
+		expect(result).toEqual(expectdResult);
+	});
 
-			expect(result).toEqual([bomb]);
-		});
+	test('activatePower activates the given power', () => {
+		const returnValue = Symbol('returnValue');
+		const state = Symbol('state');
+		const type = 'bomb';
+		const data = { type };
 
-		test('activatePower activates the given power', () => {
-			const returnValue = Symbol('returnValue');
-			const state = Symbol('state');
-			const type = 'bomb';
-			const data = { type };
+		jest.spyOn(Powers, type)
+			.mockReturnValue(returnValue);
 
-			jest.spyOn(Powers, type)
-				.mockReturnValue(returnValue);
+		const powerHandler = Powers[type];
 
-			const powerHandler = Powers[type];
+		const result = PowerManager.activatePower({ state, data });
 
-			const result = PowerManager.activatePower({ state, data });
-
-			expect(powerHandler).toHaveBeenCalledWith(state);
-			expect(result).toEqual(returnValue);
-		});
+		expect(powerHandler).toHaveBeenCalledWith(state);
+		expect(result).toEqual(returnValue);
 	});
 
 	describe('getDamage', () => {
 		const superBat = Date.now();
+		const expectations = [
+			['superBat', 'active', true, damage.super],
+			['normalBat', 'inactive', false, damage.normal],
+		];
 
-		test('geDamage returns superbat when power is active', () => {
-			const expectedDamage = damage.super;
+		test.each(expectations)('getDamage returns %p when power is %p',
+			(
+				dummy, dummyOne, isActive, expectation
+			) => {
+				jest.spyOn(helper, 'isFuture')
+					.mockReturnValue(isActive);
 
-			jest.spyOn(helper, 'isFuture')
-				.mockReturnValue(true);
+				const result = PowerManager
+					.getDamage({
+						duration: { superBat },
+					});
 
-			const result = PowerManager
-				.getDamage({
-					duration: { superBat },
-				});
-
-			expect(helper.isFuture).toHaveBeenCalledWith(superBat);
-			expect(result).toEqual(expectedDamage);
-		});
-		test('geDamage returns normalbat when power is not active', () => {
-			const expectedDamage = damage.normal;
-
-			jest.spyOn(helper, 'isFuture')
-				.mockReturnValue(false);
-
-			const result = PowerManager.getDamage({
-				duration: { superBat },
+				expect(helper.isFuture).toHaveBeenCalledWith(superBat);
+				expect(result).toEqual(expectation);
 			});
-
-			expect(helper.isFuture).toHaveBeenCalledWith(superBat);
-			expect(result).toEqual(expectedDamage);
-		});
 	});
+
 	describe('getBatType', () => {
 		const superBat = Date.now();
+		const expectations = [
+			['super', 'active', true],
+			['normal', 'inactive', false],
+		];
 
-		test('getBatType returns normal when superBat is inactive',
-			() => {
+		test.each(expectations)('getBatType returns %p when superBat is %p',
+			(
+				type, dummy, isActive
+			) => {
 				jest.spyOn(helper, 'isFuture')
-					.mockReturnValue(false);
+					.mockReturnValue(isActive);
 
 				const result = PowerManager.getBatType({
 					duration: { superBat },
 				});
 
 				expect(helper.isFuture).toHaveBeenCalledWith(superBat);
-				expect(result).toEqual('normal');
-			});
-
-		test('getBatType returns super when superBat is active',
-			() => {
-				jest.spyOn(helper, 'isFuture')
-					.mockReturnValue(true);
-
-				const result = PowerManager.getBatType({
-					duration: { superBat },
-				});
-
-				expect(helper.isFuture).toHaveBeenCalledWith(superBat);
-				expect(result).toEqual('super');
+				expect(result).toEqual(type);
 			});
 	});
 
@@ -208,39 +190,32 @@ describe('PowerManager', () => {
 	});
 
 	describe('getPowers', () => {
-		test('getPowers returns powers based on add prob', () => {
-			const power = Symbol('power');
-			const expectedResult = collection.range(0, 9).map(() => power);
+		const expectations = [
+			['powers', true, keys(config.powers).length],
+			['no powers', false, 0],
+		];
 
-			jest.spyOn(helper, 'isProbable')
-				.mockReturnValue(true);
-			jest.spyOn(PowerManager, 'getPower')
-				.mockReturnValue(power);
+		test.each(expectations)('getPowers returns %p while isProb is %p',
+			(
+				dummy, isActive, expectation
+			) => {
+				const power = Symbol('power');
 
-			const result = PowerManager.getPowers();
+				jest.spyOn(helper, 'isProbable')
+					.mockReturnValue(isActive);
+				jest.spyOn(PowerManager, 'getPower')
+					.mockReturnValue(power);
 
-			collection.keys(config.powers).map((type) => {
-				expect(helper.isProbable)
-					.toHaveBeenCalledWith(config.powers[type].prob.add);
-				expect(PowerManager.getPower)
-					.toHaveBeenCalledWith({ type });
+				const result = PowerManager.getPowers();
+
+				collection.keys(config.powers).map((type) => {
+					expect(helper.isProbable)
+						.toHaveBeenCalledWith(config.powers[type].prob.add);
+					isActive && expect(PowerManager.getPower)
+						.toHaveBeenCalledWith({ type });
+				});
+				expect(result.length).toEqual(expectation);
 			});
-			expect(result).toEqual(expectedResult);
-		});
-
-		test('getPowers returns no powers while prob is 0', () => {
-			const expectedResult = [];
-
-			jest.spyOn(helper, 'isProbable')
-				.mockReturnValue(false);
-
-			const result = PowerManager.getPowers();
-
-			collection.keys(config.powers).map((type) =>
-				expect(helper.isProbable)
-					.toHaveBeenCalledWith(config.powers[type].prob.add));
-			expect(result).toEqual(expectedResult);
-		});
 	});
 
 	describe('getActivePowers', () => {
@@ -266,19 +241,20 @@ describe('PowerManager', () => {
 	});
 
 	describe('isActive', () => {
-		const input = Symbol('Future');
-		const power = 'ice';
+		const returnValue = Symbol('Future');
+		const power = random.rndValue(getTransientPowers());
+		const [type] = keys(power);
 		const state
-		= { duration: { ice: 1 }};
+		= { duration: { type }};
 
 		test('whether isFuture is called', () => {
 			jest.spyOn(helper, 'isFuture')
-				.mockReturnValue(input);
+				.mockReturnValue(returnValue);
 			const result
 				= PowerManager.isActive(state, power);
 
 			expect(helper.isFuture).toHaveBeenCalledWith(state.duration[power]);
-			expect(result).toEqual(input);
+			expect(result).toEqual(returnValue);
 		});
 	});
 });

@@ -7,24 +7,24 @@
 import config from '../core/config';
 import * as random from '@laufire/utils/random';
 import { isEqual } from '@laufire/utils/predicates';
-import * as helper from './helperService';
+import * as helpers from './helpers';
 import { isAcceptable, retry } from '../../test/helpers';
 import { range } from '@laufire/utils/collection';
 
-describe('HelperService', () => {
-	const { getId, isFuture, getVariance } = helper;
+describe('helpers', () => {
+	const { getId, isFuture, getVariance } = helpers;
 
 	describe('getId', () => {
 		test('getId gives a rndString of the configured idLength', () => {
-			const mockValue = Symbol('mock');
+			const returnValue = Symbol('mock');
 
 			jest.spyOn(random, 'rndString')
-				.mockReturnValue(mockValue);
+				.mockReturnValue(returnValue);
 
 			const result = getId();
 
 			expect(random.rndString).toHaveBeenCalledWith(config.idLength);
-			expect(result).toEqual(mockValue);
+			expect(result).toEqual(returnValue);
 		});
 	});
 
@@ -55,14 +55,14 @@ describe('HelperService', () => {
 			const { rndBetween } = random;
 			const result = getVariance(variance);
 
-			expect(result).toEqual(returnValue / hundred);
 			expect(rndBetween).toHaveBeenCalledWith(minimum, maximum);
+			expect(result).toEqual(returnValue / hundred);
 		});
 	});
 
 	test('isProbable true based on give probablility', () => {
 		const retryCount = 100000;
-		const { isProbable } = helper;
+		const { isProbable } = helpers;
 		const generateTest = (probability, errorMargin) => {
 			const results = retry(() => isProbable(probability), retryCount);
 			const successCount = results.filter(isEqual(true)).length;
