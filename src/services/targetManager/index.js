@@ -78,7 +78,9 @@ const TargetManager = {
 			target,
 		]));
 
-		const events = values(index);
+		const events = values(index).sort((a, b) =>
+			a[0].attackedAt - b[0].attackedAt);
+
 		let score = 0;
 		const two = 2;
 
