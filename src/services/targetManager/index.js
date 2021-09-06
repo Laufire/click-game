@@ -89,8 +89,7 @@ const TargetManager = {
 				const targetCount = event.filter((target) =>
 					target.type === type).length;
 				const termial = (n) => n * (n + 1) / two;
-				const targetScore = event.find((target) =>
-					target.type === type)?.score || 0;
+				const targetScore = config.targets[type].score;
 
 				score += targetScore * ((multiplier * targetCount)
 					+ termial(targetCount));

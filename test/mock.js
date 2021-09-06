@@ -5,12 +5,12 @@ import context from '../src/core/context';
 import swatEffects from '../src/services/targetManager/swatEffects';
 
 const livesTill = Date.now();
-
+// TODO: Get other properties on config.
 const allTargets = map(context.config.targets, (typeConfig) => secure({
 	id: rndString(context.config.idLength),
 	type: typeConfig.type,
 	health: 1,
-	score: 0,
+	score: typeConfig.score,
 	livesTill: livesTill,
 	damage: 1,
 	variance: 0.2,

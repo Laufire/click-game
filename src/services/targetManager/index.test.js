@@ -219,13 +219,14 @@ describe('TargetManager', () => {
 			const [targetOne, targetTwo] = getRandomTargets(two);
 
 			const data = secure([
-				{ ...targetOne, attackedAt: 1, score: 1 },
-				{ ...targetTwo, attackedAt: 1, score: 1 },
-				{ ...targetOne, attackedAt: 1, score: 1 },
-				{ ...targetOne, attackedAt: 2, score: 1 },
-				{ ...targetTwo, attackedAt: 3, score: 1 },
+				{ ...targetOne, attackedAt: 1 },
+				{ ...targetTwo, attackedAt: 1 },
+				{ ...targetOne, attackedAt: 1 },
+				{ ...targetOne, attackedAt: 2 },
+				{ ...targetTwo, attackedAt: 3 },
 			]);
-			const expected = 8;
+			// eslint-disable-next-line no-magic-numbers
+			const expected = (6 * targetOne.score) + (2 * targetTwo.score);
 
 			const result = getTargetsScore({ data });
 
