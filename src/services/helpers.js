@@ -14,5 +14,17 @@ const isFuture = (dateValue) => dateValue > Date.now();
 const isProbable = (probablity) =>
 	rndBetween(1, hundred) <= probablity * hundred;
 
-export { getId,
-	getVariance, isFuture, isProbable };
+// eslint-disable-next-line no-magic-numbers
+const termial = (n) => n * (n + 1) / 2;
+
+const index = (data, property) => {
+	const result = {};
+
+	data.forEach((value) => (result[value[property]] = [
+		...result[value[property]] || [],
+		value,
+	]));
+	return result;
+};
+
+export { getId, getVariance, isFuture, isProbable, termial, index };

@@ -4,7 +4,8 @@ import { keys, sort, values } from '@laufire/utils/collection';
 import { truthy } from '@laufire/utils/predicates';
 import { getRandomX, getRandomY } from '../positionService';
 import { getId, getVariance,
-	isFuture, isProbable } from '../helpers';
+	index,
+	isFuture, isProbable, termial } from '../helpers';
 import PowerManager from '../powerManager';
 import PlayerManager from '../playerManager';
 import { adjustTime } from '../timeService';
@@ -68,23 +69,11 @@ const TargetManager = {
 	removeTargets: ({ state: { targets }, data: targetsToRemove }) =>
 		targets.filter((target) => !targetsToRemove.includes(target)),
 
-	// eslint-disable-next-line max-lines-per-function
 	getTargetsScore: ({ state, data: targets }) => {
-		const sortedTargets = sort(targets, onProp('attackedAt', ascending));
-		const index = {};
-
-		sortedTargets.forEach((target) => (index[target.attackedAt] = [
-			...index[target.attackedAt] || [],
-			target,
-		]));
-
-		const events = values(index).sort((a, b) =>
-			a[0].attackedAt - b[0].attackedAt);
-
 		let score = 0;
-		const two = 2;
-
 		const multipliers = { ...state.multipliers };
+		const grouped = index(targets, 'attackedAt');
+		const events = sort(values(grouped), onProp('attackedAt', ascending));
 
 		targetTypeKeys.forEach((type) => {
 			let multiplier = multipliers[type];
@@ -92,7 +81,6 @@ const TargetManager = {
 			events.forEach((event) => {
 				const targetCount = event.filter((target) =>
 					target.type === type).length;
-				const termial = (n) => n * (n + 1) / two;
 				const targetScore = config.targets[type].score;
 
 				score += targetScore * ((multiplier * targetCount)
