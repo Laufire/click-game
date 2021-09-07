@@ -69,7 +69,7 @@ const TargetManager = {
 		targets.filter((target) => !targetsToRemove.includes(target)),
 
 	// eslint-disable-next-line max-lines-per-function
-	getTargetsScore: ({ data: targets }) => {
+	getTargetsScore: ({ state, data: targets }) => {
 		const sortedTargets = sort(targets, onProp('attackedAt', ascending));
 		const index = {};
 
@@ -84,8 +84,10 @@ const TargetManager = {
 		let score = 0;
 		const two = 2;
 
+		const multipliers = { ...state.multipliers };
+
 		targetTypeKeys.forEach((type) => {
-			let multiplier = 0;
+			let multiplier = multipliers[type];
 
 			events.forEach((event) => {
 				const targetCount = event.filter((target) =>
@@ -95,10 +97,12 @@ const TargetManager = {
 
 				score += targetScore * ((multiplier * targetCount)
 					+ termial(targetCount));
-				multiplier = targetCount ? multiplier + targetCount : 0;
+				multiplier = targetCount
+					? multipliers[type] = multiplier + targetCount
+					: multipliers[type] = 0;
 			});
 		});
-		return score;
+		return { score, multipliers };
 	},
 
 	isDead: (target) => target.health <= 0 || !isFuture(target.livesTill),

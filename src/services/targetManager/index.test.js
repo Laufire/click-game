@@ -216,6 +216,11 @@ describe('TargetManager', () => {
 	test('getTargetsScore returns the bonus score',
 		() => {
 			const two = 2;
+
+			const state = {
+				multipliers: map(config.targets, () => 0),
+			};
+
 			const [targetOne, targetTwo] = getRandomTargets(two);
 
 			const data = secure([
@@ -225,10 +230,18 @@ describe('TargetManager', () => {
 				{ ...targetOne, attackedAt: 2 },
 				{ ...targetTwo, attackedAt: 3 },
 			]);
-			// eslint-disable-next-line no-magic-numbers
-			const expected = (6 * targetOne.score) + (2 * targetTwo.score);
 
-			const result = getTargetsScore({ data });
+			const expected = {
+				// eslint-disable-next-line no-magic-numbers
+				score: (6 * targetOne.score) + (2 * targetTwo.score),
+				multipliers: {
+					...state.multipliers,
+					[targetOne.type]: 0,
+					[targetTwo.type]: 1,
+				},
+			};
+
+			const result = getTargetsScore({ state, data });
 
 			expect(result).toEqual(expected);
 		});

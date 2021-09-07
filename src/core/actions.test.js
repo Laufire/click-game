@@ -151,8 +151,9 @@ describe('actions', () => {
 
 	test('computeScore', () => {
 		const killedTargets = [Symbol('killedTargets')];
-		const targetsScore = Symbol('targetsScore');
 		const score = Symbol('score');
+		const multipliers = Symbol('multipliers');
+		const targetsScore = { score,	multipliers };
 
 		jest.spyOn(PlayerManager, 'adjustScore')
 			.mockReturnValue(score);
@@ -171,11 +172,12 @@ describe('actions', () => {
 		const result = computeScore(context);
 
 		expect(PlayerManager.adjustScore)
-			.toHaveBeenCalledWith(context.state, targetsScore);
+			.toHaveBeenCalledWith(context.state, score);
 		expect(TargetManager.getKilledTargets)
 			.toHaveBeenCalledWith(context);
 		expect(TargetManager.getTargetsScore)
 			.toHaveBeenCalledWith({ ...context, data: killedTargets });
-		expect(result).toMatchObject({ score });
+		expect(result)
+			.toMatchObject({ score, multipliers });
 	});
 });

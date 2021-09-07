@@ -47,13 +47,17 @@ const removeDeadTargets = (context) => {
 	};
 };
 
-const computeScore = (context) => ({
-	score: PlayerManager.adjustScore(context.state,
-		TargetManager.getTargetsScore({
-			...context,
-			data: TargetManager.getKilledTargets(context),
-		})),
-});
+const computeScore = (context) => {
+	const { score, multipliers } = TargetManager.getTargetsScore({
+		...context,
+		data: TargetManager.getKilledTargets(context),
+	});
+
+	return {
+		score: PlayerManager.adjustScore(context.state, score),
+		multipliers: multipliers,
+	};
+};
 
 const swatTarget = (context) =>
 	TargetManager.swatTarget(context);

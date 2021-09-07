@@ -10,6 +10,7 @@ const seed = {
 	score: 0,
 	health: config.maxHealth,
 	duration: map(getTransientPowers(), () => timeZero),
+	multipliers: map(config.targets, () => 0),
 };
 
 export default seed;
