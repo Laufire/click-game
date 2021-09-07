@@ -1,15 +1,7 @@
 /* eslint-disable react/display-name */
 import { React } from 'react';
-import context from '../core/context';
-import { project } from '../services/positionService';
-
-const clickHandlers = {
-	target: (data) => context.actions.swatTarget(data),
-	power: (data) => {
-		context.actions.activatePower(data);
-		context.actions.removeActivatedPower(data);
-	},
-};
+import { project } from '../../services/positionService';
+import clickHandlers from './handlers';
 
 const genClickable = (type) => (data) => {
 	const { id, x, y, height, width, image } = project(data);
