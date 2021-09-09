@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import { rndValues } from '@laufire/utils/random';
 import { keys } from '@laufire/utils/collection';
 import config from '../../core/config';

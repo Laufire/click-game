@@ -1,4 +1,3 @@
-/* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-nested-callbacks */
 import Powers from './powers';

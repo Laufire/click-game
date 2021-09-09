@@ -1,6 +1,4 @@
 /* eslint-disable max-statements */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable react/display-name */
 
 jest.mock('../core/context', () => ({ state: { score: 10 }}));
 

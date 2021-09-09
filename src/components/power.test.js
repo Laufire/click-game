@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 jest.mock('./genClickable/index', () => () => () => Symbol('genClickable'));
 import Power from './power';
 

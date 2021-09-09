@@ -1,6 +1,4 @@
 /* eslint-disable max-statements */
-/* eslint-disable no-magic-numbers */
-/* eslint-disable no-import-assign */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-nested-callbacks */
 
@@ -18,6 +16,7 @@ import * as timeService from '../timeService';
 import * as PositionService from '../positionService';
 
 describe('PowerManager', () => {
+	const two = 2;
 	const { adjustTime } = timeService;
 	const { map, secure, shuffle, keys } = collection;
 	const powers = keys(config.powers)
@@ -169,7 +168,7 @@ describe('PowerManager', () => {
 	});
 
 	test('getDropCount returns killed targets count based on drop prob', () => {
-		const rndTargets = Mocks.getRandomTargets(2);
+		const rndTargets = Mocks.getRandomTargets(two);
 		const context = Symbol('context');
 
 		const targetWithDrop = { ...rndTargets[0], prob: { drop: 1 }};
@@ -186,7 +185,7 @@ describe('PowerManager', () => {
 		expect(TargetManager.getKilledTargets).toHaveBeenCalledWith(context);
 		targets.map((target) => expect(helper.isProbable)
 			.toHaveBeenCalledWith(target.prob.drop));
-		expect(result).toEqual(2);
+		expect(result).toEqual(two);
 	});
 
 	describe('getPowers', () => {

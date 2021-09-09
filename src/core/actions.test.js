@@ -1,6 +1,5 @@
 /* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
-/* eslint-disable max-nested-callbacks */
 import { map } from '@laufire/utils/collection';
 import Actions from '../core/actions';
 import TargetManager from '../services/targetManager';

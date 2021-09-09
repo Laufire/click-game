@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import context from '../../core/context';
 import clickHandlers from './handlers';
 

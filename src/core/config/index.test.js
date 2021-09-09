@@ -1,5 +1,3 @@
-/* eslint-disable max-statements */
-/* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines-per-function */
 import * as collection from '@laufire/utils/collection';
 import base from './base';

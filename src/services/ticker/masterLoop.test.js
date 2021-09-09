@@ -1,5 +1,3 @@
-/* eslint-disable max-statements */
-/* eslint-disable max-lines-per-function */
 import Actions from '../../core/actions';
 import MasterLoop from './masterLoop';
 

@@ -1,8 +1,4 @@
-/* eslint-disable max-len */
-/* eslint-disable max-statements */
-/* eslint-disable no-magic-numbers */
 /* eslint-disable max-lines-per-function */
-/* eslint-disable max-nested-callbacks */
 
 import config from '../core/config';
 import * as random from '@laufire/utils/random';
@@ -13,6 +9,8 @@ import { range } from '@laufire/utils/collection';
 
 describe('helpers', () => {
 	const { getId, isFuture, getVariance } = helpers;
+	const hundred = 100;
+	const two = 2;
 
 	describe('getId', () => {
 		test('getId gives a rndString of the configured idLength', () => {
@@ -35,17 +33,18 @@ describe('helpers', () => {
 			['future', true, Date.now() + msPerDay],
 		];
 
-		test.each(expectations)('when input date is in the %p than new date isFuture returns %p ',
-			(
-				dummy, expectation, value
-			) =>
-				expect(isFuture(value)).toEqual(expectation));
+		test.each(expectations)('when input date is in the %p than'
+			+ 'new date isFuture returns %p ',
+		(
+			dummy, expectation, value
+		) =>
+			expect(isFuture(value)).toEqual(expectation));
 	});
 
 	describe('getVariance', () => {
-		const hundred = 100;
+		const ten = 10;
 		const returnValue = random.rndBetween(1, hundred);
-		const variance = random.rndBetween(0, 10) / 10;
+		const variance = random.rndBetween(0, ten) / ten;
 		const minimum = hundred - (variance * hundred);
 		const maximum = hundred + (variance * hundred);
 
@@ -62,6 +61,7 @@ describe('helpers', () => {
 
 	test('isProbable true based on give probablility', () => {
 		const retryCount = 100000;
+		const errMargin = 0.08;
 		const { isProbable } = helpers;
 		const generateTest = (probability, errorMargin) => {
 			const results = retry(() => isProbable(probability), retryCount);
@@ -73,13 +73,15 @@ describe('helpers', () => {
 			);
 		};
 		const testValues = (values, margin) => {
-			const results = values.map((probability) =>	generateTest(probability, margin));
+			const results = values.map((probability) =>
+				generateTest(probability, margin));
 			const successCount = results.filter(isEqual(true)).length;
 
 			expect(successCount).toEqual(results.length);
 		};
 
-		testValues([0, 1, 2], 0);
-		testValues(range(2, 99).map((probability) => probability / 100), 0.08);
+		testValues([0, 1, two], 0);
+		testValues(range(two, hundred - 1)
+			.map((probability) => probability / hundred), errMargin);
 	});
 });

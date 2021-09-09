@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 jest.mock('../core/context', () => ({ state: {
 	targets: Symbol('targets'),
 	powers: Symbol('powers'),

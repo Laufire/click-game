@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import { secure, values, map, keys } from '@laufire/utils/collection';
 import { rndString, rndValues } from '@laufire/utils/random';
 import context from '../src/core/context';

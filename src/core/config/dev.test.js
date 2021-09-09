@@ -1,4 +1,5 @@
 /* eslint-disable max-statements */
+
 import * as collection from '@laufire/utils/collection';
 import * as UrlService from '../../services/urlService';
 
@@ -8,12 +9,9 @@ describe('devConfig', () => {
 		const paramValue = Symbol('paramValue');
 		const parsed = Symbol('parsed');
 
-		jest.spyOn(UrlService, 'getURLParam')
-			.mockReturnValue(paramValue);
-		jest.spyOn(collection, 'merge')
-			.mockReturnValue(merged);
-		jest.spyOn(JSON, 'parse')
-			.mockReturnValue(parsed);
+		jest.spyOn(UrlService, 'getURLParam').mockReturnValue(paramValue);
+		jest.spyOn(collection, 'merge').mockReturnValue(merged);
+		jest.spyOn(JSON, 'parse').mockReturnValue(parsed);
 
 		const result = require('./dev').default;
 

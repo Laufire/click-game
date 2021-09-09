@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-magic-numbers */
 const replace = (
 	array, target, replacement
 ) => {
@@ -16,7 +14,9 @@ const isAcceptable = (
 	actual, expected, margin
 ) => Math.abs((expected - actual) / (expected || 1)) <= margin;
 
-const retry = (fn, retryCount = 100) => {
+const hundred = 100;
+
+const retry = (fn, retryCount = hundred) => {
 	const ret = [];
 	let i = 0;
 

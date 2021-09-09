@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 jest.mock('../core/context', () => ({ state: { health: 2 }}));
 
 import { render } from '@testing-library/react';
