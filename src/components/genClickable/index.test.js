@@ -22,12 +22,13 @@ describe('', () => {
 	test.each(expectations)('renders the component %p with appropriate styling',
 		(param, paramValue) => {
 			const projectedTarget = {
+				...paramValue,
 				x: 10,
 				y: 15,
 				width: 20,
 				height: 25,
 			};
-			const { x, y, width, height } = projectedTarget;
+			const { x, y, width, height, image } = projectedTarget;
 
 			jest.spyOn(PositionService, 'project')
 				.mockReturnValue(projectedTarget);
@@ -39,6 +40,8 @@ describe('', () => {
 
 			expect(PositionService.project).toHaveBeenCalledWith(paramValue);
 			expect(component).toBeInTheDocument();
+			expect(component)
+				.toHaveAttribute('src', image);
 			expect(component).toHaveStyle({
 				position: 'absolute',
 				top: `${ y }%`,

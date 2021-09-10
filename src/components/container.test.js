@@ -9,6 +9,6 @@ test('returns a component while parameters are passed', () => {
 
 	const result = Container(data, component);
 
-	expect(result).toEqual(returnValue);
 	expect(data.map).toHaveBeenCalledWith(component);
+	expect(result).toEqual(returnValue);
 });

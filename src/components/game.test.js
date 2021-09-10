@@ -22,43 +22,33 @@ describe('Game', () => {
 		expect(getByRole('healthBar')).toBeInTheDocument();
 	});
 
-	test('Game render gameOverScreen when the health is 0', () => {
-		jest.spyOn(PlayerManager, 'isAlive').mockReturnValue(false);
+	const expects = [
+		['gameScreen', true],
+		['gameOverScreen', false],
+	];
 
-		const component = render(Game()).getByRole('gameOverScreen');
+	test.each(expects)('Game render %p when the isAlive is %p',
+		(screen, isActive) => {
+			jest.spyOn(PlayerManager, 'isAlive').mockReturnValue(isActive);
 
-		expect(PlayerManager.isAlive).toHaveBeenCalledWith(context);
-		expect(component).toBeInTheDocument();
-	});
+			const component = render(Game()).getByRole(screen);
 
-	test('Game render gameScreen when the health is greater than 0', () => {
-		jest.spyOn(PlayerManager, 'isAlive').mockReturnValue(true);
+			expect(PlayerManager.isAlive).toHaveBeenCalledWith(context);
+			expect(component).toBeInTheDocument();
+		});
 
-		const component = render(Game()).getByRole('gameScreen');
+	const expectations = [
+		['active', 'super'],
+		['inactive', 'normal'],
+	];
 
-		expect(PlayerManager.isAlive).toHaveBeenCalledWith(context);
-		expect(component).toBeInTheDocument();
-	});
+	test.each(expectations)('when the power is %p className is %p-bat ',
+		(dummy, type) => {
+			jest.spyOn(PowerManager, 'getBatType').mockReturnValue(type);
 
-	test('className super-bat when the power super-bat is active', () => {
-		const batType = 'super';
+			const component = render(Game()).getByRole('game');
 
-		jest.spyOn(PowerManager, 'getBatType').mockReturnValue(batType);
-
-		const component = render(Game()).getByRole('game');
-
-		expect(PowerManager.getBatType).toHaveBeenCalledWith(context.state);
-		expect(component).toHaveClass('super-bat');
-	});
-
-	test('className normal-bat when the power super-bat is not active', () => {
-		const batType = 'normal';
-
-		jest.spyOn(PowerManager, 'getBatType').mockReturnValue(batType);
-
-		const component = render(Game()).getByRole('game');
-
-		expect(PowerManager.getBatType).toHaveBeenCalledWith(context.state);
-		expect(component).toHaveClass('normal-bat');
-	});
+			expect(PowerManager.getBatType).toHaveBeenCalledWith(context.state);
+			expect(component).toHaveClass(`${ type }-bat`);
+		});
 });
