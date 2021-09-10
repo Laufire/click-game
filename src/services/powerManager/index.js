@@ -48,7 +48,7 @@ const PowerManager = {
 
 	isActive: (state, power) => isFuture(state.duration[power]),
 
-	// TODO: Standardise the input parameter as Context.
+	// TODO: Standardize the input parameter as Context.
 	getBatType: (state) =>
 		(PowerManager.isActive(state, 'superBat') ? 'super' : 'normal'),
 

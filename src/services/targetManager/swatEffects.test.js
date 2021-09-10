@@ -4,17 +4,19 @@ import * as random from '@laufire/utils/random';
 import TargetManager from '.';
 import PlayerManager from '../playerManager';
 import swatEffects from './swatEffects';
+import context from '../../core/context';
+import { rndBetween } from '@laufire/utils/random';
 
 describe('targets', () => {
 	const { butterfly, spoiler } = swatEffects;
+	const hundred = 100;
 
 	test('butterfly decrease health', () => {
-		const health = 5;
 		const state = {
-			health,
+			health: context.config.maxHealth,
 		};
 		const result = butterfly(state);
-		const expectedResult = health - 1;
+		const expectedResult = state.health - 1;
 
 		expect(result).toMatchObject({ health: expectedResult });
 	});
@@ -22,17 +24,18 @@ describe('targets', () => {
 	test('spoiler return adjustScore', () => {
 		const state = Symbol('state');
 		const data = TargetManager.getTarget({ type: 'spoiler' });
-		const rnd = 5;
+		const adjustment = rndBetween(0, hundred);
 		const adjustScore = Symbol('adjustScore');
 		const { min, max } = data.effect.score;
 
-		jest.spyOn(random, 'rndBetween').mockReturnValue(rnd);
+		jest.spyOn(random, 'rndBetween').mockReturnValue(adjustment);
 		jest.spyOn(PlayerManager, 'adjustScore').mockReturnValue(adjustScore);
 
 		const result = spoiler(state, data);
 
 		expect(random.rndBetween).toHaveBeenCalledWith(min, max);
-		expect(PlayerManager.adjustScore).toHaveBeenCalledWith(state, -rnd);
+		expect(PlayerManager.adjustScore)
+			.toHaveBeenCalledWith(state, -adjustment);
 		expect(result).toMatchObject({ score: adjustScore });
 	});
 });

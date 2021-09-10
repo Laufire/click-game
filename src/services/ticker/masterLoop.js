@@ -1,8 +1,6 @@
 import context from '../../core/context';
 
 // TODO: Rename variables appropriately.
-// TODO: Use variables instead of strings.
-// TODO: Test the sequence of actions.
 
 const masterLoop = [
 	'computeScore',

@@ -23,8 +23,8 @@ describe('PowerManager', () => {
 		.map((type) => PowerManager.getPower({ type }));
 
 	describe('getPower', () => {
-		const { getPower } = PowerManager;
 		const type = random.rndValue(keys(config.powers));
+		const { getPower } = PowerManager;
 		const typeConfig = config.powers[type];
 		const id = Symbol('id');
 		const x = Symbol('x');
@@ -46,7 +46,7 @@ describe('PowerManager', () => {
 		});
 	});
 
-	describe('removeExpired powers', () => {
+	describe('removeExpiredPowers', () => {
 		const expectations = [
 			['does not removes', false, powers],
 			['removes', true, []],
@@ -70,18 +70,19 @@ describe('PowerManager', () => {
 
 	test('removePower remove the given power', () => {
 		const data = random.rndValue(powers);
-		const expectdResult
+		const expectedResult
 			= powers.filter((power) => power.type !== data.type);
 
 		const result = PowerManager
 			.removePower({ state: { powers }, data: data });
 
-		expect(result).toEqual(expectdResult);
+		expect(result).toEqual(expectedResult);
 	});
 
 	test('activatePower activates the given power', () => {
 		const returnValue = Symbol('returnValue');
 		const state = Symbol('state');
+		// TODO: random type
 		const type = 'bomb';
 		const data = { type };
 
@@ -96,6 +97,7 @@ describe('PowerManager', () => {
 		expect(result).toEqual(returnValue);
 	});
 
+	// TODO: Improper test.
 	describe('getDamage', () => {
 		const superBat = Date.now();
 		const expectations = [
@@ -167,6 +169,7 @@ describe('PowerManager', () => {
 		});
 	});
 
+	// TODO: test required for false case.
 	test('getDropCount returns killed targets count based on drop prob', () => {
 		const rndTargets = Mocks.getRandomTargets(two);
 		const context = Symbol('context');
@@ -230,6 +233,7 @@ describe('PowerManager', () => {
 			))),
 		};
 
+		// TODO: spyOn isFuture.
 		test('getActivePowers returns a list of all active powers',
 			() => {
 				const result = PowerManager.getActivePowers({ state });
@@ -243,14 +247,12 @@ describe('PowerManager', () => {
 		const returnValue = Symbol('Future');
 		const power = random.rndValue(getTransientPowers());
 		const [type] = keys(power);
-		const state
-		= { duration: { type }};
+		const state = { duration: { type }};
 
 		test('whether isFuture is called', () => {
-			jest.spyOn(helper, 'isFuture')
-				.mockReturnValue(returnValue);
-			const result
-				= PowerManager.isActive(state, power);
+			jest.spyOn(helper, 'isFuture').mockReturnValue(returnValue);
+
+			const result = PowerManager.isActive(state, power);
 
 			expect(helper.isFuture).toHaveBeenCalledWith(state.duration[power]);
 			expect(result).toEqual(returnValue);

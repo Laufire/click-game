@@ -383,6 +383,7 @@ describe('TargetManager', () => {
 			},
 		};
 		const decreasedHealth = Symbol('decreasedHealth');
+		// TODO: Replace rndTargets to target.
 		const [rndTarget] = getRandomTargets();
 		const num = targets.reduce((acc, item) => acc + item.damage, 0);
 		const expectations = [

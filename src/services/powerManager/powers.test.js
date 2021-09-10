@@ -37,61 +37,52 @@ describe('Powers', () => {
 
 			expect(Math.min)
 				.toHaveBeenCalledWith(targetsCount, targets.length);
-
 			expect(random.rndValues).toHaveBeenCalledWith(targets, count);
-
 			expect(random.rndBetween)
 				.toHaveBeenCalledWith(min, max);
-
 			expect(TargetManager.decreaseTargetHealth).toHaveBeenCalledWith(
 				targets, randomTargets, damage
 			);
-
 			expect(result).toMatchObject({ targets });
 		});
 	});
 
 	describe('gift randomly increases the score or health', () => {
-		const score = 5;
-		const health = 3;
-		const addScore = Symbol('score');
-		const addLife = config.powers.gift.effect.health;
-		const state = {
-			score,
-			health,
-		};
+		const adjustment = Symbol('adjustment');
+		const { score, health } = config.powers.gift.effect;
+		const state = Symbol('state');
+		const returnValue = Symbol('returnValue');
 
 		test('gift sometimes increase the score', () => {
-			const { min, max } = config.powers.gift.effect.score;
-
 			jest.spyOn(random, 'rndBetween')
 				.mockReturnValueOnce(1)
-				.mockReturnValueOnce(addScore);
+				.mockReturnValueOnce(adjustment);
 			jest.spyOn(PlayerManager, 'adjustScore')
-				.mockReturnValue(addScore);
+				.mockReturnValue(returnValue);
 
 			const result = gift(state);
 
 			expect(PlayerManager.adjustScore)
-				.toHaveBeenLastCalledWith(state, addScore);
+				.toHaveBeenLastCalledWith(state, adjustment);
 			expect(random.rndBetween)
-				.toHaveBeenCalledWith(min, max);
+				.toHaveBeenCalledWith(score.min, score.max);
 			expect(result).toMatchObject({
-				score: addScore,
+				score: returnValue,
 			});
 		});
 
 		test('gift sometimes increase the health', () => {
 			jest.spyOn(random, 'rndBetween')
 				.mockReturnValue(0);
-			jest.spyOn(PlayerManager, 'increaseHealth');
+			jest.spyOn(PlayerManager, 'increaseHealth')
+				.mockReturnValue(returnValue);
 
 			const result = gift(state);
 
 			expect(PlayerManager.increaseHealth)
-				.toHaveBeenCalledWith(state, addLife);
+				.toHaveBeenCalledWith(state, health);
 			expect(result).toMatchObject({
-				health: health + addLife,
+				health: returnValue,
 			});
 		});
 	});

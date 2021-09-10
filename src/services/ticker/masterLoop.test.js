@@ -4,14 +4,13 @@ import MasterLoop from './masterLoop';
 describe('masterLoop', () => {
 	test('masterLoop', () => {
 		MasterLoop.masterLoop.forEach((item) => {
-			jest.spyOn(Actions, item)
-				.mockReturnValue();
+			jest.spyOn(Actions, item).mockReturnValue();
 		});
+
 		MasterLoop.runMasterLoop();
 
 		MasterLoop.masterLoop.forEach((item) => {
-			expect(Actions[item])
-				.toHaveBeenCalled();
+			expect(Actions[item]).toHaveBeenCalled();
 		});
 	});
 });
