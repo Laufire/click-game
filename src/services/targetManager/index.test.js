@@ -226,6 +226,8 @@ describe('TargetManager', () => {
 
 			const [targetOne, targetTwo] = getRandomTargets(two);
 
+			state.multipliers[targetOne.type] = two;
+
 			const data = secure([
 				{ ...targetOne, attackedAt: 1 },
 				{ ...targetTwo, attackedAt: 1 },
@@ -233,10 +235,12 @@ describe('TargetManager', () => {
 				{ ...targetOne, attackedAt: 2 },
 				{ ...targetTwo, attackedAt: 3 },
 			]);
+			const targetOneBonusMultiplier = 12;
+			const targetTwoBonusMultiplier = 2;
 
 			const expected = {
-				// eslint-disable-next-line no-magic-numbers
-				score: (6 * targetOne.score) + (2 * targetTwo.score),
+				score: (targetOneBonusMultiplier * targetOne.score)
+					+ (targetTwoBonusMultiplier * targetTwo.score),
 				multipliers: {
 					...state.multipliers,
 					[targetOne.type]: 0,
