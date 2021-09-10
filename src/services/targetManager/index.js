@@ -102,7 +102,7 @@ const TargetManager = {
 			.map((impactedTarget) => impactedTarget.id);
 		const attackedAt = Date.now();
 
-		return 	targets.map((target) =>
+		return targets.map((target) =>
 			(impactedTargetIDs.includes(target.id)
 				&& !TargetManager.isDead(target)
 				? {

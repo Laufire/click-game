@@ -29,6 +29,7 @@ describe('TargetManager', () => {
 	const [target] = getRandomTargets();
 	const { type } = target;
 
+	// TODO:Test need to be refactored.
 	describe('addTargets adds target', () => {
 		test('returns targets with new targets added', () => {
 			const returnSpawnTargets = [Symbol('spawnTargets')];
@@ -85,6 +86,7 @@ describe('TargetManager', () => {
 				.mockReturnValue(adjustedTime);
 			jest.spyOn(Date, 'now').mockReturnValue(currentTime);
 
+			// TODO: test to be fixed
 			const expectedResult = {
 				id,
 				x,
@@ -145,6 +147,7 @@ describe('TargetManager', () => {
 			targets,
 		});
 
+		// TODO: test description
 		test('', () => {
 			const data = Symbol('data');
 
@@ -345,9 +348,10 @@ describe('TargetManager', () => {
 	});
 
 	describe('getExpiredTargets', () => {
-		const [rndtargets] = getRandomTargets();
+		// TODO: Replace rndTargets to target.
+		const [rndTargets] = getRandomTargets();
 		const livesTill = Symbol('livesTill');
-		const state = { targets: [{ ...rndtargets, livesTill }] };
+		const state = { targets: [{ ...rndTargets, livesTill }] };
 
 		const expectations = [
 			['remove', 'less', false, state.targets],
