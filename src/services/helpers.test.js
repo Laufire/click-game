@@ -37,8 +37,9 @@ describe('helpers', () => {
 			+ 'new date isFuture returns %p ',
 		(
 			dummy, expectation, value
-		) =>
-			expect(isFuture(value)).toEqual(expectation));
+		) => {
+			expect(isFuture(value)).toEqual(expectation);
+		});
 	});
 
 	describe('getVariance', () => {

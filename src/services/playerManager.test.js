@@ -60,8 +60,9 @@ describe('PlayerManager', () => {
 		test.each(expectations)('returns %p if health is %p zero',
 			(
 				expectation, dummy, context
-			) =>
-				expect(isAlive(context)).toEqual(expectation));
+			) => {
+				expect(isAlive(context)).toEqual(expectation);
+			});
 	});
 
 	describe('increaseHealth', () => {
