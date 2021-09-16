@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
 import { fireEvent, render } from '@testing-library/react';
 import * as PositionService from '../../services/positionService';
@@ -40,8 +41,7 @@ describe('', () => {
 
 			expect(PositionService.project).toHaveBeenCalledWith(paramValue);
 			expect(component).toBeInTheDocument();
-			expect(component)
-				.toHaveAttribute('src', image);
+			expect(component).toHaveAttribute('src', image);
 			expect(component).toHaveStyle({
 				position: 'absolute',
 				top: `${ y }%`,
@@ -49,6 +49,7 @@ describe('', () => {
 				height: `${ height }vw`,
 				width: `${ width }vw`,
 			});
+			expect(component).toHaveClass('clickable');
 		});
 
 	test.each(expectations)('when clicked triggers the handler %p',

@@ -20,6 +20,7 @@ const genClickable = (type) => (data) => {
 			role={ type }
 			src={ image }
 			style={ style }
+			className="clickable"
 			onClick={ () => clickHandlers[type](data) }
 		/>
 	);
