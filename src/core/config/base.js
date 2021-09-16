@@ -46,6 +46,7 @@ const config = {
 			lifespan: 10,
 			health: 1,
 			damage: 1,
+			speed: 8,
 			prob: {
 				spawn: 1,
 				fertility: 1,
@@ -63,6 +64,7 @@ const config = {
 			lifespan: 5,
 			health: 1,
 			damage: 1,
+			speed: 5,
 			prob: {
 				spawn: 1,
 				fertility: 1,
@@ -80,6 +82,7 @@ const config = {
 			lifespan: 5,
 			damage: 1,
 			health: 3,
+			speed: 3,
 			prob: {
 				spawn: 1,
 				fertility: 1,
@@ -98,6 +101,7 @@ const config = {
 			lifespan: 3,
 			damage: 1,
 			health: 1,
+			speed: 7,
 			prob: {
 				spawn: 1,
 				fertility: 1,
@@ -115,6 +119,7 @@ const config = {
 			damage: 1,
 			health: 1,
 			score: 0,
+			speed: 10,
 			prob: {
 				spawn: 1,
 				fertility: 1,

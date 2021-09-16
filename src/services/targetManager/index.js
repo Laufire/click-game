@@ -2,7 +2,7 @@ import config from '../../core/config';
 import { rndValue } from '@laufire/utils/random';
 import { keys, sort, values } from '@laufire/utils/collection';
 import { truthy } from '@laufire/utils/predicates';
-import { getRandomX, getRandomY } from '../positionService';
+import { getPosition, getRandomX, getRandomY } from '../positionService';
 import { getId, getVariance,
 	index,
 	isFuture, isProbable, termial } from '../helpers';
@@ -62,8 +62,7 @@ const TargetManager = {
 			? state.targets
 			: state.targets.map((target) => ({
 				...target,
-				x: getRandomX(target),
-				y: getRandomY(target),
+				...getPosition(target),
 			}))),
 
 	removeTargets: ({ state: { targets }, data: targetsToRemove }) =>

@@ -323,10 +323,8 @@ describe('TargetManager', () => {
 			const expectedResult = secure(targets.map((item) =>
 				({ ...item, ...position })));
 
-			jest.spyOn(PositionService, 'getRandomX')
-				.mockReturnValue(x);
-			jest.spyOn(PositionService, 'getRandomY')
-				.mockReturnValue(y);
+			jest.spyOn(PositionService, 'getPosition')
+				.mockReturnValue(position);
 			jest.spyOn(PowerManager, 'isActive')
 				.mockReturnValue(false);
 

@@ -1,12 +1,17 @@
+/* eslint-disable max-nested-callbacks */
+/* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
 
 import * as random from '@laufire/utils/random';
-import { keys } from '@laufire/utils/lib';
+import { keys, rndBetween } from '@laufire/utils/lib';
 import config from '../core/config';
-import { getRandomX, getRandomY, project } from './positionService';
+import { getPosition, getRandomX,
+	getRandomY, project } from './positionService';
 import PowerManager from './powerManager';
 import TargetManager from './targetManager';
 import { values } from '@laufire/utils/collection';
+import { retry } from '../../test/helpers';
+import { unique } from '@laufire/utils/predicates';
 
 describe('PositionService', () => {
 	const twentyFive = 25;
@@ -46,6 +51,47 @@ describe('PositionService', () => {
 			...position,
 			x: x - (width / two),
 			y: y - (height / two),
+		});
+	});
+
+	describe('getPosition', () => {
+		test('getPosition returns the new position', () => {
+			const width = 2;
+			const height = 2;
+			const xMargin = width / two;
+			const yMargin = height / two;
+
+			const compute = () => {
+				const x = rndBetween(xMargin, hundred - xMargin);
+				const y = rndBetween(yMargin, hundred - yMargin);
+				const speed = rndBetween(two, two);
+				const target = { x, y, height, width, speed };
+
+				const results = retry(() => getPosition(target), hundred);
+				const xValues = results.map((item) => item.x).filter(unique);
+				const yValues = results.map((item) => item.y).filter(unique);
+
+				const position = getPosition(target);
+
+				expect(xValues.length)
+					.toBeGreaterThanOrEqual(speed + 1)
+					.toBeLessThanOrEqual((two * speed) + 1);
+				expect(yValues.length)
+					.toBeGreaterThanOrEqual(speed + 1)
+					.toBeLessThanOrEqual((two * speed) + 1);
+				expect(position.x)
+					.toBeGreaterThanOrEqual(xMargin)
+					.toBeLessThanOrEqual(hundred - xMargin)
+					.toBeGreaterThanOrEqual(x - speed)
+					.toBeLessThanOrEqual(x + speed);
+				expect(position.y)
+					.toBeGreaterThanOrEqual(yMargin)
+					.toBeLessThanOrEqual(hundred - yMargin)
+					.toBeGreaterThanOrEqual(y - speed)
+					.toBeLessThanOrEqual(y + speed);
+			};
+
+			retry(compute, hundred);
 		});
 	});
 });
