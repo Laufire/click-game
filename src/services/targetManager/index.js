@@ -10,14 +10,14 @@ import PowerManager from '../powerManager';
 import PlayerManager from '../playerManager';
 import { adjustTime } from '../timeService';
 import swatEffects from './swatEffects';
-import { onProp, ascending } from '@laufire/utils/sorters';
 
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
 
 const buildEventChain = (targets) => {
 	const grouped = index(targets, 'attackedAt');
-	const events = sort(values(grouped), onProp('attackedAt', ascending));
+	const events = sort(values(grouped),
+		([a], [b]) => a.attackedAt - b.attackedAt);
 
 	return events;
 };
