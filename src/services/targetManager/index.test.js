@@ -219,14 +219,14 @@ describe('TargetManager', () => {
 	test('getTargetsScore returns the bonus score',
 		() => {
 			const two = 2;
-
-			const state = {
-				multipliers: map(config.targets, () => 0),
-			};
-
 			const [targetOne, targetTwo] = getRandomTargets(two);
 
-			state.multipliers[targetOne.type] = two;
+			const state = {
+				multipliers: {
+					...map(config.targets, () => 0),
+					[targetOne.type]: two,
+				},
+			};
 
 			const data = secure([
 				{ ...targetOne, attackedAt: 1 },

@@ -15,6 +15,31 @@ import { onProp, ascending } from '@laufire/utils/sorters';
 const { maxTargets } = config;
 const targetTypeKeys = keys(config.targets);
 
+const buildEventChain = (targets) => {
+	const grouped = index(targets, 'attackedAt');
+	const events = sort(values(grouped), onProp('attackedAt', ascending));
+
+	return events;
+};
+
+const computeTypeScore = (events) =>
+	(acc, type) => events.reduce(({ score, multipliers }, event) => {
+		const multiplier = multipliers[type];
+		const targetCount = event
+			.filter((target) => target.type === type).length;
+		const targetScore = config.targets[type].score;
+
+		return {
+			score: score
+					+ (targetScore * ((multiplier * targetCount)
+						+ termial(targetCount))),
+			multipliers: {
+				...multipliers,
+				[type]: targetCount ? multiplier + targetCount : 0,
+			},
+		};
+	}, acc);
+
 const TargetManager = {
 	// eslint-disable-next-line max-lines-per-function
 	getTarget: ({ x, y, type } = {}) => {
@@ -69,27 +94,13 @@ const TargetManager = {
 		targets.filter((target) => !targetsToRemove.includes(target)),
 
 	getTargetsScore: ({ state, data: targets }) => {
-		let score = 0;
-		const multipliers = { ...state.multipliers };
-		const grouped = index(targets, 'attackedAt');
-		const events = sort(values(grouped), onProp('attackedAt', ascending));
+		const events = buildEventChain(targets);
 
-		targetTypeKeys.forEach((type) => {
-			let multiplier = multipliers[type];
+		const result = targetTypeKeys
+			.reduce(computeTypeScore(events),
+				{ score: 0, multipliers: state.multipliers });
 
-			events.forEach((event) => {
-				const targetCount = event.filter((target) =>
-					target.type === type).length;
-				const targetScore = config.targets[type].score;
-
-				score += targetScore * ((multiplier * targetCount)
-					+ termial(targetCount));
-				multiplier = targetCount
-					? multipliers[type] = multiplier + targetCount
-					: multipliers[type] = 0;
-			});
-		});
-		return { score, multipliers };
+		return result;
 	},
 
 	isDead: (target) => target.health <= 0 || !isFuture(target.livesTill),
