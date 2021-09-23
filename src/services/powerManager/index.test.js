@@ -12,13 +12,12 @@ import * as collection from '@laufire/utils/collection';
 import TargetManager from '../targetManager';
 import Mocks from '../../../test/mock';
 import { getTransientPowers } from '../../core/helpers';
-import * as timeService from '../timeService';
 import * as PositionService from '../positionService';
+import { rndBetween } from '@laufire/utils/lib';
 
 describe('PowerManager', () => {
 	const two = 2;
-	const { adjustTime } = timeService;
-	const { map, secure, shuffle, keys } = collection;
+	const { map, secure, keys, filter } = collection;
 	const powers = keys(config.powers)
 		.map((type) => PowerManager.getPower({ type }));
 
@@ -82,8 +81,7 @@ describe('PowerManager', () => {
 	test('activatePower activates the given power', () => {
 		const returnValue = Symbol('returnValue');
 		const state = Symbol('state');
-		// TODO: random type
-		const type = 'bomb';
+		const type = random.rndValue(keys(config.powers));
 		const data = { type };
 
 		jest.spyOn(Powers, type)
@@ -221,24 +219,22 @@ describe('PowerManager', () => {
 	});
 
 	describe('getActivePowers', () => {
-		const [activePower, inactivePower]
-			= shuffle(collection.keys(getTransientPowers()));
-		const adjustments = {
-			[activePower]: 5,
-			[inactivePower]: -5,
-		};
-		const state = {
-			duration: secure(map(adjustments, (adjustment) => adjustTime(
-				Date.now(), adjustment, 'hours'
-			))),
-		};
-
-		// TODO: spyOn isFuture.
 		test('getActivePowers returns a list of all active powers',
 			() => {
-				const result = PowerManager.getActivePowers({ state });
-				const expected = [activePower];
+				jest.spyOn(helper, 'isFuture')
+					.mockImplementation((value) => value);
 
+				const state = secure({
+					duration: map(getTransientPowers(),
+						() => Boolean(rndBetween(0, 1))),
+				});
+				const result = PowerManager.getActivePowers({ state });
+
+				const expected = keys(filter(state.duration, (value) => value));
+
+				map(state.duration,
+					(value) => expect(helper.isFuture)
+						.toHaveBeenCalledWith(value));
 				expect(result).toEqual(expected);
 			});
 	});

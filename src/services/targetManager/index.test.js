@@ -139,7 +139,7 @@ describe('TargetManager', () => {
 		});
 	});
 
-	describe('swatTarget reduces health', () => {
+	describe('swatTarget', () => {
 		const decreasedTargetHealth = Symbol('decreasedTargetHealth');
 		const damage = Symbol('damage');
 		const mockData = { mockValue: Symbol('mockValue') };
@@ -147,8 +147,7 @@ describe('TargetManager', () => {
 			targets,
 		});
 
-		// TODO: test description
-		test('', () => {
+		test('swatTarget handles swatedTarget and acutate effect', () => {
 			const data = Symbol('data');
 
 			jest.spyOn(TargetManager, 'decreaseTargetHealth')
@@ -350,10 +349,8 @@ describe('TargetManager', () => {
 	});
 
 	describe('getExpiredTargets', () => {
-		// TODO: Replace rndTargets to target.
-		const [rndTargets] = getRandomTargets();
 		const livesTill = Symbol('livesTill');
-		const state = { targets: [{ ...rndTargets, livesTill }] };
+		const state = { targets: [{ ...target, livesTill }] };
 
 		const expectations = [
 			['remove', 'less', false, state.targets],
@@ -381,8 +378,6 @@ describe('TargetManager', () => {
 			},
 		};
 		const decreasedHealth = Symbol('decreasedHealth');
-		// TODO: Replace rndTargets to target.
-		const [rndTarget] = getRandomTargets();
 		const num = targets.reduce((acc, item) => acc + item.damage, 0);
 		const expectations = [
 			[num, true],
@@ -394,7 +389,7 @@ describe('TargetManager', () => {
 				jest.spyOn(helpers, 'isProbable')
 					.mockReturnValue(mockValue);
 				jest.spyOn(helpers, 'getVariance')
-					.mockReturnValue(rndTarget.variance);
+					.mockReturnValue(target.variance);
 				jest.spyOn(PlayerManager, 'decreaseHealth')
 					.mockReturnValue(decreasedHealth);
 
@@ -403,7 +398,7 @@ describe('TargetManager', () => {
 				expect(PlayerManager.decreaseHealth)
 					.toHaveBeenCalledWith({ ...context, data: damage });
 				expect(helpers.getVariance)
-					.toHaveBeenCalledWith(rndTarget.variance);
+					.toHaveBeenCalledWith(target.variance);
 				expect(result).toEqual(decreasedHealth);
 			});
 	});
